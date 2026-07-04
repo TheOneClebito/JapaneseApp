@@ -1,0 +1,2247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<meta name="theme-color" content="#0f1020" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="日本語" />
+<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+<title>Estudo de Japonês</title>
+<style>
+  :root{
+    --bg:#0f1020; --bg2:#171833; --card:#1e1f3d; --card2:#262749;
+    --txt:#eef0ff; --muted:#9aa0c7; --accent:#7c6cff; --accent2:#00d4b8;
+    --good:#36c275; --hard:#e0a83c; --again:#e0556b; --easy:#3aa0ff;
+    --line:#2c2e54;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; height:100%;}
+  body{
+    background:linear-gradient(180deg,var(--bg),#0b0c1a 60%);
+    color:var(--txt); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    display:flex; flex-direction:column; min-height:100%;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
+  }
+  header{
+    padding:14px 18px 10px; display:flex; align-items:center; gap:10px;
+    position:sticky; top:0; backdrop-filter:blur(10px);
+    background:rgba(15,16,32,.7); z-index:5; border-bottom:1px solid var(--line);
+  }
+  header h1{font-size:18px; margin:0; font-weight:700; letter-spacing:.3px;}
+  header .sub{color:var(--muted); font-size:12px;}
+  main{flex:1; padding:16px 16px 90px; max-width:680px; width:100%; margin:0 auto;}
+  nav{
+    position:fixed; bottom:0; left:0; right:0; display:flex; justify-content:space-around;
+    background:rgba(20,21,44,.95); backdrop-filter:blur(12px); border-top:1px solid var(--line);
+    padding:8px 4px calc(8px + env(safe-area-inset-bottom)); z-index:10;
+  }
+  nav button{
+    background:none; border:none; color:var(--muted); font-size:10px; display:flex;
+    flex-direction:column; align-items:center; gap:3px; padding:4px 2px; cursor:pointer; flex:1;
+  }
+  nav button .ic{font-size:19px; line-height:1;}
+  nav button.active{color:var(--accent2);}
+  .btn{
+    background:var(--accent); color:#fff; border:none; border-radius:14px; padding:13px 16px;
+    font-size:15px; font-weight:600; cursor:pointer; width:100%; transition:transform .05s;
+  }
+  .btn:active{transform:scale(.98);}
+  .btn.sec{background:var(--card2); color:var(--txt);}
+  .btn.ghost{background:transparent; border:1px solid var(--line); color:var(--txt);}
+  .row{display:flex; gap:10px;}
+  .chip{
+    background:var(--card2); border:1px solid var(--line); color:var(--txt); border-radius:999px;
+    padding:7px 13px; font-size:13px; cursor:pointer;
+  }
+  .chip.on{background:var(--accent); border-color:var(--accent);}
+  .deck{
+    background:var(--card); border:1px solid var(--line); border-radius:18px; padding:16px;
+    margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  .deck h3{margin:0 0 4px; font-size:16px;}
+  .deck .meta{color:var(--muted); font-size:12.5px;}
+  .badge{background:var(--bg2); border-radius:8px; padding:2px 8px; font-size:12px; color:var(--accent2); margin-left:6px;}
+  .field{margin-bottom:12px;}
+  .field label{display:block; font-size:12.5px; color:var(--muted); margin-bottom:5px;}
+  .field input,.field select,.field textarea{
+    width:100%; background:var(--bg2); border:1px solid var(--line); color:var(--txt);
+    border-radius:12px; padding:12px; font-size:15px; font-family:inherit;
+  }
+  .field textarea{min-height:60px; resize:vertical;}
+  /* Flashcard */
+  .study-wrap{display:flex; flex-direction:column; align-items:center; gap:18px; margin-top:10px;}
+  .progress{width:100%; height:6px; background:var(--bg2); border-radius:999px; overflow:hidden;}
+  .progress > i{display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2));}
+  .flash{
+    background:linear-gradient(160deg,var(--card),var(--card2)); border:1px solid var(--line);
+    border-radius:24px; width:100%; min-height:300px; padding:26px; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; gap:14px; cursor:pointer;
+  }
+  .jp-main{font-size:46px; font-weight:700; line-height:1.25;}
+  .jp-kana{font-size:22px; color:var(--accent2);}
+  .jp-romaji{font-size:16px; color:var(--muted); font-style:italic;}
+  .divider{width:60%; height:1px; background:var(--line); margin:6px 0;}
+  .meaning{font-size:24px; font-weight:600;}
+  .example{font-size:16px; color:var(--txt); margin-top:4px;}
+  .example .ex-tr{color:var(--muted); font-size:14px; display:block; margin-top:3px;}
+  .speak{
+    background:var(--card2); border:1px solid var(--line); color:var(--accent2); border-radius:999px;
+    width:46px; height:46px; font-size:20px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center;
+  }
+  .grade-row{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; width:100%;}
+  .grade{border:none; border-radius:14px; padding:12px 4px; font-size:13px; font-weight:600; color:#fff; cursor:pointer;}
+  .grade small{display:block; font-weight:400; opacity:.8; font-size:10px; margin-top:2px;}
+  .g-again{background:var(--again);} .g-hard{background:var(--hard);}
+  .g-good{background:var(--good);} .g-easy{background:var(--easy);}
+  .hint{color:var(--muted); font-size:13px; text-align:center;}
+  .empty{text-align:center; color:var(--muted); padding:50px 16px;}
+  .empty .big{font-size:46px; margin-bottom:10px;}
+  .stat-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:18px;}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; text-align:center;}
+  .stat .n{font-size:26px; font-weight:700;}
+  .stat .l{font-size:11.5px; color:var(--muted);}
+  .card-mini{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:11px 13px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:8px;}
+  .card-mini .jp{font-size:17px; font-weight:600;}
+  .card-mini .mn{font-size:13px; color:var(--muted);}
+  .icon-btn{background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer; padding:4px 6px;}
+  .modal-bg{position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:flex-end; z-index:50;}
+  .modal-bg.show{display:flex;}
+  .modal{background:var(--bg2); width:100%; max-width:680px; margin:0 auto; border-radius:22px 22px 0 0; padding:18px 18px calc(18px + env(safe-area-inset-bottom)); max-height:90vh; overflow:auto;}
+  .modal h2{margin:4px 0 14px; font-size:18px;}
+  .seg{display:flex; background:var(--bg2); border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-bottom:14px;}
+  .seg button{flex:1; background:none; border:none; color:var(--muted); padding:10px; font-size:13px; cursor:pointer;}
+  .seg button.on{background:var(--accent); color:#fff;}
+  .toast{position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:var(--card2); border:1px solid var(--line); color:var(--txt); padding:10px 18px; border-radius:999px; font-size:14px; opacity:0; transition:opacity .3s; z-index:99; pointer-events:none;}
+  .toast.show{opacity:1;}
+  h2.sec-title{font-size:15px; color:var(--muted); margin:18px 0 10px; font-weight:600;}
+  a.link{color:var(--accent2);}
+  .tag{font-size:10px; background:var(--bg2); color:var(--muted); border-radius:6px; padding:2px 6px; margin-left:6px;}
+  /* ---- Kanjidex ---- */
+  .kgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(64px,1fr)); gap:10px; margin-top:6px;}
+  .kcell{background:var(--card); border:1px solid var(--line); border-radius:14px; aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; position:relative;}
+  .kcell .kc{font-size:30px; font-weight:700;}
+  .kcell .km{font-size:9px; color:var(--muted); margin-top:2px; max-width:90%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .kcell .new{position:absolute; top:5px; right:5px; width:7px; height:7px; border-radius:50%; background:var(--accent2);}
+  .kdetail{display:flex; flex-direction:column; gap:14px;}
+  .khead{display:flex; gap:16px; align-items:center;}
+  .khead .big-k{font-size:74px; font-weight:700; line-height:1; min-width:90px; text-align:center;}
+  .kread{flex:1;}
+  .kread .line{margin-bottom:8px;}
+  .kread .lbl{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;}
+  .kread .val{font-size:18px; font-weight:600;}
+  .kread .rom{font-size:13px; color:var(--accent2); font-style:italic;}
+  .kread .mean{font-size:17px; margin-top:4px;}
+  .hw-box{background:#fff; border-radius:18px; padding:8px; display:flex; align-items:center; justify-content:center; align-self:center; position:relative;}
+  .hw-grid{position:absolute; inset:8px; pointer-events:none;}
+  .diagram{background:#fff; border-radius:18px; padding:10px; align-self:center;}
+  .diagram svg, .hw-box svg{display:block;}
+  .kbtns{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+  .opt{background:var(--card); border:1px solid var(--line); color:var(--txt); border-radius:14px; padding:16px; font-size:20px; font-weight:600; cursor:pointer; text-align:center;}
+  .opt.ok{background:var(--good); border-color:var(--good); color:#fff;}
+  .opt.no{background:var(--again); border-color:var(--again); color:#fff;}
+  .opt:disabled{opacity:.55;}
+  .quiz-q{text-align:center; margin:10px 0 18px;}
+  .quiz-q .qk{font-size:80px; font-weight:700;}
+  .quiz-q .qprompt{color:var(--muted); font-size:14px;}
+  .seg.kanji-seg{margin-bottom:16px;}
+  .backbar{display:flex; align-items:center; gap:6px; margin-bottom:6px;}
+  .backbar button{background:none;border:none;color:var(--accent2);font-size:15px;cursor:pointer;padding:4px 0;}
+  /* ---- RPG / XP ---- */
+  @font-face{ font-family:'PressStart'; src:url('./fonts/pressstart.woff2') format('woff2'); font-display:swap; }
+  .pixel{ font-family:'PressStart','Courier New',monospace; letter-spacing:.5px; }
+  .rpg-panel{
+    background:linear-gradient(160deg,#222349,#15163a); border:2px solid var(--accent);
+    border-radius:18px; padding:14px; margin-bottom:16px; position:relative;
+    box-shadow:0 0 0 2px #0b0c1a, 0 6px 16px rgba(0,0,0,.4);
+  }
+  .rpg-head{display:flex; align-items:center; gap:12px; margin-bottom:12px;}
+  .rpg-ava{
+    width:54px; height:54px; border-radius:12px; background:var(--bg); border:2px solid var(--accent2);
+    display:flex; align-items:center; justify-content:center; font-family:'PressStart','Courier New',monospace;
+    font-size:20px; color:var(--accent2); flex:none;
+  }
+  .rpg-title{font-family:'PressStart','Courier New',monospace; font-size:13px; color:var(--txt); margin-bottom:5px;}
+  .rpg-sub{font-size:12px; color:var(--muted);}
+  .xpbar{position:relative; height:18px; background:var(--bg); border:1px solid var(--line); border-radius:999px; overflow:hidden; margin-bottom:14px;}
+  .xpbar > i{display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2));}
+  .xpbar > span{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; text-shadow:0 1px 2px #000;}
+  .rpg-body{display:flex; gap:8px; align-items:center;}
+  .radar-wrap{flex:none;}
+  .attr-list{flex:1; display:flex; flex-direction:column; gap:7px; min-width:0;}
+  .attr-row{display:flex; align-items:center; gap:6px; font-size:12px;}
+  .attr-ic{width:18px; text-align:center;}
+  .attr-name{width:78px; color:var(--txt); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .attr-lvl{font-family:'PressStart','Courier New',monospace; font-size:9px; color:var(--accent2); width:38px;}
+  .attr-bar{flex:1; height:7px; background:var(--bg); border:1px solid var(--line); border-radius:999px; overflow:hidden; min-width:30px;}
+  .attr-bar > i{display:block; height:100%; background:var(--accent);}
+  .xp-float{
+    position:fixed; left:50%; bottom:120px; transform:translateX(-50%); z-index:120;
+    font-family:'PressStart','Courier New',monospace; font-size:12px; color:var(--accent2);
+    text-shadow:0 2px 4px #000; pointer-events:none; animation:xpup 1.1s ease-out forwards;
+  }
+  @keyframes xpup{ 0%{opacity:0;transform:translate(-50%,8px);} 20%{opacity:1;} 100%{opacity:0;transform:translate(-50%,-26px);} }
+  .levelup{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:130; pointer-events:none; opacity:0; transition:opacity .25s;}
+  .levelup.show{opacity:1;}
+  .lu-card{
+    background:linear-gradient(160deg,#2a2b57,#15163a); border:3px solid var(--accent2); border-radius:18px;
+    padding:22px 30px; text-align:center; box-shadow:0 0 0 3px #0b0c1a, 0 10px 30px rgba(0,0,0,.6);
+    transform:scale(.7); transition:transform .3s cubic-bezier(.2,1.4,.5,1);
+  }
+  .levelup.show .lu-card{transform:scale(1);}
+  .lu-star{font-size:30px; color:var(--accent2); margin-bottom:6px;}
+  .lu-big{font-family:'PressStart','Courier New',monospace; font-size:16px; color:#fff; margin-bottom:8px;}
+  .lu-small{font-size:13px; color:var(--muted);}
+  /* ---- Listening ---- */
+  #drill-seg button{font-size:12px; padding:9px 4px;}
+  .listen-play{
+    width:96px; height:96px; border-radius:50%; border:none; cursor:pointer;
+    background:linear-gradient(160deg,var(--accent),var(--accent2)); color:#fff; font-size:40px;
+    box-shadow:0 6px 18px rgba(124,108,255,.45); margin:6px 0; transition:transform .06s;
+  }
+  .listen-play:active{transform:scale(.95);}
+  /* ---- Gamificação 2: missões, conquistas, cosméticos ---- */
+  .mission{display:flex; align-items:center; gap:8px; font-size:13px; padding:4px 0;}
+  .mission.done{opacity:.6;}
+  .mission .mi-check{width:18px;}
+  .mission .mi-label{flex:1; min-width:0;}
+  .mission .mi-prog{font-family:'PressStart','Courier New',monospace; font-size:9px; color:var(--accent2);}
+  .combo{display:inline-block; background:var(--accent); color:#fff; font-family:'PressStart','Courier New',monospace; font-size:9px; padding:2px 6px; border-radius:6px; vertical-align:middle;}
+  .ach-grid{display:flex; flex-direction:column; gap:8px;}
+  .ach{display:flex; align-items:center; gap:12px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:10px 12px;}
+  .ach.locked{opacity:.45;}
+  .ach.got{border-color:var(--accent2);}
+  .ach-ic{font-size:24px; width:30px; text-align:center;}
+  .ach-lb{font-size:14px; font-weight:600;}
+  .ach-ds{font-size:12px; color:var(--muted);}
+  .cos-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:6px;}
+  .cos{display:flex; align-items:center; gap:8px; background:var(--bg2); border:1px solid var(--line); color:var(--txt); border-radius:12px; padding:10px; font-size:13px; cursor:pointer; text-align:left;}
+  .cos.on{border-color:var(--accent); background:var(--card2);}
+  .cos.lock{opacity:.5;}
+  .cos-dot{width:16px; height:16px; border-radius:50%; flex:none; border:2px solid rgba(255,255,255,.3);}
+  /* ---- Leitura ---- */
+  .read-body{display:flex; flex-direction:column; gap:4px;}
+  .rline{padding:8px 10px; border-radius:10px; cursor:pointer;}
+  .rline:active{background:var(--bg2);}
+  .rjp{font-size:20px; line-height:2.1;}
+  .rjp ruby rt{font-size:10px; color:var(--accent2); font-weight:400;}
+  /* palavras clicáveis (lookup por toque) */
+  .read-body, .ca-jp, #lnext, .example{ -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  .jpw{ cursor:pointer; border-radius:4px; }
+  .jpw:active{ background:rgba(124,108,255,.35); }
+  /* regra do te-form */
+  .rule-box{ background:var(--card); border:1px solid var(--accent2); border-radius:12px; padding:10px 12px; margin-bottom:12px; font-size:13px; line-height:1.55; text-align:left; }
+  .rule-box .rule-t{ font-weight:700; color:var(--accent2); margin-bottom:4px; }
+  .rule-box .rm{ color:var(--muted); font-size:12px; }
+  .rule-box .tree{ white-space:pre-wrap; font-family:'Courier New',monospace; font-size:12px; line-height:1.5; margin-top:4px; }
+  /* tabela de kana */
+  .kc-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:5px; margin-bottom:6px; }
+  .kc-cell{ background:var(--card); border:1px solid var(--line); border-radius:8px; padding:5px 1px; text-align:center; }
+  .kc-cell.empty{ background:transparent; border:none; }
+  .kc-h{ font-size:18px; line-height:1.1; }
+  .kc-k{ font-size:14px; color:var(--accent2); line-height:1.2; }
+  .kc-r{ font-size:10px; color:var(--muted); }
+  #word-pop{position:absolute; z-index:200; max-width:250px; background:var(--card2); border:1px solid var(--accent); border-radius:12px; padding:9px 12px; box-shadow:0 8px 22px rgba(0,0,0,.55);}
+  #word-pop .wp-w{display:block; font-size:17px; font-weight:700; color:var(--accent2); margin-bottom:3px;}
+  #word-pop .wp-m{display:block; font-size:13px; color:var(--txt); line-height:1.4;}
+  /* ---- Compor frases ---- */
+  #drill-seg{overflow-x:auto;}
+  #drill-seg button{white-space:nowrap;}
+  .compose-q{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
+  .compose-q .cq-pt{font-size:18px; font-weight:600;}
+  .cmp-in{width:100%; background:var(--bg2); border:1px solid var(--line); color:var(--txt); border-radius:12px; padding:12px; font-size:17px; font-family:inherit; resize:vertical;}
+  .cmp-ans{background:var(--card2); border:1px solid var(--accent2); border-radius:12px; padding:12px;}
+  .cmp-ans .ca-jp{font-size:20px; margin-bottom:4px;}
+  .cmp-ans .ca-rom{font-size:13px; color:var(--accent2); font-style:italic;}
+  .rpt{font-size:13px; color:var(--muted); margin-top:4px; padding-left:2px; border-left:2px solid var(--line);}
+  .rvocab{display:flex; justify-content:space-between; gap:10px; font-size:13px; padding:5px 0; border-bottom:1px solid var(--line);}
+  .rv-jp{font-weight:600;}
+  .rv-pt{color:var(--muted); text-align:right;}
+  .rq{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin-bottom:8px;}
+  .rq-q{font-size:14px; margin-bottom:6px;}
+  .rq-show{background:none; border:1px solid var(--line); color:var(--accent2); border-radius:8px; padding:5px 10px; font-size:12px; cursor:pointer;}
+  .rq-a{font-size:14px; color:var(--good); margin-top:8px;}
+</style>
+</head>
+<body>
+<header>
+  <div style="font-size:22px">🗾</div>
+  <div style="flex:1">
+    <h1 id="hdr-title">Estudo de Japonês</h1>
+    <div class="sub" id="hdr-sub">日本語を勉強しましょう</div>
+  </div>
+  <button class="speak" id="install-btn" style="display:none" title="Instalar">⤓</button>
+</header>
+
+<main id="view"></main>
+
+<nav>
+  <button data-tab="home" class="active"><span class="ic">🏠</span>Início</button>
+  <button data-tab="study"><span class="ic">📖</span>Estudar</button>
+  <button data-tab="kanji"><span class="ic">漢</span>Kanji</button>
+  <button data-tab="drills"><span class="ic">🎯</span>Treino</button>
+  <button data-tab="manage"><span class="ic">🗂️</span>Cards</button>
+  <button data-tab="settings"><span class="ic">⚙️</span>Ajustes</button>
+</nav>
+
+<div class="modal-bg" id="modal-bg"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="./hanzi-writer.min.js"></script>
+<script src="./kanji-strokes.js"></script>
+<script src="./kanji-list.js"></script>
+<script src="./kanji-words.js"></script>
+<script src="./vocab-decks.js"></script>
+<script src="./tatoeba-sentences.js"></script>
+<script src="./reading-texts.js"></script>
+<script src="./writing-sentences.js"></script>
+<script src="./jp-dict.js"></script>
+<script>
+"use strict";
+/* ============================================================
+   ESTUDO DE JAPONÊS — PWA (arquivo único)
+   Dados salvos no próprio dispositivo (localStorage).
+   ============================================================ */
+
+// ---------- Util ----------
+const $ = (s, el=document) => el.querySelector(s);
+const view = $('#view');
+const uid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
+const now = () => Date.now();
+const DAY = 86400000;
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1800); }
+function esc(s){ return (s||'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+// ---------- Estado ----------
+const KEY = 'jpstudy.v1';
+let state = load();
+
+function load(){
+  let s;
+  try{
+    const raw = localStorage.getItem(KEY);
+    s = raw ? JSON.parse(raw) : seed();
+  }catch(e){ s = seed(); }
+  // migrações / valores padrão
+  if(!s.settings) s.settings = { showRomaji:true, showKana:true, voice:'', dailyNew:10 };
+  if(s.settings.sound==null) s.settings.sound = true;
+  if(s.settings.writeGuide==null) s.settings.writeGuide = true; // guia (contorno) na escrita de kanji
+  if(s.settings.kanjiHard==null) s.settings.kanjiHard = false;  // modo difícil do quiz de significado
+  if(s.settings.cardKanjiMode==null) s.settings.cardKanjiMode = 'learned'; // kanji nos cards: learned|all|kana
+  if(s.settings.drillWrite==null) s.settings.drillWrite = false; // drills: modo escrever (digitar resposta)
+  if(s.settings.teHint==null) s.settings.teHint = false;         // te-form: mostrar regra de conjugação
+  if(s.settings.adjHint==null) s.settings.adjHint = false;       // adjetivos: mostrar regra de conjugação
+  if(!s.settings.composeLevels) s.settings.composeLevels = { easy:true, med:true, hard:true }; // níveis no compor
+  if(s.settings.kanjiWords==null) s.settings.kanjiWords = false; // quiz de kanji em palavras
+  if(!s.kanjiProgress) s.kanjiProgress = {}; // por kanji: {mean:{seen,ok}, read:{seen,ok}, writeBest}
+  if(!s.profile) s.profile = {};
+  const p = s.profile;
+  if(!p.xp) p.xp = { vocab:0, grammar:0, reading:0, writing:0, listening:0 };
+  ['vocab','grammar','reading','writing','listening'].forEach(k=>{ if(p.xp[k]==null) p.xp[k]=0; });
+  if(p.xpTotal==null) p.xpTotal=0;
+  if(p.daysStudied==null) p.daysStudied=0;
+  if(p.lastDay===undefined) p.lastDay=null;
+  if(!p.counts) p.counts = {};
+  ['reviews','kanjiWrite','kanjiPerfect','quizCorrect','listen','listenCorrect','drills','maxCombo','missionDays'].forEach(k=>{ if(p.counts[k]==null) p.counts[k]=0; });
+  if(!p.achievements) p.achievements = {};
+  if(p.missions===undefined) p.missions = null;
+  if(!p.cosmetics) p.cosmetics = { frame:'none', accent:'roxo' };
+  if(!p.readDone) p.readDone = { day:null, ids:{} }; // textos lidos hoje (anti-farm de XP)
+  delete p.streak; // removido: ofensiva consecutiva gerava pressão
+  return s;
+}
+function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+// ============================================================
+//  SISTEMA DE XP / NÍVEIS (RPG)
+// ============================================================
+const ATTRS = [
+  { key:'vocab',     label:'Vocabulário', icon:'📖' },
+  { key:'grammar',   label:'Gramática',   icon:'🧩' },
+  { key:'reading',   label:'Leitura',     icon:'👁' },
+  { key:'writing',   label:'Escrita',     icon:'✍️' },
+  { key:'listening', label:'Listening',   icon:'🎧' }
+];
+const TITLES = [[0,'Aprendiz'],[3,'Estudante'],[6,'Viajante'],[10,'Discípulo'],[15,'Aventureiro'],[20,'Mestre'],[28,'Sensei']];
+function titleFor(level){ let t='Aprendiz'; for(const [l,name] of TITLES){ if(level>=l) t=name; } return t; }
+// custo do nível n→n+1 = base*(n+1)
+function calcLevel(xp, base){
+  let lvl=0, rem=xp;
+  while(rem >= base*(lvl+1)){ rem -= base*(lvl+1); lvl++; }
+  const next = base*(lvl+1);
+  return { level:lvl, into:rem, next:next, pct: Math.round(rem/next*100) };
+}
+function attrLevel(key){ return calcLevel(state.profile.xp[key]||0, 100); }
+function overallLevel(){ return calcLevel(state.profile.xpTotal||0, 250); }
+
+function awardXP(key, amount){
+  if(!amount) return;
+  const before = attrLevel(key).level;
+  const beforeG = overallLevel().level;
+  state.profile.xp[key] = (state.profile.xp[key]||0) + amount;
+  state.profile.xpTotal = (state.profile.xpTotal||0) + amount;
+  markDayStudied();
+  save();
+  const after = attrLevel(key).level;
+  const afterG = overallLevel().level;
+  const meta = ATTRS.find(a=>a.key===key);
+  if(afterG>beforeG){ sfx('levelup'); applyCosmetics(); levelUpToast('NÍVEL '+afterG+'!', 'Você subiu de nível!'); }
+  else if(after>before){ sfx('levelup'); levelUpToast(meta.icon+' '+meta.label+' Nv'+after, 'Atributo aumentou!'); }
+  else xpFloat('+'+amount+' XP');
+}
+function xpFloat(txt){
+  const el=document.createElement('div'); el.className='xp-float'; el.textContent=txt;
+  document.body.appendChild(el); setTimeout(()=>el.remove(), 1100);
+}
+function levelUpToast(big, small){
+  const o=document.createElement('div'); o.className='levelup';
+  o.innerHTML='<div class="lu-card"><div class="lu-star">★</div><div class="lu-big">'+esc(big)+'</div><div class="lu-small">'+esc(small)+'</div></div>';
+  document.body.appendChild(o);
+  setTimeout(()=>o.classList.add('show'),10);
+  setTimeout(()=>{ o.classList.remove('show'); setTimeout(()=>o.remove(),300); }, 1600);
+}
+
+// Radar (pentágono) em SVG puro — 5 atributos
+function buildRadar(size){
+  const NS='http://www.w3.org/2000/svg';
+  const cx=size/2, cy=size/2+4, R=size*0.34;
+  const max = Math.max(5, ...ATTRS.map(a=>attrLevel(a.key).level)); // escala dinâmica, mínimo 5
+  const pt=(i,r)=>{ const ang=-Math.PI/2 + i*2*Math.PI/5; return [cx+r*Math.cos(ang), cy+r*Math.sin(ang)]; };
+  const svg=document.createElementNS(NS,'svg');
+  svg.setAttribute('viewBox',`0 0 ${size} ${size}`); svg.setAttribute('width',size); svg.setAttribute('height',size);
+  // anéis
+  [0.25,0.5,0.75,1].forEach(f=>{
+    const poly=document.createElementNS(NS,'polygon');
+    poly.setAttribute('points', ATTRS.map((_,i)=>pt(i,R*f).join(',')).join(' '));
+    poly.setAttribute('fill','none'); poly.setAttribute('stroke','var(--line)'); poly.setAttribute('stroke-width','1');
+    svg.appendChild(poly);
+  });
+  // eixos
+  ATTRS.forEach((_,i)=>{ const [x,y]=pt(i,R); const ln=document.createElementNS(NS,'line');
+    ln.setAttribute('x1',cx); ln.setAttribute('y1',cy); ln.setAttribute('x2',x); ln.setAttribute('y2',y);
+    ln.setAttribute('stroke','var(--line)'); ln.setAttribute('stroke-width','1'); svg.appendChild(ln); });
+  // polígono de dados
+  const data=document.createElementNS(NS,'polygon');
+  data.setAttribute('points', ATTRS.map((a,i)=>pt(i, R*Math.min(1, (attrLevel(a.key).level)/max)).join(',')).join(' '));
+  data.setAttribute('fill','rgba(124,108,255,0.35)'); data.setAttribute('stroke','var(--accent)'); data.setAttribute('stroke-width','2');
+  svg.appendChild(data);
+  // vértices + labels
+  ATTRS.forEach((a,i)=>{
+    const lv=attrLevel(a.key).level;
+    const [px,py]=pt(i, R*Math.min(1, lv/max));
+    const dot=document.createElementNS(NS,'circle'); dot.setAttribute('cx',px); dot.setAttribute('cy',py); dot.setAttribute('r','3'); dot.setAttribute('fill','var(--accent2)'); svg.appendChild(dot);
+    const [lx,ly]=pt(i, R+16);
+    const tx=document.createElementNS(NS,'text'); tx.setAttribute('x',lx); tx.setAttribute('y',ly);
+    tx.setAttribute('text-anchor', lx<cx-4?'end':(lx>cx+4?'start':'middle'));
+    tx.setAttribute('dominant-baseline','middle'); tx.setAttribute('font-size','11'); tx.setAttribute('fill','var(--muted)');
+    tx.textContent=a.icon+' '+lv; svg.appendChild(tx);
+  });
+  return svg;
+}
+
+// ============================================================
+//  GAMIFICAÇÃO: dias estudados, combo, som, missões, conquistas, cosméticos
+// ============================================================
+function dayKey(d){ return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function markDayStudied(){
+  const dk = dayKey(new Date());
+  if(state.profile.lastDay !== dk){
+    state.profile.daysStudied = (state.profile.daysStudied||0) + 1;
+    state.profile.lastDay = dk;
+  }
+  ensureMissions(); // regenera sozinho quando missions.day muda de dia
+}
+
+// ----- Som retrô (Web Audio, sem arquivos) -----
+let _actx = null;
+function sfx(kind){
+  if(!state.settings.sound) return;
+  try{
+    _actx = _actx || new (window.AudioContext||window.webkitAudioContext)();
+    if(_actx.state==='suspended') _actx.resume();
+    const seqs = {
+      correct:[[660,0,.07],[988,.07,.12]],
+      wrong:[[196,0,.2]],
+      levelup:[[523,0,.1],[659,.1,.1],[784,.2,.22]],
+      unlock:[[784,0,.08],[1047,.08,.16]],
+      combo:[[880,0,.05],[1175,.05,.07]]
+    };
+    (seqs[kind]||seqs.correct).forEach(([f,t,d])=>{
+      const o=_actx.createOscillator(), g=_actx.createGain();
+      o.type='square'; o.frequency.value=f;
+      const st=_actx.currentTime+t; o.connect(g); g.connect(_actx.destination);
+      g.gain.setValueAtTime(0.06,st); g.gain.exponentialRampToValueAtTime(0.0001,st+d);
+      o.start(st); o.stop(st+d);
+    });
+  }catch(e){}
+}
+
+// ----- Combo (por sessão, não persiste) -----
+let sessionCombo = 0;
+function bumpCombo(correct){
+  if(correct){ sessionCombo++; if(sessionCombo > (state.profile.counts.maxCombo||0)) state.profile.counts.maxCombo = sessionCombo; }
+  else sessionCombo = 0;
+  return sessionCombo;
+}
+function comboMult(){ return 1 + Math.min(Math.max(sessionCombo-1,0),4)*0.25; } // x1 .. x2
+
+// ----- Missões diárias -----
+const MISSION_POOL = [
+  { id:'rev',    type:'review',      n:15, label:'Revisar {n} cards' },
+  { id:'kanji',  type:'kanjiWrite',  n:3,  label:'Praticar escrita de {n} kanji' },
+  { id:'quiz',   type:'quizCorrect', n:8,  label:'Acertar {n} no quiz de kanji' },
+  { id:'listen', type:'listen',      n:8,  label:'Fazer {n} exercícios de listening' },
+  { id:'drill',  type:'drill',       n:10, label:'Fazer {n} drills de gramática' },
+  { id:'read',   type:'read',        n:1,  label:'Ler {n} texto de leitura' },
+  { id:'compose',type:'compose',     n:5,  label:'Compor {n} frases' }
+];
+const MISSION_ATTR = { review:'vocab', kanjiWrite:'writing', quizCorrect:'vocab', listen:'listening', drill:'grammar', read:'reading', compose:'writing' };
+function ensureMissions(){
+  const dk = dayKey(new Date());
+  if(!state.profile.missions || state.profile.missions.day !== dk){
+    const pool = MISSION_POOL.slice(); shuffle(pool);
+    const items = pool.slice(0,3).map(m=>({ id:m.id, type:m.type, goal:m.n, label:m.label.replace('{n}',m.n), prog:0, done:false }));
+    state.profile.missions = { day:dk, items, bonusGiven:false };
+  }
+}
+function trackMission(type){
+  ensureMissions();
+  let changed=false;
+  state.profile.missions.items.forEach(m=>{
+    if(m.type===type && !m.done){
+      m.prog++;
+      if(m.prog>=m.goal){ m.done=true; awardXP(MISSION_ATTR[type]||'vocab', 30); sfx('unlock'); toast('Missão completa! +30 XP'); }
+      changed=true;
+    }
+  });
+  const all = state.profile.missions.items.every(m=>m.done);
+  if(all && !state.profile.missions.bonusGiven){
+    state.profile.missions.bonusGiven = true;
+    state.profile.counts.missionDays = (state.profile.counts.missionDays||0)+1;
+    awardXP('vocab', 50); levelUpToast('✅ MISSÕES!', 'Todas as missões de hoje! +50 XP');
+  }
+  if(changed) save();
+}
+
+// ----- Evento central de progresso -----
+function track(type, opts){
+  opts = opts || {};
+  markDayStudied();
+  const c = state.profile.counts;
+  if(type==='review') c.reviews++;
+  else if(type==='kanjiWrite'){ c.kanjiWrite++; if(opts.perfect) c.kanjiPerfect++; }
+  else if(type==='quizCorrect') c.quizCorrect++;
+  else if(type==='listen'){ c.listen++; if(opts.correct) c.listenCorrect++; }
+  else if(type==='drill') c.drills++;
+  trackMission(type);
+  checkAchievements();
+  save();
+}
+
+// ----- Conquistas -----
+const ACHIEVEMENTS = [
+  { id:'first',      icon:'🌱', label:'Primeiro passo',  desc:'Faça sua 1ª revisão',           test:p=>p.counts.reviews>=1 },
+  { id:'rev100',     icon:'📚', label:'Estudioso',        desc:'100 revisões',                  test:p=>p.counts.reviews>=100 },
+  { id:'rev500',     icon:'🎓', label:'Veterano',         desc:'500 revisões',                  test:p=>p.counts.reviews>=500 },
+  { id:'kperfect',   icon:'✒️', label:'Traço firme',      desc:'Escreva um kanji sem erros',    test:p=>p.counts.kanjiPerfect>=1 },
+  { id:'kperfect10', icon:'🖌️', label:'Mestre dos traços',desc:'10 kanji perfeitos',            test:p=>p.counts.kanjiPerfect>=10 },
+  { id:'quiz50',     icon:'🎯', label:'Pontaria',         desc:'50 acertos em quizzes',         test:p=>p.counts.quizCorrect>=50 },
+  { id:'listen25',   icon:'👂', label:'Ouvido afiado',    desc:'25 acertos de listening',       test:p=>p.counts.listenCorrect>=25 },
+  { id:'drill50',    icon:'🤸', label:'Ginasta gramatical',desc:'50 drills feitos',             test:p=>p.counts.drills>=50 },
+  { id:'combo5',     icon:'⚡', label:'Embalado',         desc:'Combo x5 numa sessão',          test:p=>p.counts.maxCombo>=5 },
+  { id:'missions1',  icon:'✅', label:'Dia produtivo',    desc:'Complete as missões de um dia', test:p=>p.counts.missionDays>=1 },
+  { id:'lv5',        icon:'⭐', label:'Em ascensão',      desc:'Nível geral 5',                 test:p=>overallLevel().level>=5 },
+  { id:'lv10',       icon:'🌟', label:'Herói',            desc:'Nível geral 10',                test:p=>overallLevel().level>=10 },
+  { id:'attr10',     icon:'💎', label:'Especialista',     desc:'Nível 10 em um atributo',       test:p=>ATTRS.some(a=>attrLevel(a.key).level>=10) }
+];
+function checkAchievements(){
+  let any=false;
+  ACHIEVEMENTS.forEach(a=>{
+    if(!state.profile.achievements[a.id] && a.test(state.profile)){
+      state.profile.achievements[a.id] = now(); any=true;
+      sfx('unlock'); levelUpToast(a.icon+' '+a.label, 'Conquista desbloqueada!');
+    }
+  });
+  if(any) save();
+}
+
+// ----- Cosméticos (recompensas de nível) -----
+const FRAMES = [
+  { id:'none',   label:'Padrão', lv:0,  color:'var(--accent2)' },
+  { id:'bronze', label:'Bronze', lv:3,  color:'#cd7f32' },
+  { id:'prata',  label:'Prata',  lv:6,  color:'#cfd3da' },
+  { id:'ouro',   label:'Ouro',   lv:10, color:'#ffcf3a' },
+  { id:'cyber',  label:'Cyber',  lv:15, color:'#00ffd0' }
+];
+const ACCENTS = [
+  { id:'roxo',  label:'Roxo',  lv:0,  c:'#7c6cff' },
+  { id:'verde', label:'Verde', lv:4,  c:'#36c275' },
+  { id:'rosa',  label:'Rosa',  lv:8,  c:'#e0556b' },
+  { id:'azul',  label:'Azul',  lv:12, c:'#3aa0ff' }
+];
+function frameColor(){ const f=FRAMES.find(x=>x.id===state.profile.cosmetics.frame)||FRAMES[0]; return f.color; }
+function applyCosmetics(){
+  const a = ACCENTS.find(x=>x.id===state.profile.cosmetics.accent) || ACCENTS[0];
+  document.documentElement.style.setProperty('--accent', a.c);
+}
+function openAchievements(){
+  const unlocked = Object.keys(state.profile.achievements).length;
+  openModal(`
+    <h2>🏅 Conquistas (${unlocked}/${ACHIEVEMENTS.length})</h2>
+    <div class="ach-grid">
+      ${ACHIEVEMENTS.map(a=>{
+        const got = !!state.profile.achievements[a.id];
+        return `<div class="ach ${got?'got':'locked'}">
+          <div class="ach-ic">${got?a.icon:'🔒'}</div>
+          <div class="ach-tx"><div class="ach-lb">${esc(a.label)}</div><div class="ach-ds">${esc(a.desc)}</div></div>
+        </div>`;
+      }).join('')}
+    </div>
+    <button class="btn sec" id="ach-close" style="margin-top:14px">Fechar</button>
+  `);
+  $('#ach-close').onclick=closeModal;
+}
+function openCosmetics(){
+  const lvl = overallLevel().level;
+  const cos = state.profile.cosmetics;
+  const swatch = (list, sel, key, isFrame)=> list.map(o=>{
+    const locked = lvl < o.lv;
+    const on = sel===o.id;
+    const col = isFrame ? o.color : o.c;
+    return `<button class="cos ${on?'on':''} ${locked?'lock':''}" data-key="${key}" data-id="${o.id}" ${locked?'disabled':''}>
+      <span class="cos-dot" style="background:${col}"></span>
+      <span>${esc(o.label)}${locked?` · Nv${o.lv}`:''}</span>
+    </button>`;
+  }).join('');
+  openModal(`
+    <h2>🎨 Personalizar</h2>
+    <div class="hint" style="margin-bottom:6px">Itens desbloqueiam conforme seu nível geral (atual: ${lvl}).</div>
+    <h2 class="sec-title">Moldura do avatar</h2>
+    <div class="cos-grid">${swatch(FRAMES, cos.frame, 'frame', true)}</div>
+    <h2 class="sec-title">Cor do tema</h2>
+    <div class="cos-grid">${swatch(ACCENTS, cos.accent, 'accent', false)}</div>
+    <button class="btn sec" id="cos-close" style="margin-top:14px">Fechar</button>
+  `);
+  $('#modal').querySelectorAll('.cos').forEach(b=>{
+    b.onclick=()=>{ state.profile.cosmetics[b.dataset.key]=b.dataset.id; save(); applyCosmetics(); sfx('correct'); openCosmetics(); render(); };
+  });
+  $('#cos-close').onclick=closeModal;
+}
+
+// ----- Tabela de kana (consulta rápida) -----
+const GOJUON=[['あ','い','う','え','お'],['か','き','く','け','こ'],['さ','し','す','せ','そ'],['た','ち','つ','て','と'],['な','に','ぬ','ね','の'],['は','ひ','ふ','へ','ほ'],['ま','み','む','め','も'],['や','','ゆ','','よ'],['ら','り','る','れ','ろ'],['わ','','','','を'],['ん','','','','']];
+const DAKUTEN=[['が','ぎ','ぐ','げ','ご'],['ざ','じ','ず','ぜ','ぞ'],['だ','ぢ','づ','で','ど'],['ば','び','ぶ','べ','ぼ'],['ぱ','ぴ','ぷ','ぺ','ぽ']];
+function kataOf(h){ return h ? String.fromCharCode(h.charCodeAt(0)+0x60) : ''; }
+function kanaCell(h){ return h ? `<div class="kc-cell"><div class="kc-h">${h}</div><div class="kc-k">${kataOf(h)}</div><div class="kc-r">${esc(kanaToRomaji(h))}</div></div>` : `<div class="kc-cell empty"></div>`; }
+function kanaGrid(rows){ return `<div class="kc-grid">${rows.map(r=>r.map(kanaCell).join('')).join('')}</div>`; }
+function openKanaChart(){
+  openModal(`
+    <h2>あ・ア Kana</h2>
+    <div class="hint" style="margin-bottom:8px">Hiragana · Katakana · romaji — consulta rápida.</div>
+    <h2 class="sec-title">Gojūon</h2>
+    ${kanaGrid(GOJUON)}
+    <h2 class="sec-title">Dakuten / Handakuten</h2>
+    ${kanaGrid(DAKUTEN)}
+    <button class="btn sec" id="kc-close" style="margin-top:14px">Fechar</button>
+  `);
+  $('#kc-close').onclick=closeModal;
+}
+
+function seed(){
+  const d = uid();
+  const mk = (jp,kana,romaji,meaning,example,exTr) => ({
+    id: uid(), deckId: d, jp, kana, romaji, meaning, example: example||'', exTr: exTr||'',
+    srs:{ due: now(), interval:0, ease:2.5, reps:0, lapses:0 }
+  });
+  return {
+    settings: { showRomaji:true, showKana:true, voice:'', dailyNew:10 },
+    decks: [{ id:d, name:'Iniciante — Básico' }],
+    cards: [
+      mk('こんにちは','こんにちは','konnichiwa','olá / boa tarde','こんにちは、田中さん。','Olá, senhor Tanaka.'),
+      mk('ありがとう','ありがとう','arigatou','obrigado(a)','どうもありがとう。','Muito obrigado.'),
+      mk('おはよう','おはよう','ohayou','bom dia','おはよう、みんな。','Bom dia, pessoal.'),
+      mk('さようなら','さようなら','sayounara','adeus','さようなら、また明日。','Adeus, até amanhã.'),
+      mk('はい','はい','hai','sim','はい、わかります。','Sim, eu entendo.'),
+      mk('いいえ','いいえ','iie','não','いいえ、違います。','Não, está errado.'),
+      mk('水','みず','mizu','água','水をください。','Água, por favor.'),
+      mk('食べる','たべる','taberu','comer','りんごを食べる。','Comer uma maçã.'),
+      mk('飲む','のむ','nomu','beber','お茶を飲む。','Beber chá.'),
+      mk('行く','いく','iku','ir','学校に行く。','Ir para a escola.'),
+      mk('見る','みる','miru','ver / olhar','映画を見る。','Ver um filme.'),
+      mk('日本','にほん','nihon','Japão','日本に住む。','Morar no Japão.'),
+      mk('先生','せんせい','sensei','professor(a)','先生は親切です。','O professor é gentil.'),
+      mk('学生','がくせい','gakusei','estudante','私は学生です。','Eu sou estudante.'),
+      mk('大きい','おおきい','ookii','grande','大きい家。','Uma casa grande.'),
+      mk('小さい','ちいさい','chiisai','pequeno','小さい犬。','Um cachorro pequeno.'),
+      mk('好き','すき','suki','gostar (de)','寿司が好きです。','Gosto de sushi.'),
+      mk('今日','きょう','kyou','hoje','今日は暑い。','Hoje está quente.'),
+      mk('ねこ','ねこ','neko','gato','ねこが好き。','Gosto de gatos.'),
+      mk('いぬ','いぬ','inu','cachorro','いぬと散歩する。','Passear com o cachorro.')
+    ]
+  };
+}
+
+// ---------- SRS (SM-2 simplificado) ----------
+// grade: 0=Again 1=Hard 2=Good 3=Easy
+function applyGrade(card, grade){
+  const s = card.srs;
+  s.reps = (s.reps||0);
+  if(grade === 0){
+    s.lapses = (s.lapses||0)+1; s.reps = 0; s.interval = 0;
+    s.ease = Math.max(1.3, s.ease - 0.2);
+    s.due = now() + 60*1000*5; // 5 min
+  } else {
+    s.ease = Math.max(1.3, s.ease + (grade===1? -0.15 : grade===3? 0.15 : 0));
+    if(s.reps === 0) s.interval = grade===1? 1 : grade===3? 4 : 1;
+    else if(s.reps === 1) s.interval = grade===1? 3 : grade===3? 7 : 4;
+    else s.interval = Math.round(s.interval * s.ease * (grade===1?0.7:grade===3?1.3:1));
+    s.interval = Math.max(1, s.interval);
+    s.reps += 1;
+    s.due = now() + s.interval*DAY;
+  }
+  save();
+}
+function dueCards(deckId){
+  return state.cards.filter(c => (!deckId || c.deckId===deckId) && c.srs.due <= now());
+}
+function newCardsToday(){ /* simples: cartas com reps 0 contam como novas */ return state.cards.filter(c=>c.srs.reps===0); }
+
+// ---------- TTS ----------
+let voices = [];
+function loadVoices(){ voices = (window.speechSynthesis? speechSynthesis.getVoices():[]) || []; }
+if(window.speechSynthesis){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+function speak(text){
+  if(!window.speechSynthesis){ toast('Áudio não suportado neste navegador'); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ja-JP'; u.rate = 0.9;
+  const pick = voices.find(v=>v.name===state.settings.voice) || voices.find(v=>/ja|japan/i.test(v.lang));
+  if(pick) u.voice = pick;
+  speechSynthesis.speak(u);
+}
+
+// ---------- Navegação ----------
+let tab = 'home';
+document.querySelectorAll('nav button').forEach(b=>{
+  b.addEventListener('click', ()=>{ setTab(b.dataset.tab); });
+});
+function setTab(t){
+  if(t==='kanji' && tab!=='kanji') kanjiView='grid';
+  tab = t;
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active', b.dataset.tab===t));
+  render();
+}
+
+// ---------- Render ----------
+function render(){
+  if(tab==='home') renderHome();
+  else if(tab==='study') renderStudy();
+  else if(tab==='kanji') renderKanji();
+  else if(tab==='drills') renderDrills();
+  else if(tab==='manage') renderManage();
+  else if(tab==='settings') renderSettings();
+}
+
+function renderHome(){
+  const due = dueCards().length;
+  const nw = newCardsToday().length;
+  const total = state.cards.length;
+  const g = overallLevel();
+  ensureMissions();
+  const days = state.profile.daysStudied||0;
+  const ms = state.profile.missions.items;
+  const achUnlocked = Object.keys(state.profile.achievements).length;
+  view.innerHTML = `
+    <div class="rpg-panel">
+      <div class="rpg-head">
+        <div class="rpg-ava" style="border-color:${frameColor()}">${g.level}</div>
+        <div class="rpg-id">
+          <div class="rpg-title">${titleFor(g.level)}</div>
+          <div class="rpg-sub">Nível ${g.level} · ${state.profile.xpTotal} XP${days>0?` · 📅 ${days} ${days===1?'dia':'dias'}`:''}</div>
+        </div>
+      </div>
+      <div class="xpbar"><i style="width:${g.pct}%"></i><span>${g.into} / ${g.next} XP</span></div>
+      <div class="rpg-body">
+        <div class="radar-wrap" id="radar-wrap"></div>
+        <div class="attr-list" id="attr-list"></div>
+      </div>
+    </div>
+    <div class="rpg-panel" style="padding:12px 14px">
+      <div class="rpg-title" style="font-size:11px;margin-bottom:9px">📜 MISSÕES DE HOJE</div>
+      ${ms.map(m=>`<div class="mission ${m.done?'done':''}">
+        <span class="mi-check">${m.done?'✅':'⬜'}</span>
+        <span class="mi-label">${esc(m.label)}</span>
+        <span class="mi-prog">${Math.min(m.prog,m.goal)}/${m.goal}</span>
+      </div>`).join('')}
+    </div>
+    <div class="row" style="gap:10px;margin-bottom:6px">
+      <button class="btn sec" id="go-ach">🏅 Conquistas ${achUnlocked}/${ACHIEVEMENTS.length}</button>
+      <button class="btn sec" id="go-cos">🎨 Personalizar</button>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="n">${due}</div><div class="l">para revisar</div></div>
+      <div class="stat"><div class="n">${nw}</div><div class="l">novas</div></div>
+      <div class="stat"><div class="n">${total}</div><div class="l">total</div></div>
+    </div>
+    <button class="btn" id="go-study">📖 Estudar agora ${due? `(${due})`:''}</button>
+    <div style="height:10px"></div>
+    <button class="btn sec" id="go-drills">✍️ Praticar conjugação (te-form)</button>
+    <div style="height:10px"></div>
+    <button class="btn sec" id="go-kanji">漢 Kanjidex (${(window.KANJI_DEX||[]).length} kanji)</button>
+    <div style="height:10px"></div>
+    <button class="btn sec" id="go-kana">あ・ア Tabela de kana</button>
+    <h2 class="sec-title">Seus baralhos</h2>
+    <div id="decklist"></div>
+    <button class="btn ghost" id="add-deck">＋ Novo baralho</button>
+  `;
+  const rw=$('#radar-wrap'); rw.appendChild(buildRadar(190));
+  $('#attr-list').innerHTML = ATTRS.map(a=>{
+    const L=attrLevel(a.key);
+    return `<div class="attr-row">
+      <span class="attr-ic">${a.icon}</span>
+      <span class="attr-name">${a.label}</span>
+      <span class="attr-lvl">Nv ${L.level}</span>
+      <span class="attr-bar"><i style="width:${L.pct}%"></i></span>
+    </div>`;
+  }).join('');
+  const dl = $('#decklist');
+  dl.innerHTML = state.decks.map(dk=>{
+    const cnt = state.cards.filter(c=>c.deckId===dk.id).length;
+    const d = state.cards.filter(c=>c.deckId===dk.id && c.srs.due<=now()).length;
+    return `<div class="deck">
+      <div><h3>${esc(dk.name)}</h3><div class="meta">${cnt} cards <span class="badge">${d} a revisar</span></div></div>
+      <button class="btn sec" style="width:auto" data-study="${dk.id}">Estudar</button>
+    </div>`;
+  }).join('') || `<div class="empty">Nenhum baralho ainda.</div>`;
+  $('#go-study').onclick = ()=>setTab('study');
+  $('#go-drills').onclick = ()=>setTab('drills');
+  $('#go-kanji').onclick = ()=>{ kanjiView='grid'; setTab('kanji'); };
+  $('#go-ach').onclick = openAchievements;
+  $('#go-cos').onclick = openCosmetics;
+  $('#go-kana').onclick = openKanaChart;
+  $('#add-deck').onclick = ()=>openDeckModal();
+  dl.querySelectorAll('[data-study]').forEach(b=> b.onclick=()=>{ studySession.deckId=b.dataset.study; setTab('study'); });
+}
+
+// ---------- Estudar (flashcards) ----------
+let studySession = { deckId:null, queue:[], i:0, revealed:false };
+function renderStudy(){
+  const q = dueCards(studySession.deckId);
+  if(q.length===0){
+    view.innerHTML = `<div class="empty"><div class="big">🎉</div>Tudo revisado por agora!<br><span style="font-size:13px">Volte mais tarde ou adicione novos cards.</span><div style="height:18px"></div><button class="btn sec" id="b-manage">Adicionar cards</button></div>`;
+    $('#b-manage').onclick=()=>setTab('manage');
+    return;
+  }
+  studySession.queue = q;
+  studySession.i = Math.min(studySession.i, q.length-1);
+  const card = q[studySession.i];
+  const s = state.settings;
+  const total = q.length, done = total - q.length + studySession.i;
+  view.innerHTML = `
+    <div class="study-wrap">
+      <div class="progress"><i style="width:${(studySession.i/total*100)}%"></i></div>
+      <div class="hint">${studySession.i+1} / ${total} nesta sessão</div>
+      <div class="flash" id="flash"></div>
+      <div id="answer-area" style="width:100%"></div>
+    </div>`;
+  drawFlash(card, false);
+  $('#flash').onclick = ()=>{ if(!studySession.revealed){ studySession.revealed=true; drawFlash(card,true); } };
+}
+// kanji que o usuário já aprendeu (Kanjidex)
+let _knownK = null;
+function knownKanjiSet(){ return _knownK || (_knownK = new Set((window.KANJI_DEX||[]).map(k=>k.c))); }
+function isAllKnown(s){ const ks=knownKanjiSet(); for(const ch of (s||'')){ if(ch>='一' && ch<='鿿' && !ks.has(ch)) return false; } return true; }
+// texto da frente do card conforme o ajuste de kanji
+function frontText(card){
+  const mode = state.settings.cardKanjiMode || 'learned';
+  if(mode==='all') return card.jp;
+  if(mode==='kana') return card.kana || card.jp;
+  return isAllKnown(card.jp) ? card.jp : (card.kana || card.jp); // 'learned'
+}
+function drawFlash(card, reveal){
+  studySession.revealed = reveal;
+  const s = state.settings;
+  const f = $('#flash');
+  const front = frontText(card);
+  const hidKanji = (front !== card.jp); // escondemos o kanji (mostrando kana)
+  f.innerHTML = `
+    <div class="jp-main">${esc(front)}</div>
+    ${reveal? `
+      ${s.showKana && card.kana && card.kana!==front && !hidKanji? `<div class="jp-kana">${esc(card.kana)}</div>`:''}
+      ${s.showRomaji && card.romaji? `<div class="jp-romaji">${esc(card.romaji)}</div>`:''}
+      <div class="divider"></div>
+      <div class="meaning">${esc(card.meaning)}</div>
+      ${hidKanji && card.jp!==card.kana? `<div class="hint" style="margin-top:2px">kanji: ${esc(card.jp)}</div>`:''}
+      ${card.example? `<div class="example">${tappableJP(card.example,false)}<span class="ex-tr">${esc(card.exTr)}</span></div>`:''}
+      <button class="speak" id="say">🔊</button>
+    `: `<div class="hint">Toque para revelar</div>`}
+  `;
+  if(reveal){ $('#say').onclick=(e)=>{ e.stopPropagation(); speak(card.kana||card.jp); }; attachTapLookup(f); }
+  const ans = $('#answer-area');
+  if(reveal){
+    ans.innerHTML = `<div class="grade-row">
+      <button class="grade g-again" data-g="0">De novo<small>&lt;5min</small></button>
+      <button class="grade g-hard" data-g="1">Difícil<small>${prettyNext(card,1)}</small></button>
+      <button class="grade g-good" data-g="2">Bom<small>${prettyNext(card,2)}</small></button>
+      <button class="grade g-easy" data-g="3">Fácil<small>${prettyNext(card,3)}</small></button>
+    </div>`;
+    ans.querySelectorAll('.grade').forEach(b=> b.onclick=()=>{ grade(card, +b.dataset.g); });
+  } else {
+    ans.innerHTML = `<button class="btn" id="reveal">Mostrar resposta</button>`;
+    $('#reveal').onclick = ()=>{ studySession.revealed=true; drawFlash(card,true); };
+  }
+}
+function prettyNext(card, grade){
+  // estimativa rápida em dias (sem alterar estado)
+  const s = {...card.srs};
+  if(grade===0) return '5min';
+  let iv;
+  if(s.reps===0) iv = grade===1?1:grade===3?4:1;
+  else if(s.reps===1) iv = grade===1?3:grade===3?7:4;
+  else iv = Math.round(s.interval * s.ease * (grade===1?0.7:grade===3?1.3:1));
+  iv = Math.max(1,iv);
+  return iv>=30? Math.round(iv/30)+'mes' : iv+'d';
+}
+function grade(card, g){
+  applyGrade(card, g);
+  awardXP('vocab', [3,7,10,12][g] || 5);
+  track('review');
+  sfx(g===0?'wrong':'correct');
+  studySession.revealed = false;
+  if(g!==0) studySession.i++;
+  renderStudy();
+}
+
+// ---------- Drills: conjugação te-form ----------
+const VERBS = [
+  { jp:'食べる', kana:'たべる', romaji:'taberu', meaning:'comer', type:'ichidan' },
+  { jp:'見る', kana:'みる', romaji:'miru', meaning:'ver', type:'ichidan' },
+  { jp:'寝る', kana:'ねる', romaji:'neru', meaning:'dormir', type:'ichidan' },
+  { jp:'起きる', kana:'おきる', romaji:'okiru', meaning:'acordar', type:'ichidan' },
+  { jp:'飲む', kana:'のむ', romaji:'nomu', meaning:'beber', type:'godan' },
+  { jp:'読む', kana:'よむ', romaji:'yomu', meaning:'ler', type:'godan' },
+  { jp:'書く', kana:'かく', romaji:'kaku', meaning:'escrever', type:'godan' },
+  { jp:'話す', kana:'はなす', romaji:'hanasu', meaning:'falar', type:'godan' },
+  { jp:'待つ', kana:'まつ', romaji:'matsu', meaning:'esperar', type:'godan' },
+  { jp:'買う', kana:'かう', romaji:'kau', meaning:'comprar', type:'godan' },
+  { jp:'泳ぐ', kana:'およぐ', romaji:'oyogu', meaning:'nadar', type:'godan' },
+  { jp:'遊ぶ', kana:'あそぶ', romaji:'asobu', meaning:'brincar', type:'godan' },
+  { jp:'死ぬ', kana:'しぬ', romaji:'shinu', meaning:'morrer', type:'godan' },
+  { jp:'帰る', kana:'かえる', romaji:'kaeru', meaning:'voltar', type:'godan' },
+  { jp:'行く', kana:'いく', romaji:'iku', meaning:'ir', type:'irregular' },
+  { jp:'する', kana:'する', romaji:'suru', meaning:'fazer', type:'irregular' },
+  { jp:'来る', kana:'くる', romaji:'kuru', meaning:'vir', type:'irregular' },
+  { jp:'降る', kana:'ふる', romaji:'furu', meaning:'cair / chover', type:'godan' },
+  { jp:'住む', kana:'すむ', romaji:'sumu', meaning:'morar', type:'godan' },
+  { jp:'働く', kana:'はたらく', romaji:'hataraku', meaning:'trabalhar', type:'godan' },
+  { jp:'知る', kana:'しる', romaji:'shiru', meaning:'saber / conhecer', type:'godan' },
+  { jp:'作る', kana:'つくる', romaji:'tsukuru', meaning:'fazer / criar', type:'godan' },
+  { jp:'持つ', kana:'もつ', romaji:'motsu', meaning:'ter / segurar', type:'godan' },
+  { jp:'飛ぶ', kana:'とぶ', romaji:'tobu', meaning:'voar / pular', type:'godan' },
+  { jp:'咲く', kana:'さく', romaji:'saku', meaning:'florescer', type:'godan' },
+  { jp:'走る', kana:'はしる', romaji:'hashiru', meaning:'correr', type:'godan' },
+  { jp:'結婚する', kana:'けっこんする', romaji:'kekkonsuru', meaning:'casar(-se)', type:'irregular' }
+];
+function teForm(v){
+  if(v.type==='irregular'){
+    if(v.kana==='くる'||v.kana==='来る') return {kana:'きて', romaji:'kite'};
+    if(v.kana==='いく'||v.kana==='行く') return {kana:'いって', romaji:'itte'};
+    if(v.kana.endsWith('する')) return {kana: v.kana.slice(0,-2)+'して', romaji: v.romaji.replace(/suru$/,'shite')};
+  }
+  if(v.type==='ichidan'){
+    return { kana: v.kana.slice(0,-1)+'て', romaji: v.romaji.slice(0,-2)+'te' };
+  }
+  // godan
+  const last = v.kana.slice(-1);
+  const stem = v.kana.slice(0,-1);
+  const map = {
+    'う':'って','つ':'って','る':'って',
+    'ぬ':'んで','ぶ':'んで','む':'んで',
+    'く':'いて','ぐ':'いで','す':'して'
+  };
+  const suf = map[last] || 'て';
+  const romMap = {'って':'tte','んで':'nde','いて':'ite','いで':'ide','して':'shite'};
+  const baseRom = v.romaji.slice(0,-2); // remove last vowel+consonant roughly
+  return { kana: stem+suf, romaji: (v.romaji.replace(/(u|tsu|ru|nu|bu|mu|ku|gu|su)$/, '') ) + (romMap[suf]||'te') };
+}
+let drill = { v:null, revealed:false };
+let drillMode = 'te';
+function renderDrills(){
+  view.innerHTML = `
+    <div class="seg kanji-seg" id="drill-seg">
+      <button data-m="te">て-form</button>
+      <button data-m="count">Contad.</button>
+      <button data-m="adj">Adjet.</button>
+      <button data-m="listen">🎧 Ouvir</button>
+      <button data-m="read">📖 Ler</button>
+      <button data-m="compose">✍️ Compor</button>
+    </div>
+    <div id="drill-body"></div>
+  `;
+  $('#drill-seg').querySelectorAll('button').forEach(b=>{
+    b.classList.toggle('on', b.dataset.m===drillMode);
+    b.onclick=()=>{ drillMode=b.dataset.m; renderDrills(); };
+  });
+  if(drillMode==='te') renderTeDrill();
+  else if(drillMode==='count') renderCountDrill();
+  else if(drillMode==='adj') renderAdjDrill();
+  else if(drillMode==='listen') renderListenDrill();
+  else if(drillMode==='read') renderReadDrill();
+  else renderComposeDrill();
+}
+// checa resposta digitada (romaji ou kana) contra a forma esperada
+function checkKanaAnswer(input, ans){
+  const ci=romajiCanon(input), ca=romajiCanon(ans);
+  if(!ci) return 'wrong';
+  if(ci===ca) return 'correct';
+  return lev(ci,ca)<=1 ? 'close' : 'wrong';
+}
+// barra de ações compartilhada: mostrar / escrever / próximo (+ feedback)
+function drillActions(st, answerKana, redraw, next){
+  const a = $('#drill-actions');
+  if(st.revealed){
+    let fb='';
+    if(st.result){
+      const col = st.result==='correct'?'var(--good)':st.result==='close'?'var(--hard)':'var(--again)';
+      const msg = st.result==='correct'?'✅ Correto!':st.result==='close'?'🟡 Quase!':'❌ Não foi dessa vez';
+      fb=`<div class="hint" style="margin-bottom:8px;color:${col}">${msg}${st.typed?` · você: ${esc(st.typed)}`:''}</div>`;
+    }
+    a.innerHTML = fb + `<button class="btn" id="d-next">Próximo →</button>`;
+    $('#d-next').onclick=()=>{ awardXP('grammar',6); track('drill'); sfx('correct'); next(); };
+  } else if(state.settings.drillWrite){
+    a.innerHTML = `<input id="d-in" class="cmp-in" placeholder="escreva em romaji ou kana" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false"><div style="height:8px"></div><button class="btn" id="d-check">Verificar</button>`;
+    const inp=$('#d-in'); setTimeout(()=>{ try{inp.focus();}catch(e){} },50);
+    const go=()=>{ if(!inp.value.trim()) return; st.typed=inp.value.trim(); st.result=checkKanaAnswer(inp.value, answerKana); st.revealed=true; sfx(st.result==='wrong'?'wrong':'correct'); redraw(); };
+    $('#d-check').onclick=go;
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); } });
+  } else {
+    a.innerHTML = `<button class="btn sec" id="d-show">Mostrar resposta</button>`;
+    $('#d-show').onclick=()=>{ st.revealed=true; st.result=null; redraw(); };
+  }
+}
+// chips de opções no topo do drill (escrever / dica de regra no te-form)
+function drillToggles(hintKey){
+  let h = `<button class="chip ${state.settings.drillWrite?'on':''}" id="dw-toggle">✍️ Escrever ${state.settings.drillWrite?'ON':'OFF'}</button>`;
+  if(hintKey) h += ` <button class="chip ${state.settings[hintKey]?'on':''}" id="th-toggle" data-hint="${hintKey}">💡 Dica (regra)</button>`;
+  return `<div class="row" style="gap:8px;flex-wrap:wrap;margin-bottom:10px">${h}</div>`;
+}
+function wireDrillToggles(re){
+  $('#dw-toggle').onclick=()=>{ state.settings.drillWrite=!state.settings.drillWrite; save(); re(); };
+  const th=$('#th-toggle'); if(th) th.onclick=()=>{ const k=th.dataset.hint; state.settings[k]=!state.settings[k]; save(); re(); };
+}
+const TE_RULE = `<div class="rule-box">
+  <div class="rule-t">Grupo 1 (pela terminação)</div>
+  <div><b>-u / -tsu / -ru → -tte</b> <span class="rm">kau → katte</span></div>
+  <div><b>-mu / -bu / -nu → -nde</b> <span class="rm">nomu → nonde / asobu → asonde</span></div>
+  <div><b>-ku → -ite</b> <span class="rm">kaku → kaite</span> ⚠️ iku → itte</div>
+  <div><b>-gu → -ide</b> <span class="rm">oyogu → oyoide</span></div>
+  <div><b>-su → -shite</b> <span class="rm">hanasu → hanashite</span></div>
+  <div class="rule-t" style="margin-top:8px">Grupo 2 e Grupo 3</div>
+  <div><b>Grupo 2 (ru):</b> tira -ru + -te <span class="rm">taberu → tabete</span></div>
+  <div><b>Grupo 3 (irreg.):</b> suru→shite · kuru→kite · iku→itte</div>
+  <div class="rule-t" style="margin-top:8px">Como descobrir o grupo</div>
+<div class="tree">Verbo termina em -ru?
+├─ NÃO → Grupo 1
+└─ SIM → olha a vogal antes do ru:
+    ├─ i / e (oki-ru, tabe-ru) → Grupo 2 ✅
+    ├─ a / u / o (no-ru, tsuku-ru) → Grupo 1
+    └─ exceções (kaeru, hairu, hashiru,
+        shiru, kiru) → Grupo 1</div>
+</div>`;
+const ADJ_RULE = `<div class="rule-box">
+  <div class="rule-t">Adjetivo い (ex.: takai)</div>
+  <div><b>negativo:</b> -kunai <span class="rm">takai → takakunai</span></div>
+  <div><b>passado:</b> -katta <span class="rm">takakatta</span></div>
+  <div><b>passado neg.:</b> -kunakatta <span class="rm">takakunakatta</span></div>
+  <div><b>ligação (e):</b> -kute <span class="rm">takakute</span></div>
+  <div>⚠️ ii (いい) → yo-: yokunai · yokatta · yokute</div>
+  <div class="rule-t" style="margin-top:8px">Adjetivo な (ex.: shizuka)</div>
+  <div><b>negativo:</b> ~janai <span class="rm">shizuka janai</span></div>
+  <div><b>passado:</b> ~datta <span class="rm">shizuka datta</span></div>
+  <div><b>passado neg.:</b> ~janakatta</div>
+  <div><b>ligação (e):</b> ~de <span class="rm">shizuka de</span></div>
+</div>`;
+function renderTeDrill(keep){
+  $('#drill-body').innerHTML = `
+    <h2 class="sec-title">Forma て (te-form)</h2>
+    ${drillToggles('teHint')}
+    ${state.settings.teHint? TE_RULE : ''}
+    <div class="hint" style="text-align:left;margin-bottom:12px">Veja o verbo no dicionário e diga a forma て.</div>
+    <div class="flash" id="drill-card" style="min-height:240px"></div>
+    <div style="height:14px"></div>
+    <div id="drill-actions"></div>
+  `;
+  wireDrillToggles(()=>renderTeDrill(true));
+  if(keep && drill.v) drawDrill(); else nextDrill();
+}
+function nextDrill(){
+  drill.v = nextFromBag('te', VERBS);
+  drill.revealed = false; drill.result = null; drill.typed = '';
+  drawDrill();
+}
+function drawDrill(){
+  const v = drill.v;
+  const te = teForm(v);
+  const s = state.settings;
+  const c = $('#drill-card');
+  c.innerHTML = `
+    <div class="jp-main">${esc(v.jp)}</div>
+    ${s.showKana? `<div class="jp-kana">${esc(v.kana)}</div>`:''}
+    ${s.showRomaji? `<div class="jp-romaji">${esc(v.romaji)} — ${esc(v.meaning)}</div>`:''}
+    <div class="hint" style="margin-top:8px">tipo: ${v.type==='godan'?'godan (う)':v.type==='ichidan'?'ichidan (る)':'irregular'}</div>
+    ${drill.revealed? `<div class="divider"></div>
+      <div class="meaning" style="color:var(--accent2)">${esc(te.kana)}</div>
+      ${s.showRomaji?`<div class="jp-romaji">${esc(te.romaji)}</div>`:''}
+      <button class="speak" id="say-te">🔊</button>`:''}
+  `;
+  if(drill.revealed){ $('#say-te').onclick=()=>speak(te.kana); }
+  drillActions(drill, te.kana, drawDrill, nextDrill);
+}
+
+// ---------- Drill: Contadores ----------
+// readings = leituras de 1 a 10 (com mudanças de som). Romaji é derivado por kanaToRomaji.
+const COUNTERS = [
+  { key:'tsu',  label:'genérico (coisas)', icon:'🍎', readings:['ひとつ','ふたつ','みっつ','よっつ','いつつ','むっつ','ななつ','やっつ','ここのつ','とお'] },
+  { key:'nin',  label:'pessoas（人）', icon:'🧑', readings:['ひとり','ふたり','さんにん','よにん','ごにん','ろくにん','ななにん','はちにん','きゅうにん','じゅうにん'] },
+  { key:'dai',  label:'máquinas／veículos（台）', icon:'🚗', readings:['いちだい','にだい','さんだい','よんだい','ごだい','ろくだい','ななだい','はちだい','きゅうだい','じゅうだい'] },
+  { key:'satsu',label:'livros／revistas（冊）', icon:'📚', readings:['いっさつ','にさつ','さんさつ','よんさつ','ごさつ','ろくさつ','ななさつ','はっさつ','きゅうさつ','じゅっさつ'] },
+  { key:'hon',  label:'objetos longos／finos（本）', icon:'🍶', readings:['いっぽん','にほん','さんぼん','よんほん','ごほん','ろっぽん','ななほん','はっぽん','きゅうほん','じゅっぽん'] },
+  { key:'mai',  label:'objetos planos／finos（枚）', icon:'📄', readings:['いちまい','にまい','さんまい','よんまい','ごまい','ろくまい','ななまい','はちまい','きゅうまい','じゅうまい'] },
+  { key:'hai',  label:'copos／xícaras（杯）', icon:'🥤', readings:['いっぱい','にはい','さんばい','よんはい','ごはい','ろっぱい','ななはい','はっぱい','きゅうはい','じゅっぱい'] },
+  { key:'hiki', label:'animais pequenos（匹）', icon:'🐈', readings:['いっぴき','にひき','さんびき','よんひき','ごひき','ろっぴき','ななひき','はっぴき','きゅうひき','じゅっぴき'] },
+  { key:'kai',  label:'andares（階）', icon:'🏢', readings:['いっかい','にかい','さんがい','よんかい','ごかい','ろっかい','ななかい','はっかい','きゅうかい','じゅっかい'] },
+  { key:'ko',   label:'objetos pequenos（個）', icon:'🔵', readings:['いっこ','にこ','さんこ','よんこ','ごこ','ろっこ','ななこ','はっこ','きゅうこ','じゅっこ'] },
+  { key:'soku', label:'pares de calçado（足）', icon:'👟', readings:['いっそく','にそく','さんぞく','よんそく','ごそく','ろくそく','ななそく','はっそく','きゅうそく','じゅっそく'] }
+];
+let countState = { c:null, n:1, revealed:false };
+function renderCountDrill(keep){
+  $('#drill-body').innerHTML = `
+    <h2 class="sec-title">Contadores</h2>
+    ${drillToggles()}
+    <div class="hint" style="text-align:left;margin-bottom:12px">Como se lê a quantidade com o contador? Atenção às mudanças de som!</div>
+    <div class="flash" id="drill-card" style="min-height:240px"></div>
+    <div style="height:14px"></div>
+    <div id="drill-actions"></div>
+  `;
+  wireDrillToggles(()=>renderCountDrill(true));
+  if(keep && countState.c) drawCount(); else nextCount();
+}
+function nextCount(){
+  countState.c = nextFromBag('count', COUNTERS);
+  countState.n = 1 + Math.floor(Math.random()*10);
+  countState.revealed = false; countState.result = null; countState.typed = '';
+  drawCount();
+}
+function drawCount(){
+  const { c, n, revealed } = countState;
+  const reading = c.readings[n-1];
+  const s = state.settings;
+  $('#drill-card').innerHTML = `
+    <div style="font-size:54px;font-weight:700">${n} <span style="font-size:30px">${c.icon}</span></div>
+    <div class="hint" style="margin-top:6px">${esc(c.label)}</div>
+    ${revealed? `<div class="divider"></div>
+      <div class="meaning" style="color:var(--accent2)">${esc(reading)}</div>
+      ${s.showRomaji?`<div class="jp-romaji">${esc(kanaToRomaji(reading))}</div>`:''}
+      <button class="speak" id="say-c">🔊</button>`:''}
+  `;
+  if(revealed){ $('#say-c').onclick=()=>speak(reading); }
+  drillActions(countState, reading, drawCount, nextCount);
+}
+
+// ---------- Drill: Adjetivos ----------
+const ADJ = [
+  { kana:'たかい', mean:'alto/caro', type:'i' },
+  { kana:'やすい', mean:'barato', type:'i' },
+  { kana:'おおきい', mean:'grande', type:'i' },
+  { kana:'ちいさい', mean:'pequeno', type:'i' },
+  { kana:'あつい', mean:'quente', type:'i' },
+  { kana:'さむい', mean:'frio', type:'i' },
+  { kana:'おいしい', mean:'gostoso', type:'i' },
+  { kana:'おもしろい', mean:'interessante', type:'i' },
+  { kana:'ながい', mean:'longo', type:'i' },
+  { kana:'はやい', mean:'rápido', type:'i' },
+  { kana:'かわいい', mean:'fofo', type:'i' },
+  { kana:'やさしい', mean:'gentil', type:'i' },
+  { kana:'むずかしい', mean:'difícil', type:'i' },
+  { kana:'いそがしい', mean:'ocupado', type:'i' },
+  { kana:'いい', mean:'bom', type:'i', irr:true },
+  { kana:'しずか', mean:'calmo', type:'na' },
+  { kana:'きれい', mean:'bonito/limpo', type:'na' },
+  { kana:'にぎやか', mean:'movimentado', type:'na' },
+  { kana:'しんせつ', mean:'gentil', type:'na' },
+  { kana:'ゆうめい', mean:'famoso', type:'na' },
+  { kana:'まじめ', mean:'sério', type:'na' },
+  { kana:'じょうぶ', mean:'resistente', type:'na' },
+  { kana:'たいへん', mean:'difícil/trabalhoso', type:'na' },
+  { kana:'べんり', mean:'prático', type:'na' }
+];
+const ADJ_FORMS = [
+  { key:'neg',     label:'negativo (não é…)' },
+  { key:'past',    label:'passado (era…)' },
+  { key:'pastneg', label:'passado negativo (não era…)' },
+  { key:'te',      label:'ligação (…e…)' }
+];
+function conjAdj(adj, form){
+  if(adj.type==='i'){
+    const base = adj.irr ? 'よ' : adj.kana.slice(0,-1); // いい → よ-
+    if(form==='neg') return base+'くない';
+    if(form==='past') return base+'かった';
+    if(form==='pastneg') return base+'くなかった';
+    if(form==='te') return base+'くて';
+  } else {
+    if(form==='neg') return adj.kana+'じゃない';
+    if(form==='past') return adj.kana+'だった';
+    if(form==='pastneg') return adj.kana+'じゃなかった';
+    if(form==='te') return adj.kana+'で';
+  }
+  return adj.kana;
+}
+let adjState = { a:null, form:null, revealed:false };
+function renderAdjDrill(keep){
+  $('#drill-body').innerHTML = `
+    <h2 class="sec-title">Adjetivos</h2>
+    ${drillToggles('adjHint')}
+    ${state.settings.adjHint? ADJ_RULE : ''}
+    <div class="hint" style="text-align:left;margin-bottom:12px">Conjugue o adjetivo na forma pedida (lembre: い vs な).</div>
+    <div class="flash" id="drill-card" style="min-height:240px"></div>
+    <div style="height:14px"></div>
+    <div id="drill-actions"></div>
+  `;
+  wireDrillToggles(()=>renderAdjDrill(true));
+  if(keep && adjState.a) drawAdj(); else nextAdj();
+}
+function nextAdj(){
+  adjState.a = nextFromBag('adj', ADJ);
+  adjState.form = ADJ_FORMS[Math.floor(Math.random()*ADJ_FORMS.length)];
+  adjState.revealed = false; adjState.result = null; adjState.typed = '';
+  drawAdj();
+}
+function drawAdj(){
+  const { a, form, revealed } = adjState;
+  const ans = conjAdj(a, form.key);
+  const s = state.settings;
+  const dict = a.type==='na' ? a.kana+'（な）' : a.kana;
+  $('#drill-card').innerHTML = `
+    <div class="jp-main">${esc(dict)}</div>
+    ${s.showRomaji?`<div class="jp-romaji">${esc(kanaToRomaji(a.kana))} — ${esc(a.mean)}</div>`:`<div class="hint">${esc(a.mean)}</div>`}
+    <div class="hint" style="margin-top:4px">tipo: ${a.type==='i'?'adjetivo い':'adjetivo な'}</div>
+    <div class="meaning" style="font-size:18px;margin-top:8px">→ ${esc(form.label)}</div>
+    ${revealed? `<div class="divider"></div>
+      <div class="meaning" style="color:var(--accent2)">${esc(ans)}</div>
+      ${s.showRomaji?`<div class="jp-romaji">${esc(kanaToRomaji(ans))}</div>`:''}
+      <button class="speak" id="say-a">🔊</button>`:''}
+  `;
+  if(revealed){ $('#say-a').onclick=()=>speak(ans); }
+  drillActions(adjState, ans, drawAdj, nextAdj);
+}
+
+// ---------- Treino: Listening (TTS) ----------
+let listenState = { format:'mean', cur:null };
+function listenPool(){ return state.cards.filter(c=>c.kana && c.meaning); }
+function renderListenDrill(){
+  $('#drill-body').innerHTML = `
+    <h2 class="sec-title">Listening 🎧</h2>
+    <div class="hint" style="text-align:left;margin-bottom:10px">Ouça a palavra e escolha a resposta certa.</div>
+    <div class="row" style="gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <button class="chip ${listenState.format==='mean'?'on':''}" id="lf-mean">🔊 palavra → significado</button>
+      <button class="chip ${listenState.format==='esc'?'on':''}" id="lf-esc">🔊 palavra → escrita</button>
+      ${(window.TATOEBA&&window.TATOEBA.length)?`<button class="chip ${listenState.format==='native'?'on':''}" id="lf-nat">🎙️ frases (voz nativa)</button>`:''}
+    </div>
+    <div id="listen-area"></div>
+  `;
+  $('#lf-mean').onclick=()=>{ listenState.format='mean'; listenState.cur=null; renderListenDrill(); };
+  $('#lf-esc').onclick=()=>{ listenState.format='esc'; listenState.cur=null; renderListenDrill(); };
+  if($('#lf-nat')) $('#lf-nat').onclick=()=>{ listenState.format='native'; listenState.cur=null; renderListenDrill(); };
+  drawListen();
+  playListenAudio();
+}
+// toca o áudio da questão atual (TTS para palavras, mp3 nativo para frases)
+let _clip = null;
+function playListenAudio(force){
+  const q = listenState.cur; if(!q) return;
+  if(!force && q.answered!=null) return; // auto-play não toca após responder; botão (force) sempre toca
+  if(listenState.format==='native'){
+    try{ if(_clip){ _clip.pause(); } _clip = new Audio('./audio/tatoeba/'+q.item.id+'.mp3'); _clip.play().catch(()=>{}); }catch(e){}
+  } else {
+    speak(q.item.kana);
+  }
+}
+function drawListen(){
+  const native = listenState.format==='native';
+  const pool = native ? (window.TATOEBA||[]) : listenPool();
+  const area = $('#listen-area');
+  if(pool.length<4){ area.innerHTML='<div class="empty">Conteúdo insuficiente para este modo.</div>'; return; }
+  if(!listenState.cur){
+    const item = nextFromBag('listen-'+listenState.format, pool);
+    let correct, options;
+    if(listenState.format==='mean'){
+      correct = item.meaning;
+      options = shuffle([correct, ...new Set(pickDistractors(pool.map(c=>c.meaning),3,m=>m===item.meaning))]).slice(0,4);
+    } else if(listenState.format==='esc'){
+      correct = item.kana;
+      options = shuffle([correct, ...new Set(pickDistractors(pool.map(c=>c.kana),3,k=>k===item.kana))]).slice(0,4);
+    } else { // native: ouvir frase -> escolher tradução PT
+      correct = item.pt;
+      options = shuffle([correct, ...new Set(pickDistractors(pool.map(c=>c.pt),3,p=>p===item.pt))]).slice(0,4);
+    }
+    if(!options.includes(correct)) options[0]=correct;
+    listenState.cur = { item, correct, options, answered:null };
+  }
+  const q = listenState.cur;
+  area.innerHTML = `
+    <div class="study-wrap" style="margin-top:4px">
+      <button class="listen-play" id="lplay">🔊</button>
+      <div class="hint">${native?'Ouça a frase e escolha a tradução':'Toque para ouvir de novo'}</div>
+      <div class="kbtns" id="lopts" style="width:100%"></div>
+      <div id="lnext" style="width:100%"></div>
+    </div>`;
+  $('#lplay').onclick=()=>playListenAudio(true);
+  const opts=$('#lopts');
+  opts.innerHTML = q.options.map((o,i)=>`<button class="opt" data-i="${i}" style="font-size:${native?'15':'20'}px">${esc(o)}</button>`).join('');
+  opts.querySelectorAll('.opt').forEach(b=>{
+    const val=q.options[+b.dataset.i];
+    if(q.answered!=null){ b.disabled=true; if(val===q.correct) b.classList.add('ok'); else if(val===q.answered) b.classList.add('no'); }
+    b.onclick=()=>{
+      if(q.answered!=null) return;
+      q.answered=val; const right=val===q.correct;
+      const cb = bumpCombo(right);
+      awardXP('listening', right? Math.round((native?12:9)*comboMult()) : 2);
+      track('listen', { correct:right });
+      sfx(right?(cb>=2?'combo':'correct'):'wrong');
+      drawListen();
+    };
+  });
+  if(q.answered!=null){
+    const right=q.answered===q.correct;
+    let reveal;
+    if(native){
+      reveal = `${tappableJP(q.item.jp,false)} — ${esc(q.item.pt)}<div class="hint" style="font-size:11px;margin-top:4px">áudio: ${esc(q.item.by)} · Tatoeba (${esc(q.item.lic)})</div>`;
+    } else {
+      reveal = `${tappableJP(q.item.jp,false)}${state.settings.showRomaji?' ('+esc(q.item.romaji)+')':''} — ${esc(q.item.meaning)}`;
+    }
+    $('#lnext').innerHTML = `
+      <div class="hint" style="margin:10px 0;color:${right?'var(--good)':'var(--again)'}">
+        ${right?'Correto! 🎉':'Resposta: '+esc(q.correct)}<br>${reveal}</div>
+      <button class="btn" id="lnx">Próxima →</button>`;
+    $('#lnx').onclick=()=>{ listenState.cur=null; drawListen(); playListenAudio(); };
+    attachTapLookup($('#lnext')); // toque nas palavras da frase revelada
+  }
+}
+
+// ---------- Treino: Leitura (textos com furigana) ----------
+// Converte {kanji|leitura} em <ruby> (ou só o kanji se furigana off).
+function furi(s, show){
+  const e = esc(s||'');
+  return e.replace(/\{([^|]+)\|([^}]+)\}/g, (m,k,r)=> show ? `<ruby>${k}<rt>${r}</rt></ruby>` : k);
+}
+// ----- Dicionário e busca de palavra (estilo Kindle) -----
+function buildDict(){
+  const D = {};
+  const add=(k,v)=>{ if(k){ k=k.replace(/^〜/,''); if(k && !(k in D)) D[k]=v; } };
+  const JD0 = window.JP_DICT || {};
+  // partículas têm prioridade (senão 歯=は, 二=に etc. sobrescreveriam a partícula)
+  ['は','が','を','に','へ','と','も','の','で','から','まで','や','ね','よ','か'].forEach(p=>{ if(JD0[p]) D[p]=JD0[p]; });
+  state.cards.forEach(c=>{ add(c.kana, c.meaning); add(c.jp, c.meaning); });
+  (window.KANJI_DEX||[]).forEach(k=> add(k.c, k.mean));
+  (window.READINGS||[]).forEach(r=> (r.vocab||[]).forEach(v=>{
+    let base=v.jp; const m=v.jp.match(/（(.+?)）/);
+    if(m){ add(m[1], v.pt); base=v.jp.replace(/（.+?）/,''); }
+    add(base.replace(/…$/,''), v.pt);
+  }));
+  const JD = window.JP_DICT || {}; // dicionário base (preenche o que faltar)
+  for(const k in JD) add(k, JD[k]);
+  return D;
+}
+function lookupWord(raw){
+  if(!raw) return null;
+  let s = raw.replace(/[、。「」『』？！…\s　]/g,'').replace(/^〜/,'');
+  if(!s) return null;
+  const D = window._DICT || (window._DICT = buildDict());
+  const cands = [s];
+  const rules = [
+    [/ませんでした$/,'ます'],[/ましたか$/,'ます'],[/ました$/,'ます'],[/ませんか$/,'ます'],[/ません$/,'ます'],[/ましょう$/,'ます'],[/まして$/,'ます'],[/ます$/,'ます'],
+    [/くなかった$/,'い'],[/くないです$/,'い'],[/くない$/,'い'],[/かったです$/,'い'],[/かった$/,'い'],[/くて$/,'い'],
+    [/でした$/,''],[/だった$/,''],[/です$/,'']
+  ];
+  rules.forEach(([re,suf])=>{ if(re.test(s)){ const c=s.replace(re,suf); if(c) cands.push(c); } });
+  for(let n=s.length; n>=1; n--) cands.push(s.slice(0,n));
+  for(const c of cands){ if(D[c]) return { word:c, meaning:D[c] }; }
+  return null;
+}
+let _wpop = null;
+function wordPopupEl(){
+  if(!_wpop){ _wpop=document.createElement('div'); _wpop.id='word-pop'; _wpop.style.display='none'; document.body.appendChild(_wpop); }
+  return _wpop;
+}
+// mostra o popup ancorado numa palavra tocada (.jpw)
+function showWordPopupFor(el){
+  const word = el.dataset.w || el.textContent.trim();
+  const reading = el.dataset.r;
+  const hit = lookupWord(word) || (reading ? lookupWord(reading) : null);
+  const pop = wordPopupEl();
+  const rect = el.getBoundingClientRect();
+  pop.innerHTML = hit
+    ? `<span class="wp-w">${esc(hit.word)}</span><span class="wp-m">${esc(hit.meaning)}</span>`
+    : `<span class="wp-w">${esc(word)}</span><span class="wp-m" style="color:var(--muted)">sem definição no dicionário</span>`;
+  pop.style.display='block';
+  let x = rect.left + rect.width/2 - pop.offsetWidth/2 + window.scrollX;
+  x = Math.max(8, Math.min(x, window.innerWidth - pop.offsetWidth - 8));
+  let y = rect.top + window.scrollY - pop.offsetHeight - 8;
+  if(y < window.scrollY+4) y = rect.bottom + window.scrollY + 8;
+  pop.style.left = x+'px'; pop.style.top = y+'px';
+  if(hit) sfx('correct');
+}
+function _hidePop(e){ if(_wpop && _wpop.style.display==='block' && !_wpop.contains(e.target) && !(e.target.closest && e.target.closest('.jpw'))) _wpop.style.display='none'; }
+document.addEventListener('mousedown', _hidePop);
+document.addEventListener('touchstart', _hidePop, {passive:true});
+// tokeniza japonês em palavras clicáveis (.jpw). showFuri controla o furigana (ruby).
+function tappableJP(raw, showFuri){
+  const D = window._DICT || (window._DICT = buildDict());
+  let out='', last=0, m;
+  const re=/\{([^|]+)\|([^}]+)\}/g;
+  function emitPlain(text){
+    let i=0;
+    while(i<text.length){
+      let matched=null;
+      const maxL=Math.min(10, text.length-i);
+      for(let L=maxL; L>=1; L--){ const sub=text.substr(i,L); if(D[sub]){ matched=sub; break; } }
+      if(matched){ out+=`<span class="jpw" data-w="${esc(matched)}">${esc(matched)}</span>`; i+=matched.length; }
+      else { out+=esc(text[i]); i++; }
+    }
+  }
+  while((m=re.exec(raw))){
+    if(m.index>last) emitPlain(raw.slice(last,m.index));
+    const inner = showFuri ? `<ruby>${esc(m[1])}<rt>${esc(m[2])}</rt></ruby>` : esc(m[1]);
+    out+=`<span class="jpw" data-w="${esc(m[1])}" data-r="${esc(m[2])}">${inner}</span>`;
+    last=re.lastIndex;
+  }
+  if(last<raw.length) emitPlain(raw.slice(last));
+  return out;
+}
+// liga o clique nas palavras (.jpw) num container (fase de captura p/ não disparar outros cliques)
+function attachTapLookup(el){
+  if(!el) return;
+  el.addEventListener('click', e=>{
+    const w = e.target.closest && e.target.closest('.jpw');
+    if(w){ e.stopPropagation(); showWordPopupFor(w); }
+  }, true);
+}
+
+let readState = { id:null, furi:true };
+function renderReadDrill(){
+  const body=$('#drill-body');
+  const list = window.READINGS || [];
+  if(!readState.id){
+    body.innerHTML = `
+      <h2 class="sec-title">Leitura 📖</h2>
+      <div class="hint" style="text-align:left;margin-bottom:10px">Escolha um texto. Dá para ligar/desligar o furigana (leitura sobre o kanji).</div>
+      <div id="read-list"></div>`;
+    $('#read-list').innerHTML = list.map(r=>`
+      <div class="deck" data-r="${esc(r.id)}">
+        <div><h3>${furi(r.title,false)}</h3><div class="meta">${esc(r.sub||'')}${r.level?' · '+esc(r.level):''}</div></div>
+        <button class="btn sec" style="width:auto">Ler</button>
+      </div>`).join('') || '<div class="empty">Sem textos ainda.</div>';
+    $('#read-list').querySelectorAll('[data-r]').forEach(el=> el.onclick=()=>{ readState.id=el.dataset.r; renderReadDrill(); });
+    return;
+  }
+  const r = list.find(x=>x.id===readState.id);
+  if(!r){ readState.id=null; renderReadDrill(); return; }
+  body.innerHTML = `
+    <div class="backbar">
+      <button id="r-back">← Textos</button>
+      <button class="chip ${readState.furi?'on':''}" id="r-furi" style="margin-left:auto">あ furigana</button>
+    </div>
+    <h2 style="font-size:21px;margin:4px 0">${furi(r.title, readState.furi)}</h2>
+    <div class="hint" style="text-align:left;margin-bottom:10px">Toque numa <b>palavra</b> para ver o significado, ou na frase (espaços) para ver a tradução. 📖</div>
+    <div class="read-body" id="read-body"></div>
+    <button class="btn sec" id="r-all" style="margin-top:10px">Mostrar todas as traduções</button>
+    <h2 class="sec-title">Vocabulário</h2>
+    <div id="read-vocab"></div>
+    <h2 class="sec-title">Compreensão (こたえなさい)</h2>
+    <div id="read-q"></div>
+    <button class="btn" id="r-done" style="margin-top:14px">✅ Concluir leitura (+12 XP)</button>
+  `;
+  $('#r-back').onclick=()=>{ readState.id=null; renderReadDrill(); };
+  $('#r-furi').onclick=()=>{ readState.furi=!readState.furi; renderReadDrill(); };
+  const rb=$('#read-body');
+  rb.innerHTML = r.lines.map((ln,i)=>`
+    <div class="rline" data-i="${i}">
+      <div class="rjp">${tappableJP(ln.jp, readState.furi)}</div>
+      <div class="rpt" id="rpt-${i}" style="display:none">${esc(ln.pt)}</div>
+    </div>`).join('');
+  rb.querySelectorAll('.rline').forEach(el=>{ el.onclick=()=>{
+    if((window.getSelection()||'').toString().trim()) return; // está selecionando uma palavra
+    const t=$('#rpt-'+el.dataset.i); t.style.display = (t.style.display==='none'?'block':'none');
+  }; });
+  attachTapLookup(rb);
+  $('#r-all').onclick=()=>{ rb.querySelectorAll('.rpt').forEach(t=>t.style.display='block'); };
+  $('#read-vocab').innerHTML = (r.vocab||[]).map(v=>`<div class="rvocab"><span class="rv-jp">${esc(v.jp)}</span><span class="rv-pt">${esc(v.pt)}</span></div>`).join('');
+  $('#read-q').innerHTML = (r.questions||[]).map((q,i)=>`
+    <div class="rq">
+      <div class="rq-q">${i+1}. ${esc(q.q)}</div>
+      <button class="rq-show" data-i="${i}">ver resposta</button>
+      <div class="rq-a" id="rq-a-${i}" style="display:none">${esc(q.a)}</div>
+    </div>`).join('');
+  $('#read-q').querySelectorAll('.rq-show').forEach(b=> b.onclick=()=>{ $('#rq-a-'+b.dataset.i).style.display='block'; b.style.display='none'; });
+  $('#r-done').onclick=()=>{
+    const dk = dayKey(new Date());
+    const rd = state.profile.readDone || (state.profile.readDone={day:null,ids:{}});
+    if(rd.day!==dk){ rd.day=dk; rd.ids={}; }
+    const first = !rd.ids[r.id];
+    rd.ids[r.id]=true;
+    // XP proporcional ao tamanho do texto (1ª leitura do dia); reler dá pouco
+    const xp = first ? Math.min(120, 8*r.lines.length) : 5;
+    awardXP('reading', xp); track('read'); sfx('levelup');
+    toast(first ? ('Leitura concluída! +'+xp+' XP') : ('Relido (+'+xp+' XP)'));
+    $('#r-done').disabled=true;
+  };
+}
+
+// ---------- Treino: Compor frases (romaji/kana, correção tolerante) ----------
+// Normaliza qualquer entrada para um "romaji canônico" (mesma forma dos dois lados).
+function romajiCanon(s){
+  let r = kanaToRomaji(s || '').toLowerCase();
+  r = r.replace(/[\s　、。，．,\.！!？\?「」『』~〜・…\-’'）（()]/g,'');
+  const rep = [['sya','sha'],['syu','shu'],['syo','sho'],['tya','cha'],['tyu','chu'],['tyo','cho'],
+    ['zya','ja'],['zyu','ju'],['zyo','jo'],['jya','ja'],['jyu','ju'],['jyo','jo'],
+    ['si','shi'],['ti','chi'],['tu','tsu'],['hu','fu'],['zi','ji'],['di','ji'],['du','zu']];
+  rep.forEach(([a,b])=>{ r = r.split(a).join(b); });
+  // partículas e kana especiais (transform consistente nos dois lados)
+  r = r.split('wo').join('o').split('wa').join('ha').split('he').join('e').split('nn').join('n');
+  // vogais longas: colapsa repetidas e ou->o
+  r = r.replace(/([aiueo])\1+/g,'$1').split('ou').join('o');
+  return r;
+}
+function lev(a,b){
+  const m=a.length,n=b.length; if(!m) return n; if(!n) return m;
+  let prev=Array.from({length:n+1},(_,i)=>i), cur=new Array(n+1);
+  for(let i=1;i<=m;i++){ cur[0]=i;
+    for(let j=1;j<=n;j++){ cur[j]=Math.min(prev[j]+1, cur[j-1]+1, prev[j-1]+(a[i-1]===b[j-1]?0:1)); }
+    [prev,cur]=[cur,prev];
+  }
+  return prev[n];
+}
+function diffOf(item){
+  if(item.diff) return item.diff;
+  const a=item.accept[0]||''; const commas=(a.match(/、/g)||[]).length; const len=a.length;
+  if(len<=14 && commas===0) return 'easy';
+  if(commas>=2 || len>26 || (commas>=1 && len>=20)) return 'hard';
+  return 'med';
+}
+function diffLabel(d){ return d==='easy'?'🟢 Fácil':d==='hard'?'🔴 Difícil':'🟡 Médio'; }
+function composeHint(input, accept){
+  const ut=(input.trim().split(/\s+/).map(romajiCanon)).filter(Boolean);
+  const ak=accept.trim().split(/\s+/).filter(Boolean);
+  const at=ak.map(romajiCanon);
+  for(let i=0;i<at.length;i++){
+    if(ut[i]!==at[i]){
+      if(ut[i]===undefined) return 'parece faltar « '+ak[i]+' »';
+      return 'reveja a parte « '+ak[i]+' »';
+    }
+  }
+  if(ut.length>at.length) return 'tem algo a mais no fim';
+  return 'confira as partículas ou a conjugação';
+}
+function checkCompose(input, accepts){
+  const ci = romajiCanon(input);
+  if(!ci) return { status:'empty' };
+  let best=999, bestA=accepts[0];
+  for(const a of accepts){ const d=lev(ci, romajiCanon(a)); if(d<best){ best=d; bestA=a; } }
+  if(best===0) return { status:'correct' };
+  if(best <= Math.max(2, Math.floor(ci.length*0.08))) return { status:'close' };
+  if(best <= Math.max(5, Math.floor(ci.length*0.30))) return { status:'near', hint:composeHint(input,bestA) };
+  return { status:'wrong', hint:composeHint(input,bestA) };
+}
+
+let composeState = { cur:null, answered:null };
+function pickCompose(){
+  const lv = state.settings.composeLevels || {easy:true,med:true,hard:true};
+  let pool=(window.WRITING||[]).filter(w=>lv[diffOf(w)]);
+  if(!pool.length) pool=(window.WRITING||[]);
+  return nextFromBag('compose-'+['easy','med','hard'].filter(k=>lv[k]).join(''), pool);
+}
+const XP_DIFF = { easy:8, med:14, hard:20 };
+function renderComposeDrill(){
+  const body=$('#drill-body');
+  const lv = state.settings.composeLevels;
+  if(!composeState.cur) composeState.cur = pickCompose();
+  const q = composeState.cur;
+  const chip=(k,l)=>`<button class="chip ${lv[k]?'on':''}" data-lv="${k}">${l}</button>`;
+  body.innerHTML = `
+    <h2 class="sec-title">Compor frases ✍️</h2>
+    <div class="row" style="gap:8px;margin-bottom:8px">${chip('easy','🟢 Fácil')}${chip('med','🟡 Médio')}${chip('hard','🔴 Difícil')}</div>
+    <div class="hint" style="text-align:left;margin-bottom:10px">Escreva em japonês (romaji ou kana). Se chegar perto, dou uma dica e você tenta de novo.</div>
+    ${q? `
+    <div class="compose-q">
+      <div class="cq-pt">${esc(q.pt)}</div>
+      <div class="hint" style="margin-top:4px">${diffLabel(diffOf(q))}${q.level?' · '+esc(q.level):''}</div>
+    </div>
+    <textarea id="cmp-in" class="cmp-in" rows="2" placeholder="ex.: sono kamera wa ikura desuka" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false"></textarea>
+    <div id="cmp-fb" style="min-height:20px;margin:8px 0"></div>
+    <div class="kbtns">
+      <button class="btn" id="cmp-check">Verificar</button>
+      <button class="btn sec" id="cmp-skip">Ver resposta</button>
+    </div>
+    <div id="cmp-next"></div>` : '<div class="empty">Nenhuma frase neste nível.</div>'}
+  `;
+  body.querySelectorAll('[data-lv]').forEach(b=> b.onclick=()=>{
+    lv[b.dataset.lv]=!lv[b.dataset.lv];
+    if(!lv.easy && !lv.med && !lv.hard) lv[b.dataset.lv]=true; // nunca zerar tudo
+    save(); composeState.cur=null; composeState.answered=null; renderComposeDrill();
+  });
+  if(!q) return;
+  const inp=$('#cmp-in');
+  setTimeout(()=>{ try{ inp.focus(); }catch(e){} }, 50);
+  function reveal(kind){ // 'correct' | 'close' | 'shown'
+    composeState.answered=kind; inp.disabled=true;
+    const a=q.accept[0], fb=$('#cmp-fb');
+    if(kind==='correct'){ const cb=bumpCombo(true); fb.innerHTML='<span style="color:var(--good)">✅ Correto!</span>'; awardXP('writing', Math.round(XP_DIFF[diffOf(q)]*comboMult())); track('compose'); sfx(cb>=2?'combo':'correct'); }
+    else if(kind==='close'){ bumpCombo(true); fb.innerHTML='<span style="color:var(--good)">✅ Quase perfeito! (só um detalhinho)</span>'; awardXP('writing', Math.round(XP_DIFF[diffOf(q)]*0.7)); track('compose'); sfx('correct'); }
+    else { bumpCombo(false); fb.innerHTML='<span style="color:var(--muted)">Resposta:</span>'; awardXP('writing',3); }
+    $('#cmp-next').innerHTML = `
+      <div class="cmp-ans">
+        <div class="ca-jp">${tappableJP(a,false)}</div>
+        <div class="ca-rom">${esc(kanaToRomaji(a))}</div>
+        ${q.accept.length>1?`<div class="hint" style="margin-top:4px">Outra forma aceita: ${esc(q.accept[1])}</div>`:''}
+        <div class="hint" style="margin-top:6px">💡 Toque numa palavra para ver o significado.</div>
+      </div>
+      <button class="btn" id="cmp-nx" style="margin-top:10px">Próxima →</button>`;
+    $('#cmp-nx').onclick=()=>{ composeState.cur=null; composeState.answered=null; renderComposeDrill(); };
+    attachTapLookup($('#cmp-next'));
+  }
+  $('#cmp-check').onclick=()=>{
+    if(composeState.answered) return;
+    const res = checkCompose(inp.value, q.accept);
+    const fb=$('#cmp-fb');
+    if(res.status==='empty'){ fb.innerHTML='<span style="color:var(--muted)">Escreva algo primeiro 🙂</span>'; return; }
+    if(res.status==='correct'){ reveal('correct'); return; }
+    if(res.status==='close'){ reveal('close'); return; }
+    sfx('wrong'); // near/wrong: não revela, deixa reescrever
+    const col = res.status==='near'?'var(--hard)':'var(--again)';
+    const pre = res.status==='near'?'🟡 Quase! ':'❌ ';
+    fb.innerHTML = `<span style="color:${col}">${pre}${esc(res.hint||'')}</span> <span class="hint">— tente de novo (ou “Ver resposta”)</span>`;
+  };
+  $('#cmp-skip').onclick=()=>{ if(composeState.answered) return; reveal('shown'); };
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); $('#cmp-check').click(); } });
+}
+
+// ============================================================
+//  KANJIDEX
+// ============================================================
+
+// --- Kana -> Romaji (para mostrar leituras em romaji) ---
+const ROMA = {
+  'あ':'a','い':'i','う':'u','え':'e','お':'o',
+  'か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
+  'が':'ga','ぎ':'gi','ぐ':'gu','げ':'ge','ご':'go',
+  'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so',
+  'ざ':'za','じ':'ji','ず':'zu','ぜ':'ze','ぞ':'zo',
+  'た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to',
+  'だ':'da','ぢ':'ji','づ':'zu','で':'de','ど':'do',
+  'な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no',
+  'は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho',
+  'ば':'ba','び':'bi','ぶ':'bu','べ':'be','ぼ':'bo',
+  'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po',
+  'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
+  'や':'ya','ゆ':'yu','よ':'yo',
+  'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
+  'わ':'wa','を':'wo','ん':'n',
+  'きゃ':'kya','きゅ':'kyu','きょ':'kyo','しゃ':'sha','しゅ':'shu','しょ':'sho',
+  'ちゃ':'cha','ちゅ':'chu','ちょ':'cho','にゃ':'nya','にゅ':'nyu','にょ':'nyo',
+  'ひゃ':'hya','ひゅ':'hyu','ひょ':'hyo','みゃ':'mya','みゅ':'myu','みょ':'myo',
+  'りゃ':'rya','りゅ':'ryu','りょ':'ryo','ぎゃ':'gya','ぎゅ':'gyu','ぎょ':'gyo',
+  'じゃ':'ja','じゅ':'ju','じょ':'jo','びゃ':'bya','びゅ':'byu','びょ':'byo',
+  'ぴゃ':'pya','ぴゅ':'pyu','ぴょ':'pyo'
+};
+function kanaToRomaji(s){
+  if(!s) return '';
+  // normaliza katakana -> hiragana (preserva ー)
+  const a = [...s].map(ch=>{
+    const code = ch.codePointAt(0);
+    if(code>=0x30A1 && code<=0x30F6) return String.fromCodePoint(code-0x60);
+    return ch;
+  });
+  let out='';
+  for(let i=0;i<a.length;i++){
+    const c=a[i], n=a[i+1];
+    if(n && ROMA[c+n]){ out+=ROMA[c+n]; i++; continue; }
+    if(c==='っ'){ // sokuon: dobra a próxima consoante
+      const nn=a[i+1]; let r = nn ? (ROMA[nn]||'') : '';
+      out += r ? r[0] : 't'; continue;
+    }
+    if(c==='ー'){ const last=out.slice(-1); if('aeiou'.includes(last)) out+=last; continue; }
+    out += (ROMA[c] != null) ? ROMA[c] : c; // passa parênteses, hífen etc.
+  }
+  return out;
+}
+
+// --- Carregador de traços (offline-first; cai pro CDN se faltar) ---
+function jpStrokeLoader(char, onComplete, onError){
+  const d = window.KANJI_STROKES && window.KANJI_STROKES[char];
+  if(d){ onComplete(d); return; }
+  fetch('https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@latest/'+encodeURIComponent(char)+'.json')
+    .then(r=>r.json()).then(onComplete).catch(onError||function(){ toast('Traços indisponíveis offline'); });
+}
+
+// --- Diagrama estático com numeração dos traços ---
+function buildDiagram(char, size){
+  const data = window.KANJI_STROKES && window.KANJI_STROKES[char];
+  if(!data || !window.HanziWriter) return null;
+  const pad = Math.round(size*0.07);
+  const t = HanziWriter.getScalingTransform(size, size, pad);
+  const NS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg');
+  svg.setAttribute('viewBox',`0 0 ${size} ${size}`);
+  svg.setAttribute('width',size); svg.setAttribute('height',size);
+  const g=document.createElementNS(NS,'g'); g.setAttribute('transform', t.transform);
+  const N = data.strokes.length;
+  data.strokes.forEach((d,i)=>{
+    const p=document.createElementNS(NS,'path'); p.setAttribute('d',d);
+    const hue = 215 + Math.round(i*(150/Math.max(1,N-1))); // azul -> verde conforme a ordem
+    p.setAttribute('fill', `hsl(${hue},75%,45%)`);
+    g.appendChild(p);
+  });
+  svg.appendChild(g);
+  (data.medians||[]).forEach((m,i)=>{
+    if(!m || !m.length) return;
+    const px=m[0][0], py=m[0][1];
+    // o transform usa translate(t.x, size - t.y) scale(s, -s); replicamos para posicionar os números
+    const x = t.x + t.scale*px;
+    const y = (size - t.y) - t.scale*py;
+    const circ=document.createElementNS(NS,'circle');
+    circ.setAttribute('cx',x); circ.setAttribute('cy',y); circ.setAttribute('r','9');
+    circ.setAttribute('fill','#111'); circ.setAttribute('opacity','0.88');
+    const tx=document.createElementNS(NS,'text');
+    tx.setAttribute('x',x); tx.setAttribute('y',y+4); tx.setAttribute('text-anchor','middle');
+    tx.setAttribute('font-size','12'); tx.setAttribute('font-weight','700'); tx.setAttribute('fill','#fff');
+    tx.textContent=(i+1);
+    svg.appendChild(circ); svg.appendChild(tx);
+  });
+  return svg;
+}
+
+function readingsHtml(item){
+  const fmt = (arr)=> arr.map(r=>{
+    const rom = state.settings.showRomaji ? ` <span class="rom">${esc(kanaToRomaji(r))}</span>` : '';
+    return `${esc(r)}${rom}`;
+  }).join('、 ');
+  return `
+    <div class="line"><div class="lbl">On (音)</div><div class="val">${item.on&&item.on.length?fmt(item.on):'—'}</div></div>
+    <div class="line"><div class="lbl">Kun (訓)</div><div class="val">${item.kun&&item.kun.length?fmt(item.kun):'—'}</div></div>`;
+}
+
+// --- Estado de navegação da Kanjidex ---
+let kanjiView='grid', kanjiSel=null, kanjiQuiz=null, hw=null;
+function findKanji(c){ return window.KANJI_DEX.find(k=>k.c===c); }
+
+function renderKanji(){
+  hw = null; // a instância antiga sai com o innerHTML
+  if(kanjiView==='detail') return renderKanjiDetail(kanjiSel);
+  if(kanjiView==='write') return renderKanjiWrite(kanjiSel);
+  if(kanjiView==='quiz-mean') return renderKanjiQuizView('mean');
+  if(kanjiView==='quiz-read') return renderKanjiQuizView('read');
+  // grade padrão
+  const dex = window.KANJI_DEX || [];
+  const maxWeek = dex.reduce((m,k)=>Math.max(m,k.week||1),1);
+  view.innerHTML = `
+    <div class="seg kanji-seg">
+      <button class="on">📚 Consultar</button>
+      <button id="q-mean">🎯 Significado</button>
+      <button id="q-read">🔤 Leitura</button>
+      <button id="q-write">✍️ Escrita</button>
+    </div>
+    <div class="hint" style="text-align:left;margin-bottom:8px">${dex.length} kanji aprendidos. Toque em um para ver leituras e ordem dos traços.</div>
+    <div class="kgrid" id="kgrid"></div>
+  `;
+  $('#q-mean').onclick=()=>{ kanjiQuiz={type:'mean',n:0,correct:0,cur:null}; kanjiView='quiz-mean'; renderKanji(); };
+  $('#q-read').onclick=()=>{ kanjiQuiz={type:'read',n:0,correct:0,cur:null}; kanjiView='quiz-read'; renderKanji(); };
+  $('#q-write').onclick=()=>{ kanjiSel = nextFromBag('kwrite', dex).c; kanjiView='write'; renderKanji(); };
+  $('#kgrid').innerHTML = dex.map(k=>`
+    <div class="kcell" data-k="${esc(k.c)}">
+      ${(k.week===maxWeek && maxWeek>1)?'<span class="new"></span>':''}
+      <div class="kc">${esc(k.c)}</div><div class="km">${esc(k.mean.split(',')[0])}</div>
+    </div>`).join('');
+  $('#kgrid').querySelectorAll('[data-k]').forEach(el=>el.onclick=()=>{ kanjiSel=el.dataset.k; kanjiView='detail'; renderKanji(); });
+}
+
+function backToGrid(){ kanjiView='grid'; kanjiSel=null; renderKanji(); }
+
+function renderKanjiDetail(char){
+  const item = findKanji(char);
+  if(!item){ backToGrid(); return; }
+  const strokeN = (window.KANJI_STROKES[char]&&window.KANJI_STROKES[char].strokes.length)||'?';
+  view.innerHTML = `
+    <div class="backbar"><button id="back">← Voltar</button></div>
+    <div class="kdetail">
+      <div class="khead">
+        <div class="big-k">${esc(char)}</div>
+        <div class="kread">
+          ${readingsHtml(item)}
+          <div class="mean">${esc(item.mean)}</div>
+          <div class="hint" style="text-align:left;margin-top:4px">${strokeN} traços</div>
+        </div>
+      </div>
+      <h2 class="sec-title" style="margin-top:4px">Ordem dos traços</h2>
+      <div class="hw-box" id="hw-box"></div>
+      <div class="kbtns">
+        <button class="btn sec" id="animate">▶ Animar</button>
+        <button class="btn sec" id="speak">🔊 Leitura</button>
+      </div>
+      <div id="diagram-wrap" style="display:flex;justify-content:center"></div>
+      <button class="btn" id="practice">✍️ Praticar escrita (desenhar)</button>
+    </div>`;
+  $('#back').onclick=backToGrid;
+  const box=$('#hw-box');
+  const size=Math.min(220, view.clientWidth-40);
+  hw = HanziWriter.create(box, char, {
+    width:size, height:size, padding:8,
+    showCharacter:true, showOutline:true,
+    strokeColor:'#1e1f3d', radicalColor:'#7c6cff',
+    strokeAnimationSpeed:1, delayBetweenStrokes:450,
+    charDataLoader: jpStrokeLoader
+  });
+  $('#animate').onclick=()=>{ if(hw) hw.animateCharacter(); };
+  $('#speak').onclick=()=>{ const r=(item.kun&&item.kun[0])||(item.on&&item.on[0])||char; speak(r.replace(/[()\-]/g,'')); };
+  const diag=buildDiagram(char, size);
+  if(diag){ const w=$('#diagram-wrap'); const d=document.createElement('div'); d.className='diagram'; d.appendChild(diag); w.appendChild(d); }
+  $('#practice').onclick=()=>{ kanjiSel=char; kanjiView='write'; renderKanji(); };
+}
+
+function renderKanjiWrite(char){
+  const item = findKanji(char);
+  if(!item){ backToGrid(); return; }
+  view.innerHTML = `
+    <div class="backbar"><button id="back">← Kanjidex</button></div>
+    <div class="quiz-q">
+      <div class="qprompt">Escreva o kanji de:</div>
+      <div class="meaning" style="font-size:22px">${esc(item.mean)}</div>
+      <div class="hint">${esc((item.kun[0]||item.on[0]||'').replace(/[()]/g,''))} ${state.settings.showRomaji?'· '+esc(kanaToRomaji((item.kun[0]||item.on[0]||''))):''}</div>
+    </div>
+    <div class="hw-box" id="hw-box"></div>
+    <div id="wfeedback" class="hint" style="height:18px;margin:6px 0"></div>
+    <div class="kbtns">
+      <button class="btn sec" id="redo">↺ Recomeçar</button>
+      <button class="btn sec" id="order">▶ Ver ordem</button>
+    </div>
+    <div style="height:8px"></div>
+    <button class="btn ghost" id="hint-outline">${state.settings.writeGuide?'☑':'☐'} Mostrar guia (contorno)</button>
+    <div style="height:8px"></div>
+    <button class="btn" id="next">Próximo kanji →</button>
+  `;
+  $('#back').onclick=backToGrid;
+  const box=$('#hw-box');
+  const size=Math.min(240, view.clientWidth-40);
+  function startQuiz(){
+    box.innerHTML='';
+    hw = HanziWriter.create(box, char, {
+      width:size, height:size, padding:8,
+      showCharacter:false, showOutline:state.settings.writeGuide,
+      strokeColor:'#1e1f3d', drawingColor:'#7c6cff', drawingWidth:6,
+      highlightColor:'#00d4b8',
+      showHintAfterMisses:3, leniency:1.1,
+      charDataLoader: jpStrokeLoader
+    });
+    $('#wfeedback').textContent='Desenhe os traços na ordem 👆';
+    $('#wfeedback').style.color='var(--muted)';
+    hw.quiz({
+      onMistake:(d)=>{ $('#wfeedback').textContent=`Traço ${d.strokeNum+1}: tente de novo`; $('#wfeedback').style.color='var(--again)'; },
+      onCorrectStroke:(d)=>{ $('#wfeedback').textContent=`Traço ${d.strokeNum+1} ✓`; $('#wfeedback').style.color='var(--good)'; },
+      onComplete:(s)=>{
+        $('#wfeedback').textContent = s.totalMistakes===0 ? '🎉 Perfeito! Sem erros.' : `Completo! ${s.totalMistakes} erro(s).`;
+        $('#wfeedback').style.color = s.totalMistakes===0 ? 'var(--good)' : 'var(--hard)';
+        const p = state.kanjiProgress[char] || (state.kanjiProgress[char]={});
+        p.writeBest = (p.writeBest==null) ? s.totalMistakes : Math.min(p.writeBest, s.totalMistakes);
+        save();
+        awardXP('writing', Math.max(4, 14 - 2*s.totalMistakes));
+        track('kanjiWrite', { perfect: s.totalMistakes===0 });
+        sfx(s.totalMistakes===0?'levelup':'correct');
+      }
+    });
+  }
+  startQuiz();
+  $('#redo').onclick=startQuiz;
+  $('#order').onclick=()=>{ if(hw) hw.animateCharacter(); };
+  $('#hint-outline').onclick=()=>{
+    state.settings.writeGuide=!state.settings.writeGuide; save();
+    if(hw){ state.settings.writeGuide?hw.showOutline():hw.hideOutline(); }
+    $('#hint-outline').textContent=(state.settings.writeGuide?'☑':'☐')+' Mostrar guia (contorno)';
+  };
+  $('#next').onclick=()=>{ kanjiSel=nextFromBag('kwrite', window.KANJI_DEX).c; renderKanji(); };
+}
+
+// --- Quizzes de significado / leitura ---
+function pickDistractors(pool, n, isEqual){
+  const out=[]; const used=new Set();
+  let guard=0;
+  while(out.length<n && guard++<500){
+    const cand = pool[Math.floor(Math.random()*pool.length)];
+    if(isEqual(cand)) continue;
+    const key = JSON.stringify(cand);
+    if(used.has(key)) continue;
+    used.add(key); out.push(cand);
+  }
+  return out;
+}
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+// "saco" embaralhado: percorre TODOS os itens antes de repetir; nunca repete em sequência.
+const _bags = {};
+function nextFromBag(key, arr){
+  if(!arr || !arr.length) return null;
+  if(arr.length===1) return arr[0];
+  let b = _bags[key];
+  if(!b || !b.queue.length){
+    const q = shuffle(arr.slice());
+    if(b && b.last!=null && q[0]===b.last) [q[0],q[1]]=[q[1],q[0]]; // evita repetir na virada do ciclo
+    b = _bags[key] = { queue:q, last:(b?b.last:null) };
+  }
+  const item = b.queue.shift();
+  b.last = item;
+  return item;
+}
+function plainReading(r){ return r.replace(/[()]/g,''); }
+// número por extenso <-> dígito (一=um=1, etc.)
+const PT_NUM = {um:'1',uma:'1',dois:'2',duas:'2',tres:'3',quatro:'4',cinco:'5',seis:'6',sete:'7',oito:'8',nove:'9',dez:'10'};
+function numKey(w){ return PT_NUM[w] || w; }
+// normaliza PT (sem acento; remove artigos, MAS mantém um/uma que são significados)
+function normPt(s){
+  let r = (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+  return r.replace(/\b(o|a|os|as|de|do|da)\b/g,' ').replace(/\s+/g,' ').trim();
+}
+function checkMeaning(input, meanStr){
+  const ni = normPt(input); if(!ni) return false;
+  const niN = ni.split(' ').map(numKey).join(' '); // versão com números normalizados
+  const parts = meanStr.split(/[,;\/]| ou /).map(normPt).filter(Boolean);
+  for(const p of parts){
+    const pN = p.split(' ').map(numKey).join(' ');
+    if(ni===p || niN===pN) return true;
+    if(lev(ni,p)<=1) return true;       // tolera 1 typo
+    if(p.split(' ').includes(ni) || pN.split(' ').includes(niN)) return true; // 1 palavra de parte composta
+  }
+  return false;
+}
+// modo difícil da LEITURA: aceita qualquer leitura on/kun, em romaji ou kana
+function checkReadingHard(input, item){
+  const ci = romajiCanon(input); if(!ci) return false;
+  const reads = (item.on||[]).concat(item.kun||[]).map(plainReading);
+  for(const r of reads){ const cr=romajiCanon(r); if(cr && (cr===ci || lev(ci,cr)<=1)) return true; }
+  return false;
+}
+
+function renderKanjiQuizView(type){
+  const dex = window.KANJI_DEX;
+  if(!kanjiQuiz.cur){
+    let item, correct, options;
+    if(state.settings.kanjiWords && (window.KANJI_WORDS||[]).length){
+      const pool = window.KANJI_WORDS;
+      const wd = nextFromBag('kw-'+type, pool) || pool[0];
+      const plain = wd.w.replace(/\{([^|]+)\|[^}]+\}/g,'$1');
+      item = { c:plain, display:furi(wd.w,true), mean:wd.mean, on:[], kun:[wd.read] };
+      if(type==='mean'){
+        correct = wd.mean;
+        options = shuffle([correct, ...new Set(pickDistractors(pool.map(x=>x.mean),3,m=>m===wd.mean))]).slice(0,4);
+      } else {
+        correct = wd.read;
+        options = shuffle([correct, ...new Set(pickDistractors(pool.map(x=>x.read),3,r=>r===wd.read))]).slice(0,4);
+      }
+    } else {
+      const k0 = nextFromBag('kq-'+type, dex);
+      item = { c:k0.c, display:esc(k0.c), mean:k0.mean, on:k0.on, kun:k0.kun };
+      if(type==='mean'){
+        correct = item.mean;
+        options = shuffle([correct, ...pickDistractors(dex.map(k=>k.mean), 3, m=>m===item.mean)]);
+      } else {
+        const reads = (item.on||[]).concat(item.kun||[]).map(plainReading).filter(Boolean);
+        correct = reads[Math.floor(Math.random()*reads.length)];
+        const allOther = [];
+        dex.forEach(k=>{ if(k.c!==item.c) (k.on||[]).concat(k.kun||[]).forEach(r=>allOther.push(plainReading(r))); });
+        const mineSet = new Set(reads);
+        options = shuffle([correct, ...new Set(pickDistractors(allOther, 3, r=>mineSet.has(r)))]).slice(0,4);
+      }
+    }
+    if(!options.includes(correct)) options[0]=correct;
+    kanjiQuiz.cur = { item, correct, options, answered:null };
+  }
+  const q = kanjiQuiz.cur;
+  const hard = state.settings.kanjiHard;
+  view.innerHTML = `
+    <div class="backbar"><button id="back">← Kanjidex</button><div class="hint" style="margin-left:auto">${kanjiQuiz.correct}/${kanjiQuiz.n} ✓</div></div>
+    <div class="row" style="gap:8px;flex-wrap:wrap;margin-bottom:10px">
+      <button class="chip ${hard?'on':''}" id="kh-toggle">💪 Modo difícil ${hard?'(escrever)':'(MC)'}</button>
+      <button class="chip ${state.settings.kanjiWords?'on':''}" id="kw-toggle">📝 Palavras</button>
+    </div>
+    <div class="quiz-q">
+      <div class="qk" style="${state.settings.kanjiWords?'font-size:46px':''}">${q.item.display||esc(q.item.c)}</div>
+      <div class="qprompt">${hard?(type==='mean'?'Escreva o significado (em português):':'Escreva a leitura (romaji ou kana):'):(type==='mean'?'Qual é o significado?':'Qual é uma leitura válida?')}</div>
+    </div>
+    <div id="qbody"></div>
+    <div style="height:10px"></div>
+    <div id="qnext"></div>
+  `;
+  $('#back').onclick=backToGrid;
+  $('#kh-toggle').onclick=()=>{ state.settings.kanjiHard=!state.settings.kanjiHard; save(); kanjiQuiz.cur=null; renderKanjiQuizView(type); };
+  $('#kw-toggle').onclick=()=>{ state.settings.kanjiWords=!state.settings.kanjiWords; save(); kanjiQuiz.cur=null; renderKanjiQuizView(type); };
+  function commit(right, chosen){
+    q.answered = chosen; kanjiQuiz.n++;
+    if(right) kanjiQuiz.correct++;
+    const p = state.kanjiProgress[q.item.c] || (state.kanjiProgress[q.item.c]={});
+    const slot = p[type] || (p[type]={seen:0,ok:0});
+    slot.seen++; if(right) slot.ok++;
+    save();
+    const cb = bumpCombo(right);
+    awardXP(type==='mean'?'vocab':'reading', right? Math.round(9*comboMult()) : 2);
+    if(right){ track('quizCorrect'); sfx(cb>=2?'combo':'correct'); } else sfx('wrong');
+    renderKanjiQuizView(type);
+  }
+  const qbody=$('#qbody');
+  if(hard){
+    if(q.answered==null){
+      const ph = type==='mean' ? 'ex.: água' : 'ex.: ichi / ひ';
+      qbody.innerHTML = `<input id="kh-in" class="cmp-in" placeholder="${ph}" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false"><div style="height:8px"></div><button class="btn" id="kh-check">Verificar</button>`;
+      const inp=$('#kh-in'); setTimeout(()=>{ try{inp.focus();}catch(e){} },50);
+      const go=()=>{ if(!inp.value.trim()) return; const ok = type==='mean'? checkMeaning(inp.value,q.item.mean) : checkReadingHard(inp.value,q.item); commit(ok, inp.value.trim()); };
+      $('#kh-check').onclick=go;
+      inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); } });
+    } else {
+      qbody.innerHTML = `<div class="cmp-ans"><div class="ca-jp" style="font-size:18px">${esc(q.answered)}</div></div>`;
+    }
+  } else {
+    qbody.innerHTML = `<div class="kbtns" id="opts"></div>`;
+    const opts=$('#opts');
+    opts.innerHTML = q.options.map((o,i)=>`<button class="opt" data-i="${i}">${esc(o)}</button>`).join('');
+    opts.querySelectorAll('.opt').forEach(b=>{
+      const val=q.options[+b.dataset.i];
+      if(q.answered!=null){
+        b.disabled=true;
+        if(val===q.correct) b.classList.add('ok');
+        else if(val===q.answered) b.classList.add('no');
+      }
+      b.onclick=()=>{ if(q.answered!=null) return; commit(val===q.correct, val); };
+    });
+  }
+  if(q.answered!=null){
+    const right = hard ? (type==='mean'? checkMeaning(q.answered,q.item.mean) : checkReadingHard(q.answered,q.item)) : (q.answered===q.correct);
+    const corr = (type==='read') ? ((q.item.on||[]).concat(q.item.kun||[]).map(plainReading).join('、')) : q.correct;
+    $('#qnext').innerHTML = `
+      <div class="hint" style="margin-bottom:8px;color:${right?'var(--good)':'var(--again)'}">
+        ${right?'Correto! 🎉':'Resposta: '+esc(corr)}${right&&sessionCombo>=2?' <span class="combo">Combo x'+sessionCombo+'</span>':''} — ${q.item.display||esc(q.item.c)} (${esc(q.item.mean)})</div>
+      <button class="btn" id="nx">Próxima →</button>`;
+    $('#nx').onclick=()=>{ kanjiQuiz.cur=null; renderKanjiQuizView(type); };
+  }
+}
+
+// ---------- Gerenciar cards ----------
+let manageDeck = null;
+function renderManage(){
+  if(!manageDeck) manageDeck = state.decks[0]?.id;
+  view.innerHTML = `
+    <div class="field">
+      <label>Baralho</label>
+      <select id="md-sel">${state.decks.map(d=>`<option value="${d.id}" ${d.id===manageDeck?'selected':''}>${esc(d.name)}</option>`).join('')}</select>
+    </div>
+    <button class="btn" id="add-card">＋ Adicionar card</button>
+    <div style="height:8px"></div>
+    <div class="row">
+      <button class="btn ghost" id="add-deck2">＋ Baralho</button>
+      <button class="btn ghost" id="ren-deck">✎ Renomear</button>
+      <button class="btn ghost" id="del-deck">🗑 Excluir</button>
+    </div>
+    <h2 class="sec-title">Cards (<span id="cc"></span>)</h2>
+    <div id="cardlist"></div>
+  `;
+  $('#md-sel').onchange = e=>{ manageDeck=e.target.value; renderManage(); };
+  $('#add-card').onclick = ()=>openCardModal();
+  $('#add-deck2').onclick = ()=>openDeckModal();
+  $('#ren-deck').onclick = ()=>openDeckModal(manageDeck);
+  $('#del-deck').onclick = ()=>{
+    if(state.decks.length<=1){ toast('Mantenha pelo menos 1 baralho'); return; }
+    if(confirm('Excluir este baralho e seus cards?')){
+      state.cards = state.cards.filter(c=>c.deckId!==manageDeck);
+      state.decks = state.decks.filter(d=>d.id!==manageDeck);
+      manageDeck = state.decks[0].id; save(); renderManage();
+    }
+  };
+  const list = state.cards.filter(c=>c.deckId===manageDeck);
+  $('#cc').textContent = list.length;
+  $('#cardlist').innerHTML = list.map(c=>`
+    <div class="card-mini">
+      <div><div class="jp">${esc(c.jp)} ${c.kana&&c.kana!==c.jp?`<span class="tag">${esc(c.kana)}</span>`:''}</div><div class="mn">${esc(c.meaning)}</div></div>
+      <div style="white-space:nowrap">
+        <button class="icon-btn" data-say="${c.id}">🔊</button>
+        <button class="icon-btn" data-edit="${c.id}">✎</button>
+        <button class="icon-btn" data-del="${c.id}">🗑</button>
+      </div>
+    </div>`).join('') || `<div class="empty">Nenhum card. Toque em “Adicionar card”.</div>`;
+  $('#cardlist').querySelectorAll('[data-say]').forEach(b=>b.onclick=()=>{ const c=state.cards.find(x=>x.id===b.dataset.say); speak(c.kana||c.jp); });
+  $('#cardlist').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openCardModal(b.dataset.edit));
+  $('#cardlist').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    if(confirm('Excluir este card?')){ state.cards=state.cards.filter(x=>x.id!==b.dataset.del); save(); renderManage(); }
+  });
+}
+
+// ---------- Modais ----------
+function openModal(html){ $('#modal').innerHTML=html; $('#modal-bg').classList.add('show'); }
+function closeModal(){ $('#modal-bg').classList.remove('show'); }
+$('#modal-bg').addEventListener('click', e=>{ if(e.target.id==='modal-bg') closeModal(); });
+
+function openCardModal(id){
+  const c = id? state.cards.find(x=>x.id===id) : null;
+  openModal(`
+    <h2>${c?'Editar card':'Novo card'}</h2>
+    <div class="field"><label>Japonês (kanji/palavra) *</label><input id="f-jp" value="${c?esc(c.jp):''}" placeholder="食べる"></div>
+    <div class="field"><label>Leitura (hiragana/katakana)</label><input id="f-kana" value="${c?esc(c.kana):''}" placeholder="たべる"></div>
+    <div class="field"><label>Romaji</label><input id="f-romaji" value="${c?esc(c.romaji):''}" placeholder="taberu"></div>
+    <div class="field"><label>Significado *</label><input id="f-meaning" value="${c?esc(c.meaning):''}" placeholder="comer"></div>
+    <div class="field"><label>Frase de exemplo</label><textarea id="f-ex">${c?esc(c.example):''}</textarea></div>
+    <div class="field"><label>Tradução da frase</label><textarea id="f-extr">${c?esc(c.exTr):''}</textarea></div>
+    <div class="row">
+      <button class="btn sec" id="m-cancel">Cancelar</button>
+      <button class="btn" id="m-save">Salvar</button>
+    </div>
+  `);
+  $('#m-cancel').onclick = closeModal;
+  $('#m-save').onclick = ()=>{
+    const jp=$('#f-jp').value.trim(), meaning=$('#f-meaning').value.trim();
+    if(!jp||!meaning){ toast('Preencha japonês e significado'); return; }
+    const data = { jp, kana:$('#f-kana').value.trim()||jp, romaji:$('#f-romaji').value.trim(), meaning, example:$('#f-ex').value.trim(), exTr:$('#f-extr').value.trim() };
+    if(c){ Object.assign(c, data); }
+    else state.cards.push({ id:uid(), deckId:manageDeck, ...data, srs:{due:now(),interval:0,ease:2.5,reps:0,lapses:0} });
+    save(); closeModal(); toast(c?'Card atualizado':'Card adicionado'); render();
+  };
+}
+function openDeckModal(id){
+  const d = id? state.decks.find(x=>x.id===id):null;
+  openModal(`
+    <h2>${d?'Renomear baralho':'Novo baralho'}</h2>
+    <div class="field"><label>Nome</label><input id="d-name" value="${d?esc(d.name):''}" placeholder="Ex: Verbos N5"></div>
+    <div class="row"><button class="btn sec" id="dm-cancel">Cancelar</button><button class="btn" id="dm-save">Salvar</button></div>
+  `);
+  $('#dm-cancel').onclick = closeModal;
+  $('#dm-save').onclick = ()=>{
+    const name=$('#d-name').value.trim(); if(!name){ toast('Dê um nome'); return; }
+    if(d){ d.name=name; } else { const nd={id:uid(),name}; state.decks.push(nd); manageDeck=nd.id; }
+    save(); closeModal(); render();
+  };
+}
+
+// ---------- Ajustes ----------
+function renderSettings(){
+  const s = state.settings;
+  loadVoices();
+  const jaVoices = voices.filter(v=>/ja|japan/i.test(v.lang));
+  view.innerHTML = `
+    <h2 class="sec-title">Exibição</h2>
+    <div class="row" style="flex-wrap:wrap;gap:8px;margin-bottom:8px">
+      <button class="chip ${s.showRomaji?'on':''}" id="t-romaji">Romaji</button>
+      <button class="chip ${s.showKana?'on':''}" id="t-kana">Kana</button>
+      <button class="chip ${s.sound?'on':''}" id="t-sound">🔊 Sons 8-bit</button>
+    </div>
+    <h2 class="sec-title">Kanji na frente dos cards</h2>
+    <div class="row" style="flex-wrap:wrap;gap:8px;margin-bottom:4px">
+      <button class="chip ${s.cardKanjiMode==='learned'?'on':''}" data-km="learned">Só os que aprendi</button>
+      <button class="chip ${s.cardKanjiMode==='all'?'on':''}" data-km="all">Todos</button>
+      <button class="chip ${s.cardKanjiMode==='kana'?'on':''}" data-km="kana">Nenhum (kana)</button>
+    </div>
+    <div class="hint" style="text-align:left">"Só os que aprendi" mostra o kanji apenas das palavras cujos kanji já estão na sua Kanjidex; o resto aparece em hiragana.</div>
+    <h2 class="sec-title">Áudio</h2>
+    <div class="field">
+      <label>Voz japonesa ${jaVoices.length?'':'(nenhuma voz JA encontrada neste aparelho)'}</label>
+      <select id="voice-sel">
+        <option value="">Automática</option>
+        ${voices.map(v=>`<option value="${esc(v.name)}" ${v.name===s.voice?'selected':''}>${esc(v.name)} (${v.lang})</option>`).join('')}
+      </select>
+    </div>
+    <button class="btn sec" id="test-voice">🔊 Testar voz (こんにちは)</button>
+    <h2 class="sec-title">Dados</h2>
+    <button class="btn sec" id="export">⬆️ Exportar (backup .json)</button>
+    <div style="height:8px"></div>
+    <button class="btn sec" id="import">⬇️ Importar backup</button>
+    <input type="file" id="file" accept=".json" style="display:none">
+    <div style="height:8px"></div>
+    <button class="btn ghost" id="reset">↺ Restaurar deck inicial</button>
+    <h2 class="sec-title">Sobre</h2>
+    <div class="hint" style="text-align:left">App pessoal de estudo de japonês. Funciona offline e salva tudo neste aparelho. Para instalar no iPhone: abra no Safari → botão Compartilhar → “Adicionar à Tela de Início”.</div>
+  `;
+  $('#t-romaji').onclick=()=>{ s.showRomaji=!s.showRomaji; save(); renderSettings(); };
+  $('#t-kana').onclick=()=>{ s.showKana=!s.showKana; save(); renderSettings(); };
+  $('#t-sound').onclick=()=>{ s.sound=!s.sound; save(); if(s.sound) sfx('correct'); renderSettings(); };
+  view.querySelectorAll('[data-km]').forEach(b=>{ b.onclick=()=>{ s.cardKanjiMode=b.dataset.km; save(); renderSettings(); }; });
+  $('#voice-sel').onchange=e=>{ s.voice=e.target.value; save(); };
+  $('#test-voice').onclick=()=>speak('こんにちは');
+  $('#export').onclick=exportData;
+  $('#import').onclick=()=>$('#file').click();
+  $('#file').onchange=importData;
+  $('#reset').onclick=()=>{ if(confirm('Isto substitui TUDO pelo deck inicial. Continuar?')){ state=seed(); save(); manageDeck=state.decks[0].id; toast('Restaurado'); render(); } };
+}
+function exportData(){
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'japones-backup.json';
+  a.click(); URL.revokeObjectURL(a.href);
+}
+function importData(e){
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{
+    try{
+      const data = JSON.parse(r.result);
+      if(data.cards && data.decks){ state=data; if(!state.settings) state.settings={showRomaji:true,showKana:true,voice:'',dailyNew:10}; save(); manageDeck=state.decks[0]?.id; toast('Backup importado'); render(); }
+      else toast('Arquivo inválido');
+    }catch(err){ toast('Erro ao ler arquivo'); }
+  };
+  r.readAsText(f);
+}
+
+// ---------- Instalar (PWA) ----------
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); deferredPrompt=e; $('#install-btn').style.display='inline-flex'; });
+$('#install-btn').onclick = async ()=>{ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt=null; $('#install-btn').style.display='none'; } };
+
+// ---------- Service worker (com auto-atualização) ----------
+if('serviceWorker' in navigator){
+  let _refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', ()=>{
+    if(_refreshing) return; _refreshing = true; location.reload();
+  });
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js').then(reg=>{
+      reg.update();
+      setInterval(()=>{ try{ reg.update(); }catch(e){} }, 60*60*1000); // checa de hora em hora
+    }).catch(()=>{});
+  });
+}
+
+// ---------- Importar baralhos de vocabulário embutidos ----------
+// Idempotente: adiciona só os decks (por id) que ainda não existem.
+function mergeVocabPacks(){
+  const packs = window.VOCAB_DECKS || [];
+  let added = 0;
+  packs.forEach(pack=>{
+    if(state.decks.find(d=>d.id===pack.id)) return; // já importado
+    state.decks.push({ id:pack.id, name:pack.name });
+    pack.cards.forEach(c=>{
+      state.cards.push({
+        id: uid(), deckId: pack.id,
+        jp: c.jp, kana: c.jp, romaji: kanaToRomaji(c.jp),
+        meaning: c.mean, example: c.ex||'', exTr: c.exTr||'',
+        srs:{ due: now(), interval:0, ease:2.5, reps:0, lapses:0 }
+      });
+    });
+    added += pack.cards.length;
+  });
+  if(added>0) save();
+  return added;
+}
+mergeVocabPacks();
+ensureMissions();
+applyCosmetics();
+checkAchievements();
+
+// ---------- Start ----------
+render();
+</script>
+</body>
+</html>
