@@ -291,5 +291,63 @@ window.READINGS = [
       { q:'Onde fica Belém?', a:'Na foz do rio Amazonas (アマゾン川のかこう).' },
       { q:'A que distância Manaus fica de Belém?', a:'1.700 km rio acima (上流).' }
     ]
+  },
+  {
+    id:'b3-tegami', title:'{手紙|てがみ}', sub:'Carta — a Jimmy (Hokkaido)', level:'Básico 3',
+    lines:[
+      { jp:'ジミーさん、お{元気|げんき}ですか。もうすぐ{7月|しちがつ}ですね。{東京|とうきょう}は{暑|あつ}いですか。', pt:'Jimmy, tudo bem? Logo já é julho, né. Está quente em Tóquio?' },
+      { jp:'ジミーさんが{私|わたし}たちのうちにホームステイに{来|き}てから、もう{半年|はんとし}になりますね。', pt:'Já vai fazer meio ano desde que você veio para o intercâmbio (homestay) na nossa casa.' },
+      { jp:'{冬|ふゆ}の{北海道|ほっかいどう}はとても{寒|さむ}かったですが、{今|いま}は{気持|きも}ちのいい{季節|きせつ}です。', pt:'O inverno em Hokkaido foi muito frio, mas agora é uma estação agradável.' },
+      { jp:'{半年前|はんとしまえ}は、ジミーさんは{日本語学校|にほんごがっこう}の{学生|がくせい}でしたね。{4月|しがつ}からの{専門|せんもん}の{勉強|べんきょう}はどうですか。', pt:'Meio ano atrás, você era aluno da escola de japonês, né. Como está o estudo da sua especialidade desde abril?' },
+      { jp:'コンピューターの{勉強|べんきょう}はおもしろいですか。{今|いま}の{学校|がっこう}に、{留学生|りゅうがくせい}がいますか。', pt:'O estudo de computação é interessante? Na sua escola atual há estudantes intercambistas?' },
+      { jp:'ところで、{私|わたし}も{3月|さんがつ}に{大学|だいがく}を{卒業|そつぎょう}して、{4月|しがつ}からは、{旅行会社|りょこうがいしゃ}に{勤|つと}めています。', pt:'A propósito, eu também me formei na universidade em março e, desde abril, trabalho numa agência de viagens.' },
+      { jp:'{旅行会社|りょこうがいしゃ}の{仕事|しごと}は{大変|たいへん}ですが、おもしろいです。{毎日|まいにち}{5時|ごじ}まで{仕事|しごと}をしますが、その{後|あと}、{火曜日|かようび}と{木曜日|もくようび}には{英会話|えいかいわ}の{学校|がっこう}にも{通|かよ}っています。', pt:'O trabalho na agência é puxado, mas interessante. Trabalho todo dia até as 5h e, depois disso, às terças e quintas, também frequento uma escola de conversação em inglês.' },
+      { jp:'{英会話|えいかいわ}の{学校|がっこう}では、いろいろな{会社|かいしゃ}の{人|ひと}が{勉強|べんきょう}しています。{出版社|しゅっぱんしゃ}や{銀行|ぎんこう}の{人|ひと}などです。', pt:'Na escola de inglês, pessoas de várias empresas estudam. São pessoas de editoras, bancos, etc.' },
+      { jp:'{授業|じゅぎょう}の{後|あと}でときどき、その{人|ひと}たちといっしょにごはんを{食|た}べて、{話|はなし}をします。とても{楽|たの}しいです。', pt:'Depois da aula, às vezes como junto com essas pessoas e conversamos. É muito divertido.' },
+      { jp:'{弟|おとうと}は{4月|しがつ}から{高校|こうこう}{3年生|さんねんせい}になりました。{弟|おとうと}はスポーツが{好|す}きで、{去年|きょねん}は{毎日|まいにち}、{学校|がっこう}で{友|とも}だちと{野球|やきゅう}やサッカーをしていました。', pt:'Meu irmão mais novo virou 3º ano do ensino médio em abril. Ele gosta de esportes e, no ano passado, jogava beisebol e futebol com os amigos na escola todo dia.' },
+      { jp:'でも、{今年|ことし}は{高校|こうこう}{3年生|さんねんせい}で、{大変|たいへん}です。{弟|おとうと}は{勉強|べんきょう}はあまり{好|す}きじゃありませんが、{今|いま}は{学校|がっこう}から{帰|かえ}ってから、うちで{5時間|ごじかん}ぐらい{勉強|べんきょう}しています。', pt:'Mas este ano ele está no 3º ano e é puxado. Ele não gosta muito de estudar, mas agora, depois de voltar da escola, estuda cerca de 5 horas em casa.' },
+      { jp:'{私|わたし}も{私|わたし}の{家族|かぞく}も、みんな{忙|いそが}しいですが、{8月|はちがつ}には、{湖|みずうみ}へキャンプに{行|い}きます。ジミーさんも、いっしょにキャンプをしませんか。', pt:'Eu e minha família, todos estamos ocupados, mas em agosto vamos acampar no lago. Você não quer acampar com a gente?' },
+      { jp:'{北海道|ほっかいどう}の{夏|なつ}は{涼|すず}しくて、メロンやとうもろこしなどおいしい{食|た}べ{物|もの}もたくさんありますよ。', pt:'O verão em Hokkaido é fresco, e há muitas comidas gostosas, como melão e milho.' },
+      { jp:'ジミーさんの{新|あたら}しい{学校|がっこう}の{話|はなし}も、{聞|き}きたいです。', pt:'Também quero ouvir sobre a sua nova escola.' },
+      { jp:'それでは、またご{連絡|れんらく}します。どうぞ、お{元気|げんき}で。', pt:'Então, entro em contato de novo. Cuide-se!' },
+      { jp:'{6月28日|ろくがつにじゅうはちにち}　{木村|きむら}ひろ{子|こ}', pt:'28 de junho — De: Hiroko Kimura' },
+      { jp:'ジミー・スミス{様|さま}', pt:'Para: Jimmy Smith (sr.)' }
+    ],
+    vocab:[
+      { jp:'手紙（てがみ）', pt:'carta' },
+      { jp:'ホームステイ', pt:'estadia em casa de família' },
+      { jp:'半年になる（はんとしになる）', pt:'passar meio ano' },
+      { jp:'気持ちのいい（きもちのいい）', pt:'confortável, agradável' },
+      { jp:'季節（きせつ）', pt:'estação (do ano)' },
+      { jp:'専門（せんもん）', pt:'especialidade' },
+      { jp:'留学生（りゅうがくせい）', pt:'intercambista' },
+      { jp:'ところで', pt:'a propósito' },
+      { jp:'卒業する（そつぎょうする）', pt:'formar-se' },
+      { jp:'旅行会社（りょこうがいしゃ）', pt:'agência de viagem' },
+      { jp:'勤める（つとめる）', pt:'trabalhar (ser empregado)' },
+      { jp:'英会話（えいかいわ）', pt:'conversação em inglês' },
+      { jp:'通う（かよう）', pt:'frequentar' },
+      { jp:'授業（じゅぎょう）', pt:'aula' },
+      { jp:'出版社（しゅっぱんしゃ）', pt:'editora' },
+      { jp:'高校になる（こうこうになる）', pt:'entrar no ensino médio' },
+      { jp:'野球（やきゅう）', pt:'beisebol' },
+      { jp:'湖（みずうみ）', pt:'lago' },
+      { jp:'キャンプ', pt:'acampamento' },
+      { jp:'とうもろこし', pt:'milho' },
+      { jp:'メロン', pt:'melão' },
+      { jp:'涼しい（すずしい）', pt:'fresco (clima)' },
+      { jp:'忙しい（いそがしい）', pt:'ocupado' },
+      { jp:'それでは', pt:'então, até mais' },
+      { jp:'連絡する（れんらくする）', pt:'entrar em contato' },
+      { jp:'お元気で（おげんきで）', pt:'fique bem' }
+    ],
+    questions:[
+      { q:'Quem escreveu a carta e para quem?', a:'木村ひろ子 (Hiroko Kimura) escreveu para ジミー・スミス (Jimmy Smith).' },
+      { q:'Há quanto tempo o Jimmy fez homestay na casa dela?', a:'Vai fazer meio ano (半年).' },
+      { q:'O que a autora começou a fazer desde abril?', a:'Trabalha numa agência de viagens (旅行会社), depois de se formar na universidade.' },
+      { q:'Em que dias ela vai à escola de conversação em inglês?', a:'Terças e quintas (火曜日と木曜日).' },
+      { q:'O que o irmão mais novo dela virou em abril?', a:'Aluno do 3º ano do ensino médio (高校3年生).' },
+      { q:'O que ela convida o Jimmy a fazer em agosto?', a:'Acampar no lago em Hokkaido (湖へキャンプ).' }
+    ]
   }
 ];
