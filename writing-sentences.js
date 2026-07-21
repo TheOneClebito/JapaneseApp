@@ -111,5 +111,17 @@ window.WRITING = [
   { id:'e9', diff:'easy', level:'Básico', pt:'Vou ao parque.', accept:['こうえんへ いきます。','こうえんに いきます。'] },
   { id:'e10', diff:'easy', level:'Básico', pt:'O gato é fofo.', accept:['ねこは かわいいです。'] },
   { id:'e11', diff:'easy', level:'Básico', pt:'Esta cidade é movimentada.', accept:['この まちは にぎやかです。'] },
-  { id:'e12', diff:'easy', level:'Básico', pt:'Bebo chá.', accept:['おちゃを のみます。'] }
+  { id:'e12', diff:'easy', level:'Básico', pt:'Bebo chá.', accept:['おちゃを のみます。'] },
+  // ---- Padrões て: permissão / proibição / pedido ----
+  { id:'tp1', diff:'med', level:'～てもいいですか', pt:'Posso comer isto?', accept:['これを たべても いいですか。','これを たべてもいいですか。'] },
+  { id:'tp2', diff:'med', level:'～てもいいですか', pt:'Posso tirar uma foto (aqui)?', accept:['しゃしんを とっても いいですか。','ここで しゃしんを とっても いいですか。'] },
+  { id:'tp3', diff:'med', level:'～てもいいですか', pt:'Posso sentar aqui?', accept:['ここに すわっても いいですか。'] },
+  { id:'tp4', diff:'med', level:'～てもいいですか', pt:'Posso entrar?', accept:['はいっても いいですか。','うちに はいっても いいですか。'] },
+  { id:'tp5', diff:'med', level:'～てはいけません', pt:'Não pode fumar aqui.', accept:['ここで タバコを すっては いけません。'] },
+  { id:'tp6', diff:'med', level:'～てはいけません', pt:'Não pode tirar fotos aqui.', accept:['ここで しゃしんを とっては いけません。'] },
+  { id:'tp7', diff:'med', level:'～てはいけません', pt:'Não pode comer aqui.', accept:['ここで たべては いけません。'] },
+  { id:'tp8', diff:'easy', level:'～てください', pt:'Por favor, espere um momento.', accept:['ちょっと まって ください。'] },
+  { id:'tp9', diff:'med', level:'～てください', pt:'Por favor, leia este livro.', accept:['この ほんを よんで ください。'] },
+  { id:'tp10', diff:'med', level:'～てください', pt:'Por favor, escreva seu nome.', accept:['なまえを かいて ください。'] },
+  { id:'tp11', diff:'med', level:'～てください', pt:'Por favor, venha às 3 horas.', accept:['３じに きて ください。','さんじに きて ください。'] }
 ];

@@ -23,7 +23,7 @@ window.KANJI_WORDS = [
   // 川
   { w:'川', read:'かわ', mean:'rio' },
   // 田
-  { w:'田{中|なか}', read:'たなか', mean:'Tanaka (sobrenome)' },
+  { w:'田中', read:'たなか', mean:'Tanaka (sobrenome)' },
   // 人
   { w:'一人', read:'ひとり', mean:'uma pessoa / sozinho' },
   { w:'二人', read:'ふたり', mean:'duas pessoas' },
@@ -58,7 +58,7 @@ window.KANJI_WORDS = [
   { w:'女', read:'おんな', mean:'mulher' },
   { w:'{彼|かの}女', read:'かのじょ', mean:'ela / namorada' },
   // 学
-  { w:'{大|だい}学', read:'だいがく', mean:'universidade' },
+  { w:'大学', read:'だいがく', mean:'universidade' },
   { w:'学{校|こう}', read:'がっこう', mean:'escola' },
   { w:'学生', read:'がくせい', mean:'estudante' },
   // 生 (sei / i)
@@ -94,5 +94,17 @@ window.KANJI_WORDS = [
   { w:'百円', read:'ひゃくえん', mean:'100 ienes' },
   { w:'千円', read:'せんえん', mean:'1000 ienes' },
   { w:'一年', read:'いちねん', mean:'um ano' },
-  { w:'年', read:'とし', mean:'ano / idade' }
+  { w:'年', read:'とし', mean:'ano / idade' },
+  // 上 下 中 大 小 (novos)
+  { w:'上', read:'うえ', mean:'em cima' },
+  { w:'上{手|ず}', read:'じょうず', mean:'habilidoso / bom em' },
+  { w:'下', read:'した', mean:'embaixo' },
+  { w:'{地|ち}下{鉄|てつ}', read:'ちかてつ', mean:'metrô' },
+  { w:'下{手|た}', read:'へた', mean:'ruim em (pouco habilidoso)' },
+  { w:'中', read:'なか', mean:'dentro / meio' },
+  { w:'中{国|ごく}', read:'ちゅうごく', mean:'China' },
+  { w:'大きい', read:'おおきい', mean:'grande' },
+  { w:'大{変|へん}', read:'たいへん', mean:'difícil / trabalhoso' },
+  { w:'小さい', read:'ちいさい', mean:'pequeno' },
+  { w:'小学生', read:'しょうがくせい', mean:'aluno do primário' }
 ];

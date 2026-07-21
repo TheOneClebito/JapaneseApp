@@ -40,5 +40,10 @@ window.KANJI_DEX = [
   { c:'千', on:['セン'], kun:['ち'], mean:'mil (1000)', week:3 },
   { c:'万', on:['マン','バン'], kun:[], mean:'dez mil (10.000)', week:3 },
   { c:'円', on:['エン'], kun:['まる(い)'], mean:'iene / círculo', week:3 },
-  { c:'年', on:['ネン'], kun:['とし'], mean:'ano', week:3 }
+  { c:'年', on:['ネン'], kun:['とし'], mean:'ano', week:3 },
+  { c:'上', on:['ジョウ'], kun:['うえ','あ(げる)','のぼ(る)'], mean:'em cima, sobre', week:4 },
+  { c:'下', on:['カ','ゲ'], kun:['した','さ(げる)','くだ(る)'], mean:'embaixo, sob', week:4 },
+  { c:'中', on:['チュウ'], kun:['なか'], mean:'dentro, meio', week:4 },
+  { c:'大', on:['ダイ','タイ'], kun:['おお(きい)'], mean:'grande', week:4 },
+  { c:'小', on:['ショウ'], kun:['ちい(さい)','こ','お'], mean:'pequeno', week:4 }
 ];
