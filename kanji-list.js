@@ -45,5 +45,10 @@ window.KANJI_DEX = [
   { c:'下', on:['カ','ゲ'], kun:['した','さ(げる)','くだ(る)'], mean:'embaixo, sob', week:4 },
   { c:'中', on:['チュウ'], kun:['なか'], mean:'dentro, meio', week:4 },
   { c:'大', on:['ダイ','タイ'], kun:['おお(きい)'], mean:'grande', week:4 },
-  { c:'小', on:['ショウ'], kun:['ちい(さい)','こ','お'], mean:'pequeno', week:4 }
+  { c:'小', on:['ショウ'], kun:['ちい(さい)','こ','お'], mean:'pequeno', week:4 },
+  { c:'本', on:['ホン'], kun:['もと'], mean:'raiz, origem; livro', week:5 },
+  { c:'半', on:['ハン'], kun:['なか(ば)'], mean:'metade', week:5 },
+  { c:'分', on:['ブン','フン','ブ'], kun:['わ(ける)','わ(かる)'], mean:'dividir, parte, minuto', week:5 },
+  { c:'力', on:['リョク','リキ'], kun:['ちから'], mean:'força', week:5 },
+  { c:'何', on:['カ'], kun:['なに','なん'], mean:'o que, quantos', week:5 }
 ];

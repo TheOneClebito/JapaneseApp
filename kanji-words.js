@@ -7,7 +7,7 @@
 // ============================================================
 window.KANJI_WORDS = [
   // 日
-  { w:'日{本|ほん}', read:'にほん', mean:'Japão' },
+  { w:'日本', read:'にほん', mean:'Japão' },
   { w:'{毎|まい}日', read:'まいにち', mean:'todo dia' },
   // 月
   { w:'{今|こん}月', read:'こんげつ', mean:'este mês' },
@@ -27,7 +27,7 @@ window.KANJI_WORDS = [
   // 人
   { w:'一人', read:'ひとり', mean:'uma pessoa / sozinho' },
   { w:'二人', read:'ふたり', mean:'duas pessoas' },
-  { w:'日{本|ほん}人', read:'にほんじん', mean:'japonês (pessoa)' },
+  { w:'日本人', read:'にほんじん', mean:'japonês (pessoa)' },
   // 口
   { w:'{入|いり}口', read:'いりぐち', mean:'entrada' },
   { w:'人口', read:'じんこう', mean:'população' },
@@ -106,5 +106,17 @@ window.KANJI_WORDS = [
   { w:'大きい', read:'おおきい', mean:'grande' },
   { w:'大{変|へん}', read:'たいへん', mean:'difícil / trabalhoso' },
   { w:'小さい', read:'ちいさい', mean:'pequeno' },
-  { w:'小学生', read:'しょうがくせい', mean:'aluno do primário' }
+  { w:'小学生', read:'しょうがくせい', mean:'aluno do primário' },
+  // 本 半 分 力 何 (novos)
+  { w:'本', read:'ほん', mean:'livro' },
+  { w:'本{屋|や}', read:'ほんや', mean:'livraria' },
+  { w:'半分', read:'はんぶん', mean:'metade' },
+  { w:'半年', read:'はんとし', mean:'meio ano' },
+  { w:'五{時|じ}半', read:'ごじはん', mean:'cinco e meia (5h30)' },
+  { w:'分かる', read:'わかる', mean:'entender' },
+  { w:'五分', read:'ごふん', mean:'cinco minutos' },
+  { w:'力', read:'ちから', mean:'força' },
+  { w:'何', read:'なに', mean:'o que' },
+  { w:'何{時|じ}', read:'なんじ', mean:'que horas' },
+  { w:'何人', read:'なんにん', mean:'quantas pessoas' }
 ];
