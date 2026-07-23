@@ -145,6 +145,8 @@
   .opt:disabled{opacity:.55;}
   .quiz-q{text-align:center; margin:10px 0 18px;}
   .quiz-q .qk{font-size:80px; font-weight:700;}
+  .quiz-q .qk .tgt{ text-decoration:underline; text-decoration-color:var(--accent2); text-underline-offset:5px; color:var(--accent2); }
+  .quiz-q .qk ruby rt{ font-size:10px; color:var(--muted); font-weight:400; }
   .quiz-q .qprompt{color:var(--muted); font-size:14px;}
   .seg.kanji-seg{margin-bottom:16px;}
   .backbar{display:flex; align-items:center; gap:6px; margin-bottom:6px;}
@@ -293,6 +295,7 @@
 <script src="./kanji-strokes.js"></script>
 <script src="./kanji-list.js"></script>
 <script src="./kanji-words.js"></script>
+<script src="./kanji-sentences.js"></script>
 <script src="./vocab-decks.js"></script>
 <script src="./tatoeba-sentences.js"></script>
 <script src="./reading-texts.js"></script>
@@ -333,8 +336,10 @@ function load(){
   if(s.settings.drillWrite==null) s.settings.drillWrite = false; // drills: modo escrever (digitar resposta)
   if(s.settings.teHint==null) s.settings.teHint = false;         // te-form: mostrar regra de conjugação
   if(s.settings.adjHint==null) s.settings.adjHint = false;       // adjetivos: mostrar regra de conjugação
+  if(!s.settings.verbForm) s.settings.verbForm = 'te';           // drill de verbos: 'te' ou 'nai'
   if(!s.settings.composeLevels) s.settings.composeLevels = { easy:true, med:true, hard:true }; // níveis no compor
-  if(s.settings.kanjiWords==null) s.settings.kanjiWords = false; // quiz de kanji em palavras
+  if(s.settings.kanjiWords==null) s.settings.kanjiWords = false; // (legado)
+  if(!s.settings.kanjiSrc) s.settings.kanjiSrc = s.settings.kanjiWords ? 'words' : 'kanji'; // kanji|words|sent
   if(!s.kanjiProgress) s.kanjiProgress = {}; // por kanji: {mean:{seen,ok}, read:{seen,ok}, writeBest}
   if(!s.profile) s.profile = {};
   const p = s.profile;
@@ -952,11 +957,24 @@ const VERBS = [
   { jp:'使う', kana:'つかう', romaji:'tsukau', meaning:'usar', type:'godan' },
   { jp:'借りる', kana:'かりる', romaji:'kariru', meaning:'pegar emprestado', type:'ichidan' },
   { jp:'もらう', kana:'もらう', romaji:'morau', meaning:'receber / ganhar', type:'godan' },
-  { jp:'サインする', kana:'サインする', romaji:'sainsuru', meaning:'assinar', type:'irregular' }
+  { jp:'サインする', kana:'サインする', romaji:'sainsuru', meaning:'assinar', type:'irregular' },
+  { jp:'吸う', kana:'すう', romaji:'suu', meaning:'fumar / inalar', type:'godan' },
+  { jp:'押す', kana:'おす', romaji:'osu', meaning:'empurrar / apertar', type:'godan' },
+  { jp:'歌う', kana:'うたう', romaji:'utau', meaning:'cantar', type:'godan' },
+  { jp:'消す', kana:'けす', romaji:'kesu', meaning:'apagar / desligar', type:'godan' },
+  { jp:'呼ぶ', kana:'よぶ', romaji:'yobu', meaning:'chamar', type:'godan' },
+  { jp:'教える', kana:'おしえる', romaji:'oshieru', meaning:'ensinar', type:'ichidan' },
+  { jp:'始める', kana:'はじめる', romaji:'hajimeru', meaning:'começar (algo)', type:'ichidan' },
+  { jp:'閉める', kana:'しめる', romaji:'shimeru', meaning:'fechar', type:'ichidan' },
+  { jp:'開ける', kana:'あける', romaji:'akeru', meaning:'abrir', type:'ichidan' },
+  { jp:'あげる', kana:'あげる', romaji:'ageru', meaning:'dar', type:'ichidan' },
+  { jp:'持ってくる', kana:'もってくる', romaji:'mottekuru', meaning:'trazer', type:'irregular' },
+  { jp:'ある', kana:'ある', romaji:'aru', meaning:'haver (coisas)', type:'godan' },
+  { jp:'入る', kana:'はいる', romaji:'hairu', meaning:'entrar', type:'godan' }
 ];
 function teForm(v){
   if(v.type==='irregular'){
-    if(v.kana==='くる'||v.kana==='来る') return {kana:'きて', romaji:'kite'};
+    if(v.kana.endsWith('くる')) return {kana: v.kana.slice(0,-2)+'きて', romaji: v.romaji.replace(/kuru$/,'kite')};
     if(v.kana==='いく'||v.kana==='行く') return {kana:'いって', romaji:'itte'};
     if(v.kana.endsWith('する')) return {kana: v.kana.slice(0,-2)+'して', romaji: v.romaji.replace(/suru$/,'shite')};
   }
@@ -976,12 +994,27 @@ function teForm(v){
   const baseRom = v.romaji.slice(0,-2); // remove last vowel+consonant roughly
   return { kana: stem+suf, romaji: (v.romaji.replace(/(u|tsu|ru|nu|bu|mu|ku|gu|su)$/, '') ) + (romMap[suf]||'te') };
 }
+// forma ない (negativa simples). Romaji derivado do kana.
+function naiForm(v){
+  const k = v.kana;
+  const mk = kana => ({ kana, romaji: kanaToRomaji(kana) });
+  if(v.type==='irregular'){
+    if(k.endsWith('くる')) return mk(k.slice(0,-2)+'こない');
+    if(k==='いく'||k==='行く') return mk('いかない');      // 行く é regular na forma ない
+    if(k.endsWith('する')) return mk(k.slice(0,-2)+'しない');
+  }
+  if(v.type==='ichidan') return mk(k.slice(0,-1)+'ない');
+  if(k==='ある') return mk('ない');                        // exceção: ある → ない
+  const map = {'う':'わ','く':'か','ぐ':'が','す':'さ','つ':'た','ぬ':'な','ぶ':'ば','む':'ま','る':'ら'};
+  const last = k.slice(-1);
+  return mk(k.slice(0,-1) + (map[last]||'ら') + 'ない');
+}
 let drill = { v:null, revealed:false };
 let drillMode = 'te';
 function renderDrills(){
   view.innerHTML = `
     <div class="seg kanji-seg" id="drill-seg">
-      <button data-m="te">て-form</button>
+      <button data-m="te">Verbos</button>
       <button data-m="count">Contad.</button>
       <button data-m="adj">Adjet.</button>
       <button data-m="listen">🎧 Ouvir</button>
@@ -1073,17 +1106,39 @@ const ADJ_RULE = `<div class="rule-box">
   <div><b>passado neg.:</b> ~janakatta</div>
   <div><b>ligação (e):</b> ~de <span class="rm">shizuka de</span></div>
 </div>`;
+const NAI_RULE = `<div class="rule-box">
+  <div class="rule-t">Grupo 1 (godan): troca o -u final por -a + nai</div>
+  <div><b>-ku → -kanai</b> <span class="rm">kaku → kakanai</span></div>
+  <div><b>-gu → -ganai</b> <span class="rm">oyogu → oyoganai</span></div>
+  <div><b>-su → -sanai</b> <span class="rm">kesu → kesanai</span></div>
+  <div><b>-tsu → -tanai</b> <span class="rm">matsu → matanai</span></div>
+  <div><b>-nu/-bu/-mu → -nanai/-banai/-manai</b> <span class="rm">nomu → nomanai</span></div>
+  <div><b>-ru → -ranai</b> <span class="rm">kaeru → kaeranai</span></div>
+  <div>⚠️ <b>-u → -wanai</b> (não "-anai") <span class="rm">kau → kawanai · suu → suwanai</span></div>
+  <div>⚠️ <b>aru → nai</b> (irregular)</div>
+  <div class="rule-t" style="margin-top:8px">Grupo 2 e Grupo 3</div>
+  <div><b>Grupo 2 (ru):</b> tira -ru + nai <span class="rm">taberu → tabenai</span></div>
+  <div><b>Grupo 3:</b> suru→shinai · kuru→<b>konai</b> · iku→ikanai</div>
+</div>`;
 function renderTeDrill(keep){
+  const nai = state.settings.verbForm==='nai';
   $('#drill-body').innerHTML = `
-    <h2 class="sec-title">Forma て (te-form)</h2>
+    <h2 class="sec-title">Verbos — forma ${nai?'ない':'て'}</h2>
+    <div class="row" style="gap:8px;margin-bottom:8px">
+      <button class="chip ${!nai?'on':''}" data-vf="te">て-form</button>
+      <button class="chip ${nai?'on':''}" data-vf="nai">ない-form</button>
+    </div>
     ${drillToggles('teHint')}
-    ${state.settings.teHint? TE_RULE : ''}
-    <div class="hint" style="text-align:left;margin-bottom:12px">Veja o verbo no dicionário e diga a forma て.</div>
+    ${state.settings.teHint? (nai? NAI_RULE : TE_RULE) : ''}
+    <div class="hint" style="text-align:left;margin-bottom:12px">Veja o verbo no dicionário e diga a forma ${nai?'ない (negativa simples)':'て'}.</div>
     <div class="flash" id="drill-card" style="min-height:240px"></div>
     <div style="height:14px"></div>
     <div id="drill-actions"></div>
   `;
   wireDrillToggles(()=>renderTeDrill(true));
+  $('#drill-body').querySelectorAll('[data-vf]').forEach(b=>{
+    b.onclick=()=>{ state.settings.verbForm=b.dataset.vf; save(); renderTeDrill(true); };
+  });
   if(keep && drill.v) drawDrill(); else nextDrill();
 }
 function nextDrill(){
@@ -1093,7 +1148,7 @@ function nextDrill(){
 }
 function drawDrill(){
   const v = drill.v;
-  const te = teForm(v);
+  const te = (state.settings.verbForm==='nai') ? naiForm(v) : teForm(v);
   const s = state.settings;
   const c = $('#drill-card');
   c.innerHTML = `
@@ -1940,11 +1995,31 @@ function checkReadingHard(input, item){
   return false;
 }
 
+// frase do quiz: [alvo|leitura] → sublinhado (sem furigana); {kanji|leitura} → ruby
+function sentenceHTML(s){
+  return esc(s)
+    .replace(/\{([^|]+)\|([^}]+)\}/g, (m,k,r)=>`<ruby>${k}<rt>${r}</rt></ruby>`)
+    .replace(/\[([^|]+)\|([^\]]+)\]/g, (m,k)=>`<u class="tgt">${k}</u>`);
+}
+function sentenceTarget(s){ const m = s.match(/\[([^|]+)\|([^\]]+)\]/); return m ? {base:m[1], read:m[2]} : {base:'', read:''}; }
+
 function renderKanjiQuizView(type){
   const dex = window.KANJI_DEX;
   if(!kanjiQuiz.cur){
     let item, correct, options;
-    if(state.settings.kanjiWords && (window.KANJI_WORDS||[]).length){
+    if(state.settings.kanjiSrc==='sent' && (window.KANJI_SENTENCES||[]).length){
+      const pool = window.KANJI_SENTENCES;
+      const sd = nextFromBag('ks-'+type, pool) || pool[0];
+      const tg = sentenceTarget(sd.s);
+      item = { c:tg.base, display:sentenceHTML(sd.s), mean:sd.pt, on:[], kun:[tg.read] };
+      if(type==='mean'){
+        correct = sd.pt;
+        options = shuffle([correct, ...new Set(pickDistractors(pool.map(x=>x.pt),3,p=>p===sd.pt))]).slice(0,4);
+      } else {
+        correct = tg.read;
+        options = shuffle([correct, ...new Set(pickDistractors(pool.map(x=>sentenceTarget(x.s).read),3,r=>r===tg.read))]).slice(0,4);
+      }
+    } else if(state.settings.kanjiSrc==='words' && (window.KANJI_WORDS||[]).length){
       const pool = window.KANJI_WORDS;
       const wd = nextFromBag('kw-'+type, pool) || pool[0];
       const plain = wd.w.replace(/\{([^|]+)\|[^}]+\}/g,'$1');
@@ -1976,15 +2051,25 @@ function renderKanjiQuizView(type){
   }
   const q = kanjiQuiz.cur;
   const hard = state.settings.kanjiHard;
+  const src = state.settings.kanjiSrc;
   view.innerHTML = `
     <div class="backbar"><button id="back">← Kanjidex</button><div class="hint" style="margin-left:auto">${kanjiQuiz.correct}/${kanjiQuiz.n} ✓</div></div>
+    <div class="row" style="gap:8px;flex-wrap:wrap;margin-bottom:8px">
+      <button class="chip ${src==='kanji'?'on':''}" data-src="kanji">漢 Kanji</button>
+      <button class="chip ${src==='words'?'on':''}" data-src="words">📝 Palavras</button>
+      <button class="chip ${src==='sent'?'on':''}" data-src="sent">📄 Frases</button>
+    </div>
     <div class="row" style="gap:8px;flex-wrap:wrap;margin-bottom:10px">
       <button class="chip ${hard?'on':''}" id="kh-toggle">💪 Modo difícil ${hard?'(escrever)':'(MC)'}</button>
-      <button class="chip ${state.settings.kanjiWords?'on':''}" id="kw-toggle">📝 Palavras</button>
     </div>
     <div class="quiz-q">
-      <div class="qk" style="${state.settings.kanjiWords?'font-size:46px':''}">${q.item.display||esc(q.item.c)}</div>
-      <div class="qprompt">${hard?(type==='mean'?'Escreva o significado (em português):':'Escreva a leitura (romaji ou kana):'):(type==='mean'?'Qual é o significado?':'Qual é uma leitura válida?')}</div>
+      <div class="qk" style="${src==='words'?'font-size:46px':src==='sent'?'font-size:21px;line-height:2.1':''}">${q.item.display||esc(q.item.c)}</div>
+      <div class="qprompt">${
+        src==='sent'
+          ? (type==='mean' ? 'O que a frase significa?' : (hard?'Escreva a leitura da parte sublinhada:':'Qual é a leitura da parte sublinhada?'))
+          : (hard ? (type==='mean'?'Escreva o significado (em português):':'Escreva a leitura (romaji ou kana):')
+                  : (type==='mean'?'Qual é o significado?':'Qual é uma leitura válida?'))
+      }</div>
     </div>
     <div id="qbody"></div>
     <div style="height:10px"></div>
@@ -1992,7 +2077,9 @@ function renderKanjiQuizView(type){
   `;
   $('#back').onclick=backToGrid;
   $('#kh-toggle').onclick=()=>{ state.settings.kanjiHard=!state.settings.kanjiHard; save(); kanjiQuiz.cur=null; renderKanjiQuizView(type); };
-  $('#kw-toggle').onclick=()=>{ state.settings.kanjiWords=!state.settings.kanjiWords; save(); kanjiQuiz.cur=null; renderKanjiQuizView(type); };
+  view.querySelectorAll('[data-src]').forEach(b=>{
+    b.onclick=()=>{ state.settings.kanjiSrc=b.dataset.src; save(); kanjiQuiz.cur=null; renderKanjiQuizView(type); };
+  });
   function commit(right, chosen){
     q.answered = chosen; kanjiQuiz.n++;
     if(right) kanjiQuiz.correct++;
@@ -2255,17 +2342,19 @@ function mergeVocabPacks(){
   const packs = window.VOCAB_DECKS || [];
   let added = 0;
   packs.forEach(pack=>{
-    if(state.decks.find(d=>d.id===pack.id)) return; // já importado
-    state.decks.push({ id:pack.id, name:pack.name });
+    if(!state.decks.find(d=>d.id===pack.id)) state.decks.push({ id:pack.id, name:pack.name });
+    // acrescenta só os cards que ainda não existem nesse baralho (permite ampliar decks)
+    const existentes = new Set(state.cards.filter(c=>c.deckId===pack.id).map(c=>c.jp));
     pack.cards.forEach(c=>{
+      if(existentes.has(c.jp)) return;
       state.cards.push({
         id: uid(), deckId: pack.id,
         jp: c.jp, kana: c.kana || c.jp, romaji: kanaToRomaji(c.kana || c.jp),
         meaning: c.mean, example: c.ex||'', exTr: c.exTr||'',
         srs:{ due: now(), interval:0, ease:2.5, reps:0, lapses:0 }
       });
+      added++;
     });
-    added += pack.cards.length;
   });
   if(added>0) save();
   return added;

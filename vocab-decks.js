@@ -241,7 +241,18 @@ window.VOCAB_DECKS = [
     { jp:'見る', kana:'みる', mean:'ver, assistir', ex:'えいがを みます。', exTr:'Vejo um filme.' },
     { jp:'使う', kana:'つかう', mean:'usar', ex:'この ペンを つかっても いいですか。', exTr:'Posso usar esta caneta?' },
     { jp:'借りる', kana:'かりる', mean:'pegar emprestado', ex:'としょかんで ほんを かります。', exTr:'Pego um livro emprestado na biblioteca.' },
-    { jp:'もらう', kana:'もらう', mean:'receber, ganhar', ex:'ともだちに プレゼントを もらいました。', exTr:'Ganhei um presente de um amigo.' }
+    { jp:'もらう', kana:'もらう', mean:'receber, ganhar', ex:'ともだちに プレゼントを もらいました。', exTr:'Ganhei um presente de um amigo.' },
+    { jp:'吸う', kana:'すう', mean:'fumar, inalar', ex:'ここで タバコを すっては いけません。', exTr:'Não pode fumar aqui.' },
+    { jp:'押す', kana:'おす', mean:'empurrar, apertar', ex:'この ボタンを おして ください。', exTr:'Aperte este botão, por favor.' },
+    { jp:'教える', kana:'おしえる', mean:'ensinar', ex:'せんせいは にほんごを おしえます。', exTr:'O professor ensina japonês.' },
+    { jp:'始める', kana:'はじめる', mean:'começar (algo)', ex:'べんきょうを はじめます。', exTr:'Começo a estudar.' },
+    { jp:'歌う', kana:'うたう', mean:'cantar', ex:'うたを うたいます。', exTr:'Canto uma música.' },
+    { jp:'消す', kana:'けす', mean:'apagar, desligar', ex:'でんきを けして ください。', exTr:'Apague a luz, por favor.' },
+    { jp:'呼ぶ', kana:'よぶ', mean:'chamar', ex:'タクシーを よびます。', exTr:'Chamo um táxi.' },
+    { jp:'閉める', kana:'しめる', mean:'fechar', ex:'まどを しめても いいですか。', exTr:'Posso fechar a janela?' },
+    { jp:'開ける', kana:'あける', mean:'abrir', ex:'ドアを あけて ください。', exTr:'Abra a porta, por favor.' },
+    { jp:'あげる', kana:'あげる', mean:'dar', ex:'ともだちに プレゼントを あげます。', exTr:'Dou um presente para um amigo.' },
+    { jp:'持ってくる', kana:'もってくる', mean:'trazer', ex:'ほんを もってきて ください。', exTr:'Traga o livro, por favor.' }
   ]},
   { id:'b2-expressoes', name:'Básico 2 — Expressões e perguntas', cards:[
     { jp:'どうですか', mean:'que tal?, como está?', ex:'おちゃは どうですか。', exTr:'Que tal um chá?' },

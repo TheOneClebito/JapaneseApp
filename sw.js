@@ -1,5 +1,5 @@
 // Service worker — cache-first offline para o app funcionar sem internet.
-const CACHE = 'jpstudy-v28';
+const CACHE = 'jpstudy-v29';
 const ASSETS = [
   './',
   './index.html',
@@ -8,6 +8,7 @@ const ASSETS = [
   './kanji-strokes.js',
   './kanji-list.js',
   './kanji-words.js',
+  './kanji-sentences.js',
   './vocab-decks.js',
   './tatoeba-sentences.js',
   './reading-texts.js',
