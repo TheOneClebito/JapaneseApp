@@ -2171,6 +2171,10 @@ function renderSettings(){
     <input type="file" id="file" accept=".json" style="display:none">
     <div style="height:8px"></div>
     <button class="btn ghost" id="reset">↺ Restaurar deck inicial</button>
+    <h2 class="sec-title">Aplicativo</h2>
+    <div class="hint" style="text-align:left;margin-bottom:8px">Versão instalada: <b id="app-ver">…</b></div>
+    <button class="btn sec" id="force-update">🔄 Forçar atualização</button>
+    <div class="hint" style="text-align:left;margin-top:6px">Use se o app não estiver pegando a versão nova. Limpa o cache e recarrega — <b>seu progresso não é apagado</b>.</div>
     <h2 class="sec-title">Sobre</h2>
     <div class="hint" style="text-align:left">App pessoal de estudo de japonês. Funciona offline e salva tudo neste aparelho. Para instalar no iPhone: abra no Safari → botão Compartilhar → “Adicionar à Tela de Início”.</div>
   `;
@@ -2184,6 +2188,12 @@ function renderSettings(){
   $('#import').onclick=()=>$('#file').click();
   $('#file').onchange=importData;
   $('#reset').onclick=()=>{ if(confirm('Isto substitui TUDO pelo deck inicial. Continuar?')){ state=seed(); save(); manageDeck=state.decks[0].id; toast('Restaurado'); render(); } };
+  $('#force-update').onclick = forceUpdate;
+  (async()=>{ try{
+    const ks = window.caches ? await caches.keys() : [];
+    const v = (ks.find(k=>/^jpstudy-v/.test(k))||'').replace('jpstudy-','');
+    const el = $('#app-ver'); if(el) el.textContent = v || '(sem cache offline ainda)';
+  }catch(e){} })();
 }
 function exportData(){
   const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
@@ -2209,6 +2219,21 @@ function importData(e){
 let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); deferredPrompt=e; $('#install-btn').style.display='inline-flex'; });
 $('#install-btn').onclick = async ()=>{ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt=null; $('#install-btn').style.display='none'; } };
+
+// Força a atualização para a última versão publicada: limpa o cache do service worker
+// e o desregistra, depois recarrega da rede. O progresso salvo (localStorage) NÃO é tocado.
+async function forceUpdate(){
+  const b = $('#force-update');
+  if(b){ b.disabled = true; b.textContent = '⏳ Atualizando…'; }
+  try{
+    if(window.caches){ const ks = await caches.keys(); await Promise.all(ks.map(k=>caches.delete(k))); }
+    if('serviceWorker' in navigator){ const rs = await navigator.serviceWorker.getRegistrations(); await Promise.all(rs.map(r=>r.unregister())); }
+    // também renova o cache HTTP do navegador (senão os .js podem vir velhos mesmo assim)
+    const urls = [location.href.split('?')[0]].concat(Array.from(document.scripts).map(s=>s.src).filter(Boolean));
+    await Promise.all(urls.map(u=>fetch(u, {cache:'reload'}).catch(()=>{})));
+  }catch(e){}
+  location.reload();
+}
 
 // ---------- Service worker (com auto-atualização) ----------
 if('serviceWorker' in navigator){
