@@ -230,6 +230,19 @@ window.VOCAB_DECKS = [
     { jp:'しか', mean:'apenas, só (+ negativo)', ex:'ひとつしか ありません。', exTr:'Só tenho um.' },
     { jp:'～も', mean:'também', ex:'わたしも いきます。', exTr:'Eu também vou.' }
   ]},
+  { id:'b3-verbos', name:'Básico 3 — Verbos (dicionário)', cards:[
+    { jp:'手伝う', kana:'てつだう', mean:'ajudar', ex:'ともだちの しごとを てつだいます。', exTr:'Ajudo no trabalho do meu amigo.' },
+    { jp:'つける', kana:'つける', mean:'ligar (aparelho), acender', ex:'テレビを つけます。', exTr:'Ligo a TV.' },
+    { jp:'見せる', kana:'みせる', mean:'mostrar', ex:'しゃしんを みせて ください。', exTr:'Por favor, mostre a foto.' },
+    { jp:'座る', kana:'すわる', mean:'sentar(-se)', ex:'いすに すわります。', exTr:'Sento na cadeira.' },
+    { jp:'曲がる', kana:'まがる', mean:'virar, dobrar (esquina)', ex:'つぎの かどを みぎに まがります。', exTr:'Viro à direita na próxima esquina.' },
+    { jp:'サインする', kana:'サインする', mean:'assinar', ex:'ここに サインして ください。', exTr:'Por favor, assine aqui.' },
+    { jp:'置く', kana:'おく', mean:'colocar, pôr', ex:'つくえの うえに ほんを おきます。', exTr:'Coloco o livro em cima da mesa.' },
+    { jp:'見る', kana:'みる', mean:'ver, assistir', ex:'えいがを みます。', exTr:'Vejo um filme.' },
+    { jp:'使う', kana:'つかう', mean:'usar', ex:'この ペンを つかっても いいですか。', exTr:'Posso usar esta caneta?' },
+    { jp:'借りる', kana:'かりる', mean:'pegar emprestado', ex:'としょかんで ほんを かります。', exTr:'Pego um livro emprestado na biblioteca.' },
+    { jp:'もらう', kana:'もらう', mean:'receber, ganhar', ex:'ともだちに プレゼントを もらいました。', exTr:'Ganhei um presente de um amigo.' }
+  ]},
   { id:'b2-expressoes', name:'Básico 2 — Expressões e perguntas', cards:[
     { jp:'どうですか', mean:'que tal?, como está?', ex:'おちゃは どうですか。', exTr:'Que tal um chá?' },
     { jp:'いきましょう', mean:'vamos (ir)', ex:'いっしょに いきましょう。', exTr:'Vamos juntos.' },

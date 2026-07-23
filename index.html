@@ -942,7 +942,17 @@ const VERBS = [
   { jp:'飛ぶ', kana:'とぶ', romaji:'tobu', meaning:'voar / pular', type:'godan' },
   { jp:'咲く', kana:'さく', romaji:'saku', meaning:'florescer', type:'godan' },
   { jp:'走る', kana:'はしる', romaji:'hashiru', meaning:'correr', type:'godan' },
-  { jp:'結婚する', kana:'けっこんする', romaji:'kekkonsuru', meaning:'casar(-se)', type:'irregular' }
+  { jp:'結婚する', kana:'けっこんする', romaji:'kekkonsuru', meaning:'casar(-se)', type:'irregular' },
+  { jp:'手伝う', kana:'てつだう', romaji:'tetsudau', meaning:'ajudar', type:'godan' },
+  { jp:'つける', kana:'つける', romaji:'tsukeru', meaning:'ligar / acender', type:'ichidan' },
+  { jp:'見せる', kana:'みせる', romaji:'miseru', meaning:'mostrar', type:'ichidan' },
+  { jp:'座る', kana:'すわる', romaji:'suwaru', meaning:'sentar(-se)', type:'godan' },
+  { jp:'曲がる', kana:'まがる', romaji:'magaru', meaning:'virar / dobrar', type:'godan' },
+  { jp:'置く', kana:'おく', romaji:'oku', meaning:'colocar / pôr', type:'godan' },
+  { jp:'使う', kana:'つかう', romaji:'tsukau', meaning:'usar', type:'godan' },
+  { jp:'借りる', kana:'かりる', romaji:'kariru', meaning:'pegar emprestado', type:'ichidan' },
+  { jp:'もらう', kana:'もらう', romaji:'morau', meaning:'receber / ganhar', type:'godan' },
+  { jp:'サインする', kana:'サインする', romaji:'sainsuru', meaning:'assinar', type:'irregular' }
 ];
 function teForm(v){
   if(v.type==='irregular'){
@@ -2225,7 +2235,7 @@ function mergeVocabPacks(){
     pack.cards.forEach(c=>{
       state.cards.push({
         id: uid(), deckId: pack.id,
-        jp: c.jp, kana: c.jp, romaji: kanaToRomaji(c.jp),
+        jp: c.jp, kana: c.kana || c.jp, romaji: kanaToRomaji(c.kana || c.jp),
         meaning: c.mean, example: c.ex||'', exTr: c.exTr||'',
         srs:{ due: now(), interval:0, ease:2.5, reps:0, lapses:0 }
       });
