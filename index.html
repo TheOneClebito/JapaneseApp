@@ -1926,10 +1926,11 @@ function renderKanji(){
   `;
   $('#q-mean').onclick=()=>{ kanjiQuiz={type:'mean',n:0,correct:0,cur:null}; kanjiView='quiz-mean'; renderKanji(); };
   $('#q-read').onclick=()=>{ kanjiQuiz={type:'read',n:0,correct:0,cur:null}; kanjiView='quiz-read'; renderKanji(); };
-  $('#q-write').onclick=()=>{ kanjiSel = nextFromBag('kwrite', dex).c; kanjiView='write'; renderKanji(); };
+  $('#q-write').onclick=()=>{ kanjiSel = weightedKanjiPick('kwrite', dex).c; kanjiView='write'; renderKanji(); };
   $('#kgrid').innerHTML = dex.map(k=>`
     <div class="kcell" data-k="${esc(k.c)}">
       ${(k.week===maxWeek && maxWeek>1)?'<span class="new"></span>':''}
+      ${kanjiWeight(k)>1.6?'<span title="Você erra mais este — aparece com mais frequência" style="position:absolute;top:3px;left:4px;font-size:11px;line-height:1">🎯</span>':''}
       <div class="kc">${esc(k.c)}</div><div class="km">${esc(k.mean.split(',')[0])}</div>
     </div>`).join('');
   $('#kgrid').querySelectorAll('[data-k]').forEach(el=>el.onclick=()=>{ kanjiSel=el.dataset.k; kanjiView='detail'; renderKanji(); });
@@ -2037,7 +2038,7 @@ function renderKanjiWrite(char){
     if(hw){ state.settings.writeGuide?hw.showOutline():hw.hideOutline(); }
     $('#hint-outline').textContent=(state.settings.writeGuide?'☑':'☐')+' Mostrar guia (contorno)';
   };
-  $('#next').onclick=()=>{ kanjiSel=nextFromBag('kwrite', window.KANJI_DEX).c; renderKanji(); };
+  $('#next').onclick=()=>{ kanjiSel=weightedKanjiPick('kwrite', window.KANJI_DEX).c; renderKanji(); };
 }
 
 // --- Quizzes de significado / leitura ---
@@ -2068,6 +2069,34 @@ function nextFromBag(key, arr){
   const item = b.queue.shift();
   b.last = item;
   return item;
+}
+// ---- Repetição adaptativa dos kanji ----
+// Kanji que você mais erra (no significado, na leitura ou na escrita) ganham
+// peso maior e aparecem com mais frequência nos quizzes e no treino de escrita.
+function kanjiWeight(k){
+  const p = state.kanjiProgress && state.kanjiProgress[k.c];
+  if(!p) return 1.4;                        // ainda não praticado → exposição moderada
+  let w = 1;
+  ['mean','read'].forEach(t=>{
+    const s = p[t];
+    if(s && s.seen) w += ((s.seen - s.ok)/s.seen) * 3;   // até +3 por modo se erra sempre
+  });
+  if(p.writeBest!=null && p.writeBest>0) w += Math.min(p.writeBest,3)*0.7; // erros na escrita
+  return Math.max(0.4, w);
+}
+// sorteio ponderado pelos pesos acima, evitando repetir o kanji anterior.
+function weightedKanjiPick(bagKey, dex){
+  if(!dex || !dex.length) return null;
+  if(dex.length===1) return dex[0];
+  const b = _bags[bagKey] || (_bags[bagKey]={last:null});
+  let cands = dex.filter(k=>k.c!==b.last);
+  if(!cands.length) cands = dex.slice();
+  const weights = cands.map(kanjiWeight);
+  const total = weights.reduce((a,x)=>a+x,0);
+  let r = Math.random()*total, pick = cands[cands.length-1];
+  for(let i=0;i<cands.length;i++){ r -= weights[i]; if(r<=0){ pick=cands[i]; break; } }
+  b.last = pick.c;
+  return pick;
 }
 function plainReading(r){ return r.replace(/[()]/g,''); }
 // número por extenso <-> dígito (一=um=1, etc.)
@@ -2136,7 +2165,7 @@ function renderKanjiQuizView(type){
         options = shuffle([correct, ...new Set(pickDistractors(pool.map(x=>x.read),3,r=>r===wd.read))]).slice(0,4);
       }
     } else {
-      const k0 = nextFromBag('kq-'+type, dex);
+      const k0 = weightedKanjiPick('kq-'+type, dex);
       item = { c:k0.c, display:esc(k0.c), mean:k0.mean, on:k0.on, kun:k0.kun };
       if(type==='mean'){
         correct = item.mean;

@@ -50,5 +50,10 @@ window.KANJI_DEX = [
   { c:'半', on:['ハン'], kun:['なか(ば)'], mean:'metade', week:5 },
   { c:'分', on:['ブン','フン','ブ'], kun:['わ(ける)','わ(かる)'], mean:'dividir, parte, minuto', week:5 },
   { c:'力', on:['リョク','リキ'], kun:['ちから'], mean:'força', week:5 },
-  { c:'何', on:['カ'], kun:['なに','なん'], mean:'o que, quantos', week:5 }
+  { c:'何', on:['カ'], kun:['なに','なん'], mean:'o que, quantos', week:5 },
+  { c:'明', on:['メイ','ミョウ'], kun:['あか(るい)','あ(ける)'], mean:'claro, brilhante; alegre', week:6 },
+  { c:'休', on:['キュウ'], kun:['やす(む)','やす(み)'], mean:'descanso, folga', week:6 },
+  { c:'体', on:['タイ','テイ'], kun:['からだ'], mean:'corpo', week:6 },
+  { c:'好', on:['コウ'], kun:['す(き)','この(む)'], mean:'gostar (de)', week:6 },
+  { c:'男', on:['ダン','ナン'], kun:['おとこ'], mean:'homem', week:6 }
 ];
