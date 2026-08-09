@@ -1015,6 +1015,7 @@ function renderDrills(){
   view.innerHTML = `
     <div class="seg kanji-seg" id="drill-seg">
       <button data-m="te">Verbos</button>
+      <button data-m="part">Partíc.</button>
       <button data-m="count">Contad.</button>
       <button data-m="adj">Adjet.</button>
       <button data-m="listen">🎧 Ouvir</button>
@@ -1028,6 +1029,7 @@ function renderDrills(){
     b.onclick=()=>{ drillMode=b.dataset.m; renderDrills(); };
   });
   if(drillMode==='te') renderTeDrill();
+  else if(drillMode==='part') renderPartDrill();
   else if(drillMode==='count') renderCountDrill();
   else if(drillMode==='adj') renderAdjDrill();
   else if(drillMode==='listen') renderListenDrill();
@@ -1232,6 +1234,11 @@ const ADJ = [
   { kana:'むずかしい', mean:'difícil', type:'i' },
   { kana:'いそがしい', mean:'ocupado', type:'i' },
   { kana:'いい', mean:'bom', type:'i', irr:true },
+  { kana:'わるい', mean:'ruim', type:'i' },
+  { kana:'あたらしい', mean:'novo', type:'i' },
+  { kana:'ふるい', mean:'velho (coisa)', type:'i' },
+  { kana:'ちかい', mean:'perto', type:'i' },
+  { kana:'とおい', mean:'longe', type:'i' },
   { kana:'しずか', mean:'calmo', type:'na' },
   { kana:'きれい', mean:'bonito/limpo', type:'na' },
   { kana:'にぎやか', mean:'movimentado', type:'na' },
@@ -1300,6 +1307,103 @@ function drawAdj(){
   `;
   if(revealed){ $('#say-a').onclick=()=>speak(ans); }
   drillActions(adjState, ans, drawAdj, nextAdj);
+}
+
+// ---------- Drill: Partículas (を・に・で・へ) ----------
+// s:[antes, depois] com a lacuna no meio · ans = partícula certa ·
+// also = alternativas também aceitas · note = por quê.
+const PARTICLES = [
+  { s:['ともだち',' よびます。'], ans:'を', opts:['を','に','へ','が'], pt:'Chamo/convido os amigos.', note:'よぶ (chamar) leva を no objeto.' },
+  { s:['たばこ',' すいます。'], ans:'を', opts:['を','に','で','が'], pt:'Fumo cigarro.', note:'Objeto direto → を.' },
+  { s:['でんわ',' つかいます。'], ans:'を', opts:['を','に','で','へ'], pt:'Uso o telefone.', note:'Objeto direto → を.' },
+  { s:['まど',' あけます。'], ans:'を', opts:['を','が','に','で'], pt:'Abro a janela.', note:'Objeto direto → を.' },
+  { s:['ケーキ',' つくって、ともだちを よびます。'], ans:'を', opts:['を','に','で','へ'], pt:'Faço bolo e chamo os amigos.', note:'つくる age sobre o objeto → を.' },
+  { s:['ペン',' てがみを かきます。'], ans:'で', opts:['で','を','に','へ'], pt:'Escrevo a carta com a caneta.', note:'で = instrumento/meio (com o quê).' },
+  { s:['でんしゃ',' がっこうへ いきます。'], ans:'で', opts:['で','に','を','へ'], pt:'Vou à escola de trem.', note:'で = meio de transporte.' },
+  { s:['７じ',' おきます。'], ans:'に', opts:['に','で','を','へ'], pt:'Acordo às 7h.', note:'に marca a hora exata.' },
+  { s:['まいあさ ６じはん',' ねます。'], ans:'に', opts:['に','で','を','へ'], pt:'Durmo às 6h30 toda manhã.', note:'Horário → に (não esqueça o に!).' },
+  { s:['がっこう',' いきます。'], ans:'へ', also:['に'], opts:['へ','を','で','が'], pt:'Vou para a escola.', note:'へ (ou に) = direção do movimento.' },
+  { s:['こうえん',' あそびます。'], ans:'で', opts:['で','に','へ','を'], pt:'Brinco no parque.', note:'で = lugar onde a ação acontece.' },
+  { s:['うち',' べんきょうします。'], ans:'で', opts:['で','に','を','へ'], pt:'Estudo em casa.', note:'で = lugar da ação.' },
+  { s:['いす',' すわります。'], ans:'に', opts:['に','を','で','へ'], pt:'Sento na cadeira.', note:'すわる (sentar) pede に (destino).' },
+  { s:['ともだち',' あいます。'], ans:'に', also:['と'], opts:['に','を','で','へ'], pt:'Encontro um amigo.', note:'あう (encontrar) pede に (ou と).' },
+  { s:['でんしゃ',' のります。'], ans:'に', opts:['に','を','で','へ'], pt:'Pego/entro no trem.', note:'のる (embarcar) pede に.' },
+  { s:['リオ',' すんでいます。'], ans:'に', opts:['に','で','を','へ'], pt:'Moro no Rio.', note:'すむ (morar) pede に (onde se reside).' },
+  { s:['きょうしつ',' たばこを すいます。'], ans:'で', opts:['で','に','を','へ'], pt:'Fumo na sala de aula.', note:'で = lugar da ação (o objeto たばこ já tem を).' },
+  { s:['あさ、コーヒー',' のみます。'], ans:'を', opts:['を','に','で','が'], pt:'De manhã bebo café.', note:'Objeto direto → を.' },
+  { s:['にほんご',' はなします。'], ans:'で', also:['を'], opts:['で','に','へ','が'], pt:'Falo em japonês.', note:'で = meio (no idioma japonês).' },
+  { s:['へや',' でんきを けします。'], ans:'の', also:['で'], opts:['の','を','に','へ'], pt:'Apago a luz do quarto.', note:'へやの でんき = a luz "do" quarto → の.' }
+];
+const PART_RULE = `<div class="rule-box">
+  <div class="rule-t">Partículas mais comuns</div>
+  <div><b>を</b> — objeto direto <span class="rm">パンを たべる</span></div>
+  <div><b>に</b> — hora, destino, "onde algo está/vai" <span class="rm">７じに · いすに すわる · うちに いる</span></div>
+  <div><b>で</b> — lugar da ação, meio/instrumento <span class="rm">こうえんで あそぶ · でんしゃで いく · ペンで かく</span></div>
+  <div><b>へ</b> — direção (≈ に) <span class="rm">がっこうへ いく</span></div>
+  <div class="rule-t" style="margin-top:8px">Verbos que "puxam" に</div>
+  <div class="rm">あう · のる · すわる · すむ · はいる → に</div>
+</div>`;
+let partState = { q:null };
+function renderPartDrill(keep){
+  $('#drill-body').innerHTML = `
+    <h2 class="sec-title">Partículas — を・に・で・へ</h2>
+    ${drillToggles('partHint')}
+    ${state.settings.partHint? PART_RULE : ''}
+    <div class="hint" style="text-align:left;margin-bottom:12px">Escolha a partícula que preenche a lacuna.</div>
+    <div id="part-area"></div>
+  `;
+  wireDrillToggles(()=>renderPartDrill(true));
+  if(!(keep && partState.q)) partState.q = null;
+  drawPart();
+}
+function drawPart(){
+  if(!partState.q){
+    const item = nextFromBag('part', PARTICLES);
+    partState.q = { item, answered:null };
+  }
+  const q = partState.q, it = q.item;
+  const s = state.settings;
+  const full = it.s[0]+it.ans+it.s[1];
+  const gapStyle = 'display:inline-block;min-width:1.2em;text-align:center;color:'+(q.answered!=null?'var(--accent2)':'var(--again)')+';border-bottom:2px solid var(--accent2);margin:0 2px';
+  const sentence = `${esc(it.s[0])}<span style="${gapStyle}">${q.answered!=null? esc(q.answered) : '?'}</span>${esc(it.s[1])}`;
+  $('#part-area').innerHTML = `
+    <div class="flash" id="drill-card" style="min-height:180px;justify-content:center">
+      <div class="jp-main" style="font-size:24px;line-height:1.6">${sentence}</div>
+      <div class="hint" style="margin-top:8px">${esc(it.pt)}</div>
+      ${q.answered!=null? `<div class="divider"></div>
+        <div class="meaning" style="color:var(--accent2);font-size:20px">${esc(full)}</div>
+        ${s.showRomaji?`<div class="jp-romaji">${esc(kanaToRomaji(full))}</div>`:''}
+        <div class="hint" style="margin-top:6px">${esc(it.note)}</div>
+        <button class="speak" id="say-p">🔊</button>`:''}
+    </div>
+    <div style="height:14px"></div>
+    <div class="kbtns" id="popts"></div>
+    <div id="pnext"></div>
+  `;
+  const ok = v => v===it.ans || (it.also||[]).includes(v);
+  const opts = $('#popts');
+  opts.innerHTML = it.opts.map((o,i)=>`<button class="opt" data-i="${i}" style="font-size:22px">${esc(o)}</button>`).join('');
+  opts.querySelectorAll('.opt').forEach(b=>{
+    const val = it.opts[+b.dataset.i];
+    if(q.answered!=null){ b.disabled=true; if(ok(val)) b.classList.add('ok'); else if(val===q.answered) b.classList.add('no'); }
+    b.onclick=()=>{
+      if(q.answered!=null) return;
+      q.answered=val; const right=ok(val);
+      const cb=bumpCombo(right);
+      awardXP('grammar', right? Math.round(6*comboMult()) : 2);
+      track('drill'); sfx(right?(cb>=2?'combo':'correct'):'wrong');
+      drawPart();
+    };
+  });
+  if(q.answered!=null){
+    $('#say-p').onclick=()=>speak(full);
+    const right=ok(q.answered);
+    $('#pnext').innerHTML = `
+      <div class="hint" style="margin:10px 0;color:${right?'var(--good)':'var(--again)'}">
+        ${right?'Correto! 🎉':'Resposta: '+esc(it.ans)}</div>
+      <button class="btn" id="pnx">Próxima →</button>`;
+    $('#pnx').onclick=()=>{ partState.q=null; drawPart(); };
+  }
 }
 
 // ---------- Treino: Listening (TTS) ----------
