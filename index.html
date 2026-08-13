@@ -337,6 +337,7 @@ function load(){
   if(s.settings.teHint==null) s.settings.teHint = false;         // te-form: mostrar regra de conjugação
   if(s.settings.adjHint==null) s.settings.adjHint = false;       // adjetivos: mostrar regra de conjugação
   if(!s.settings.verbForm) s.settings.verbForm = 'te';           // drill de verbos: 'te' ou 'nai'
+  if(s.settings.kakiMean==null) s.settings.kakiMean = true;      // 書きましょう: mostrar significado
   if(!s.settings.composeLevels) s.settings.composeLevels = { easy:true, med:true, hard:true }; // níveis no compor
   if(s.settings.kanjiWords==null) s.settings.kanjiWords = false; // (legado)
   if(!s.settings.kanjiSrc) s.settings.kanjiSrc = s.settings.kanjiWords ? 'words' : 'kanji'; // kanji|words|sent
@@ -1457,21 +1458,27 @@ let kakiState = { q:null, revealed:false };
 function renderKakiDrill(keep){
   $('#drill-body').innerHTML = `
     <h2 class="sec-title">書きましょう — Escreva o kanji</h2>
+    <div class="row" style="gap:8px;flex-wrap:wrap;margin-bottom:10px">
+      <button class="chip ${state.settings.kakiMean!==false?'on':''}" id="km-toggle">💭 Significado ${state.settings.kakiMean!==false?'ON':'OFF'}</button>
+    </div>
     <div class="hint" style="text-align:left;margin-bottom:12px">Leia em kana, escreva a palavra em <b>kanji</b> (no papel ou de cabeça) e depois confira.</div>
     <div class="flash" id="drill-card" style="min-height:220px"></div>
     <div style="height:14px"></div>
     <div id="drill-actions"></div>
   `;
+  $('#km-toggle').onclick=()=>{ state.settings.kakiMean = (state.settings.kakiMean===false); save(); renderKakiDrill(true); };
   if(!(keep && kakiState.q)){ kakiState.q = nextFromBag('kaki', KAKI_WORDS); kakiState.revealed=false; }
   drawKaki();
 }
 function drawKaki(){
   const q = kakiState.q;
+  const showMean = state.settings.kakiMean!==false;
   $('#drill-card').innerHTML = `
     <div class="jp-main" style="font-size:34px">${esc(q.r)}</div>
-    <div class="hint" style="margin-top:6px">${esc(q.m)}</div>
+    ${showMean? `<div class="hint" style="margin-top:6px">${esc(q.m)}</div>`:''}
     ${kakiState.revealed? `<div class="divider"></div>
       <div class="meaning" style="color:var(--accent2);font-size:42px;line-height:1.2">${esc(q.k)}</div>
+      <div class="hint" style="margin-top:4px">${esc(q.m)}</div>
       <button class="speak" id="say-k">🔊</button>`:''}
   `;
   const act = $('#drill-actions');
