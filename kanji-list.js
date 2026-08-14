@@ -55,5 +55,10 @@ window.KANJI_DEX = [
   { c:'休', on:['キュウ'], kun:['やす(む)','やす(み)'], mean:'descanso, folga', week:6 },
   { c:'体', on:['タイ','テイ'], kun:['からだ'], mean:'corpo', week:6 },
   { c:'好', on:['コウ'], kun:['す(き)','この(む)'], mean:'gostar (de)', week:6 },
-  { c:'男', on:['ダン','ナン'], kun:['おとこ'], mean:'homem', week:6 }
+  { c:'男', on:['ダン','ナン'], kun:['おとこ'], mean:'homem', week:6 },
+  { c:'林', on:['リン'], kun:['はやし'], mean:'bosque, mata', week:7 },
+  { c:'森', on:['シン'], kun:['もり'], mean:'floresta', week:7 },
+  { c:'間', on:['カン','ケン'], kun:['あいだ','ま'], mean:'intervalo, espaço, entre', week:7 },
+  { c:'畑', on:[], kun:['はたけ','はた'], mean:'horta, campo cultivado', week:7 },
+  { c:'岩', on:['ガン'], kun:['いわ'], mean:'rocha, rochedo', week:7 }
 ];

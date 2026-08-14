@@ -1,5 +1,5 @@
 // Service worker — cache-first offline para o app funcionar sem internet.
-const CACHE = 'jpstudy-v33';
+const CACHE = 'jpstudy-v34';
 const ASSETS = [
   './',
   './index.html',
