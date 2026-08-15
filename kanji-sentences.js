@@ -34,5 +34,18 @@ window.KANJI_SENTENCES = [
   { s:'まいあさ 六じ[半|はん]に おきます。', pt:'Acordo toda manhã às 6h30.' },
   { s:'かばんの [中|なか]に 何が ありますか。', pt:'O que há dentro da bolsa?' },
   { s:'[人口|じんこう]は 一万人です。', pt:'A população é de dez mil pessoas.' },
-  { s:'[水|みず]を 半分 のみました。', pt:'Bebi metade da água.' }
+  { s:'[水|みず]を 半分 のみました。', pt:'Bebi metade da água.' },
+  { s:'へやが [明るい|あかるい]です。', pt:'O quarto é claro/iluminado.' },
+  { s:'[明日|あした]は 何日ですか。', pt:'Que dia é amanhã?' },
+  { s:'せんげつ、一{週|しゅう}間 学{校|こう}を [休み|やすみ]ました。', pt:'No mês passado faltei à escola por uma semana.' },
+  { s:'[体|からだ]が 大きいです。', pt:'Ele tem um corpo grande.' },
+  { s:'まいにち [体力|たいりょく]を つけます。', pt:'Todo dia ganho resistência física.' },
+  { s:'わたしは 日本が [好き|すき]です。', pt:'Eu gosto do Japão.' },
+  { s:'きょうしつに [男子学生|だんしがくせい]が います。', pt:'Há um estudante (rapaz) na sala de aula.' },
+  { s:'あの [男|おとこ]の 人は 先生です。', pt:'Aquele homem é professor.' },
+  { s:'[林|はやし]の 中で 休みました。', pt:'Descansei dentro da mata.' },
+  { s:'この [森|もり]には 大きい 木が たくさん あります。', pt:'Nesta floresta há muitas árvores grandes.' },
+  { s:'私と 山田さんの [間|あいだ]に 川が あります。', pt:'Entre mim e o Yamada há um rio.' },
+  { s:'[畑|はたけ]で やさいを つくります。', pt:'Cultivo verduras na horta.' },
+  { s:'大きい [岩|いわ]の 上に ねこが います。', pt:'Há um gato em cima de uma pedra grande.' }
 ];
