@@ -356,6 +356,17 @@ function load(){
   if(!p.cosmetics) p.cosmetics = { frame:'none', accent:'roxo' };
   if(!p.readDone) p.readDone = { day:null, ids:{} }; // textos lidos hoje (anti-farm de XP)
   delete p.streak; // removido: ofensiva consecutiva gerava pressão
+  // Agrupa os cartões ultra-básicos (saudações) num deck "SUPER BÁSICO" (uma vez só).
+  // Não apaga nada — se quiser removê-los, é só apagar esse deck na aba Cards.
+  if(!s.migratedSuperBasico && Array.isArray(s.cards) && Array.isArray(s.decks)){
+    const ultra = new Set(['こんにちは','おはよう','さようなら','はい','いいえ','ありがとう','おやすみ','おやすみなさい']);
+    const alvo = s.cards.filter(c=> ultra.has(c.kana||c.jp));
+    if(alvo.length){
+      if(!s.decks.find(d=>d.id==='super-basico')) s.decks.unshift({ id:'super-basico', name:'SUPER BÁSICO' });
+      alvo.forEach(c=> c.deckId = 'super-basico');
+    }
+    s.migratedSuperBasico = true;
+  }
   return s;
 }
 function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }

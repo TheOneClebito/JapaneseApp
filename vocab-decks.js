@@ -265,5 +265,19 @@ window.VOCAB_DECKS = [
     { jp:'いくつ', mean:'quantos?', ex:'いくつ ありますか。', exTr:'Quantos há?' },
     { jp:'なにで', mean:'com o quê?, de que (meio)?', ex:'なにで いきますか。', exTr:'Como (com que meio) você vai?' },
     { jp:'AやB', mean:'A, B, etc. (lista parcial)', ex:'ねこや いぬが すきです。', exTr:'Gosto de gatos, cachorros, etc.' }
+  ]},
+  { id:'b3-l18-presentes', name:'Básico 3 — Presentes e ações (L18)', cards:[
+    { jp:'しょうがくきん', mean:'bolsa de estudos', ex:'だいがくから しょうがくきんを もらいます。', exTr:'Recebo bolsa de estudos da universidade.' },
+    { jp:'くすり', mean:'remédio', ex:'びょういんで くすりを もらいます。', exTr:'Recebo remédio no hospital.' },
+    { jp:'そつぎょう', mean:'formatura / graduação', ex:'らいねん そつぎょうします。', exTr:'Vou me formar ano que vem.' },
+    { jp:'そつぎょうしき', mean:'cerimônia de formatura', ex:'そつぎょうしきに いきました。', exTr:'Fui à cerimônia de formatura.' },
+    { jp:'おもちゃ', mean:'brinquedo', ex:'こどもに おもちゃを あげます。', exTr:'Dou um brinquedo para a criança.' },
+    { jp:'おかし', mean:'doces / guloseimas', ex:'いもうとに おかしを くれました。', exTr:'(Ele) deu doces para minha irmã.' },
+    { jp:'プレゼント', mean:'presente', ex:'たんじょうびに プレゼントを もらいました。', exTr:'Ganhei um presente no aniversário.' },
+    { jp:'おみやげ', mean:'lembrança de viagem (souvenir)', ex:'ハワイの おみやげを いただきました。', exTr:'Recebi um souvenir do Havaí.' },
+    { jp:'はなたば', mean:'buquê de flores', ex:'せんせいに はなたばを さしあげました。', exTr:'Dei um buquê ao professor.' },
+    { jp:'ネクタイ', mean:'gravata', ex:'ちちに ネクタイを あげました。', exTr:'Dei uma gravata ao meu pai.' },
+    { jp:'おれい', mean:'agradecimento / retribuição', ex:'おきゃくさまに おれいを いただきました。', exTr:'Recebi um agradecimento do cliente.' },
+    { jp:'ボーナス', mean:'bônus', ex:'かいしゃから ボーナスを もらいました。', exTr:'Recebi um bônus da empresa.' }
   ]}
 ];

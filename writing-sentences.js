@@ -6,6 +6,29 @@
 //  converte kana->romaji para comparar com o que o usuário digita.
 // ============================================================
 window.WRITING = [
+  // ---- Dar / Receber (Lição 18: あげる・もらう・くれる + て-form) ----
+  { id:'dr1', level:'Dar/Receber', pt:'Ensinei o caminho para o Sr. Tanaka.',
+    accept:['たなかさんに みちを おしえてあげました。','わたしは たなかさんに みちを おしえてあげました。'] },
+  { id:'dr2', level:'Dar/Receber', pt:'Emprestei um livro para o Sr. Yamada.',
+    accept:['やまださんに ほんを かしてあげました。','わたしは やまださんに ほんを かしてあげました。'] },
+  { id:'dr3', level:'Dar/Receber', pt:'Levei o Sr. Yamaguchi até a estação.',
+    accept:['やまぐちさんを えきまで おくってあげました。','わたしは やまぐちさんを えきまで おくってあげました。'] },
+  { id:'dr4', level:'Dar/Receber', pt:'Consertei a bicicleta do meu amigo (pra ele).',
+    accept:['ともだちの じてんしゃを しゅうりしてあげました。','わたしは ともだちの じてんしゃを しゅうりしてあげました。'] },
+  { id:'dr5', level:'Dar/Receber', pt:'Meu amigo deu um brinquedo para o meu irmão mais novo.',
+    accept:['ともだちは おとうとに おもちゃを くれました。'] },
+  { id:'dr6', level:'Dar/Receber', pt:'O professor me deu um livro de japonês.',
+    accept:['せんせいは にほんごの ほんを くださいました。','せんせいは わたしに にほんごの ほんを くださいました。'] },
+  { id:'dr7', level:'Dar/Receber', pt:'Recebi uma lembrança (souvenir) do meu amigo japonês.',
+    accept:['にほんの ともだちに おみやげを もらいました。','わたしは にほんの ともだちに おみやげを もらいました。'] },
+  { id:'dr8', level:'Dar/Receber', pt:'Recebi um dicionário de japonês do professor.',
+    accept:['せんせいに にほんごの じしょを いただきました。','わたしは せんせいに にほんごの じしょを いただきました。'] },
+  { id:'dr9', level:'Dar/Receber', pt:'Os alunos deram um buquê de flores para o professor.',
+    accept:['がくせいたちは せんせいに はなたばを さしあげました。'] },
+  { id:'dr10', level:'Dar/Receber', pt:'Minha irmã mais nova deu peixe para o gato.',
+    accept:['いもうとは ねこに さかなを やりました。'] },
+  { id:'dr11', level:'Dar/Receber', pt:'Recebi um bônus da empresa.',
+    accept:['かいしゃから ボーナスを もらいました。','わたしは かいしゃから ボーナスを もらいました。'] },
   // ---- Básico 3 (das fotos enviadas) ----
   { id:'w1', level:'Básico 3', pt:'Aos domingos vou à praia e jogo vôlei com meus amigos.',
     accept:['にちようびは うみへ いって、ともだちと バレーを します。'] },
