@@ -1,5 +1,5 @@
 // Service worker — cache-first offline para o app funcionar sem internet.
-const CACHE = 'jpstudy-v39';
+const CACHE = 'jpstudy-v40';
 const ASSETS = [
   './',
   './index.html',
@@ -14,6 +14,7 @@ const ASSETS = [
   './reading-texts.js',
   './writing-sentences.js',
   './jp-dict.js',
+  './verbs.js',
   './fonts/pressstart.woff2',
   './icons/icon-192.png',
   './icons/icon-512.png',
@@ -27,7 +28,8 @@ self.addEventListener('install', (e) => {
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
+      // só apaga caches antigos DESTE app (o jogo em /game/ tem o próprio cache)
+      Promise.all(keys.filter((k) => k.startsWith('jpstudy-') && k !== CACHE).map((k) => caches.delete(k)))
     ).then(() => self.clients.claim())
   );
 });
