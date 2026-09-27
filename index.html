@@ -982,12 +982,17 @@ const VERBS = [
   { jp:'あげる', kana:'あげる', romaji:'ageru', meaning:'dar', type:'ichidan' },
   { jp:'持ってくる', kana:'もってくる', romaji:'mottekuru', meaning:'trazer', type:'irregular' },
   { jp:'ある', kana:'ある', romaji:'aru', meaning:'haver (coisas)', type:'godan' },
-  { jp:'入る', kana:'はいる', romaji:'hairu', meaning:'entrar', type:'godan' }
+  { jp:'入る', kana:'はいる', romaji:'hairu', meaning:'entrar', type:'godan' },
+  { jp:'くれる', kana:'くれる', romaji:'kureru', meaning:'dar (a mim/à minha família)', type:'ichidan' },
+  { jp:'直す', kana:'なおす', romaji:'naosu', meaning:'consertar / corrigir', type:'godan' },
+  { jp:'迎える', kana:'むかえる', romaji:'mukaeru', meaning:'ir buscar / receber (alguém)', type:'ichidan' },
+  { jp:'修理する', kana:'しゅうりする', romaji:'shuurisuru', meaning:'consertar (reparar)', type:'irregular' },
+  { jp:'連れて行く', kana:'つれていく', romaji:'tsureteiku', meaning:'levar (uma pessoa)', type:'irregular' }
 ];
 function teForm(v){
   if(v.type==='irregular'){
     if(v.kana.endsWith('くる')) return {kana: v.kana.slice(0,-2)+'きて', romaji: v.romaji.replace(/kuru$/,'kite')};
-    if(v.kana==='いく'||v.kana==='行く') return {kana:'いって', romaji:'itte'};
+    if(v.kana.endsWith('いく')||v.kana.endsWith('行く')) return {kana: v.kana.replace(/(いく|行く)$/,'')+'いって', romaji: v.romaji.replace(/iku$/,'itte')};
     if(v.kana.endsWith('する')) return {kana: v.kana.slice(0,-2)+'して', romaji: v.romaji.replace(/suru$/,'shite')};
   }
   if(v.type==='ichidan'){
@@ -1012,7 +1017,7 @@ function naiForm(v){
   const mk = kana => ({ kana, romaji: kanaToRomaji(kana) });
   if(v.type==='irregular'){
     if(k.endsWith('くる')) return mk(k.slice(0,-2)+'こない');
-    if(k==='いく'||k==='行く') return mk('いかない');      // 行く é regular na forma ない
+    if(k.endsWith('いく')||k.endsWith('行く')) return mk(k.replace(/(いく|行く)$/,'')+'いかない'); // 行く é regular na forma ない
     if(k.endsWith('する')) return mk(k.slice(0,-2)+'しない');
   }
   if(v.type==='ichidan') return mk(k.slice(0,-1)+'ない');
@@ -1261,7 +1266,10 @@ const ADJ = [
   { kana:'まじめ', mean:'sério', type:'na' },
   { kana:'じょうぶ', mean:'resistente', type:'na' },
   { kana:'たいへん', mean:'difícil/trabalhoso', type:'na' },
-  { kana:'べんり', mean:'prático', type:'na' }
+  { kana:'べんり', mean:'prático', type:'na' },
+  { kana:'すき', mean:'gostar (de)', type:'na' },
+  { kana:'きらい', mean:'não gostar / detestar', type:'na' },
+  { kana:'だいすき', mean:'adorar / gostar muito', type:'na' }
 ];
 const ADJ_FORMS = [
   { key:'neg',     label:'negativo (não é…)' },

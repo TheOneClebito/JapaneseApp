@@ -279,5 +279,19 @@ window.VOCAB_DECKS = [
     { jp:'ネクタイ', mean:'gravata', ex:'ちちに ネクタイを あげました。', exTr:'Dei uma gravata ao meu pai.' },
     { jp:'おれい', mean:'agradecimento / retribuição', ex:'おきゃくさまに おれいを いただきました。', exTr:'Recebi um agradecimento do cliente.' },
     { jp:'ボーナス', mean:'bônus', ex:'かいしゃから ボーナスを もらいました。', exTr:'Recebi um bônus da empresa.' }
+  ]},
+  { id:'b3-jujuu', name:'Básico 3 — Dar e Receber (授受) + ações', cards:[
+    { jp:'あげます', mean:'dar (eu → outra pessoa)', ex:'ともだちに プレゼントを あげます。', exTr:'Dou um presente ao amigo.' },
+    { jp:'もらいます', mean:'receber / ganhar', ex:'ともだちに おかしを もらいます。', exTr:'Recebo doces de um amigo.' },
+    { jp:'くれます', mean:'dar (outro → mim / minha família)', ex:'ともだちは おみやげを くれました。', exTr:'O amigo me deu uma lembrança.' },
+    { jp:'さしあげます', mean:'dar (a alguém superior)', ex:'せんせいに はなたばを さしあげます。', exTr:'Dou um buquê ao professor.' },
+    { jp:'いただきます', mean:'receber (de alguém superior)', ex:'せんせいに 本を いただきました。', exTr:'Recebi um livro do professor.' },
+    { jp:'くださいます', mean:'dar (superior → mim)', ex:'せんせいは 本を くださいました。', exTr:'O professor me deu um livro.' },
+    { jp:'やります', mean:'dar (a inferior / animal / planta)', ex:'ねこに さかなを やります。', exTr:'Dou peixe ao gato.' },
+    { jp:'なおします', mean:'consertar / corrigir', ex:'とけいを なおします。', exTr:'Conserto o relógio.' },
+    { jp:'しゅうりします', mean:'consertar (reparar)', ex:'じてんしゃを しゅうりします。', exTr:'Conserto a bicicleta.' },
+    { jp:'むかえます', mean:'ir buscar / receber (alguém)', ex:'えきで ともだちを むかえます。', exTr:'Vou buscar o amigo na estação.' },
+    { jp:'つれていきます', mean:'levar (uma pessoa)', ex:'こどもを びょういんに つれていきます。', exTr:'Levo a criança ao hospital.' },
+    { jp:'ことば', mean:'palavra / vocábulo', ex:'あたらしい ことばを おぼえます。', exTr:'Memorizo palavras novas.' }
   ]}
 ];
