@@ -1,0 +1,154 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>html,body{margin:0;background:#1a1030;overflow:hidden}canvas{display:block}</style></head><body>
+<canvas id="c"></canvas>
+<script src="../kanji-strokes.js"></script><script src="../kanji-list.js"></script><script src="../kanji-words.js"></script>
+<script src="js/util.js"></script><script src="js/data.js"></script><script src="js/sprites.js"></script>
+<script>
+const G = { save: null };
+const Wd = innerWidth, Ht = innerHeight, dpr = 2;
+const cv = document.getElementById('c'); cv.width = Wd * dpr; cv.height = Ht * dpr; cv.style.width = Wd + 'px'; cv.style.height = Ht + 'px';
+const g = cv.getContext('2d'); g.scale(dpr, dpr);
+const TOP = 62, BOT = Ht - 190;
+
+function texture(seed, n, alpha) {
+  const r = mulberry32(seed);
+  for (let i = 0; i < n; i++) { g.fillStyle = r() < .5 ? `rgba(255,255,255,${alpha})` : `rgba(0,0,0,${alpha * .5})`; g.fillRect(r() * Wd, TOP + r() * (BOT - TOP), 1.3, 1.3); }
+  g.strokeStyle = `rgba(255,255,255,${alpha * .8})`; g.lineWidth = .6;
+  for (let i = 0; i < n / 20; i++) { const x = r() * Wd, y = TOP + r() * (BOT - TOP); g.beginPath(); g.moveTo(x, y); g.lineTo(x + rnd(-8, 8), y + rnd(-3, 3)); g.stroke(); }
+}
+// recorte de papel: sombra no chão + borda branca + preenchimento + brilho + contorno fino
+function cutout(shape, fill, o = {}) {
+  if (o.shadow) { const [x, y, rx, ry] = o.shadow; g.fillStyle = 'rgba(40,70,20,.25)'; g.beginPath(); g.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); g.fill(); }
+  // ordem: contorno escuro largo → borda branca → preenchimento por cima (esconde as linhas internas)
+  const bw = o.border || 7;
+  g.save(); g.lineJoin = 'round'; g.lineCap = 'round';
+  g.shadowColor = 'rgba(0,0,0,.22)'; g.shadowBlur = 5; g.shadowOffsetY = 3;
+  shape(); g.lineWidth = bw + 2.6; g.strokeStyle = 'rgba(70,50,40,.5)'; g.stroke();
+  g.shadowColor = 'transparent';
+  shape(); g.lineWidth = bw; g.strokeStyle = '#fff'; g.stroke();
+  shape(); g.fillStyle = fill; g.fill();
+  if (o.sheen !== false) { shape(); g.save(); g.clip(); const b = o.box || [0, 0, 0, 80]; const gr = g.createLinearGradient(b[0], b[1], b[2], b[3]); gr.addColorStop(0, 'rgba(255,255,255,.28)'); gr.addColorStop(.55, 'rgba(255,255,255,0)'); gr.addColorStop(1, 'rgba(0,0,0,.12)'); g.fillStyle = gr; g.fillRect(0, 0, Wd, Ht); g.restore(); }
+  g.restore();
+}
+function circles(list) { return () => { g.beginPath(); list.forEach(([x, y, r]) => { g.moveTo(x + r, y); g.arc(x, y, r, 0, Math.PI * 2); }); }; }
+function tree(x, y, s, col, dark) {
+  cutout(() => { g.beginPath(); g.rect(x - s * .1, y - s * .55, s * .2, s * .55); }, '#8a5a32', { shadow: [x, y, s * .55, s * .16], box: [x - s * .1, 0, x + s * .1, 0] });
+  const cl = [[x, y - s * 1.05, s * .42], [x - s * .32, y - s * .8, s * .32], [x + s * .32, y - s * .8, s * .32], [x - s * .12, y - s * .7, s * .3], [x + s * .14, y - s * .68, s * .3]];
+  cutout(circles(cl), col, { box: [x - s * .4, y - s * 1.4, x + s * .4, y - s * .4] });
+  g.fillStyle = dark; [[x - s * .2, y - s * .75], [x + s * .22, y - s * .9], [x + s * .05, y - s * 1.15]].forEach(([a, b]) => { g.beginPath(); g.arc(a, b, s * .05, 0, Math.PI * 2); g.fill(); });
+}
+function sakura(x, y, s) {
+  tree(x, y, s, '#f7b6cf', '#e889ad');
+  for (let i = 0; i < 7; i++) { const px = x + rnd(-s, s), py = y + rnd(-s * .1, s * .3); cutout(() => { g.beginPath(); g.ellipse(px, py, 3.5, 2.2, rnd(0, 3), 0, Math.PI * 2); }, '#f9c6da', { border: 3, sheen: false }); }
+}
+function house(x, y, w, roof) {
+  const h = w * .62;
+  cutout(() => { g.beginPath(); g.rect(x - w / 2, y - h, w, h); }, '#fbf1dc', { shadow: [x, y + 2, w * .62, w * .14], box: [x - w / 2, y - h, x + w / 2, y] });
+  cutout(() => { g.beginPath(); g.moveTo(x - w * .62, y - h); g.lineTo(x + w * .62, y - h); g.lineTo(x + w * .42, y - h - w * .42); g.lineTo(x - w * .42, y - h - w * .42); g.closePath(); }, roof, { box: [x, y - h - w * .42, x, y - h] });
+  g.strokeStyle = 'rgba(0,0,0,.18)'; g.lineWidth = 1.5;
+  for (let k = 1; k < 4; k++) { const yy = y - h - w * .42 * k / 4; g.beginPath(); g.moveTo(x - w * (.42 + .2 * (1 - k / 4)), yy); g.lineTo(x + w * (.42 + .2 * (1 - k / 4)), yy); g.stroke(); }
+  cutout(() => { g.beginPath(); g.roundRect(x - w * .1, y - h * .62, w * .2, h * .62, [6, 6, 0, 0]); }, '#8a4a2a', { border: 4, box: [x, y - h, x, y] });
+  [-1, 1].forEach(d => cutout(() => { g.beginPath(); g.rect(x + d * w * .3 - w * .09, y - h * .72, w * .18, h * .3); }, '#9bd7f5', { border: 4 }));
+}
+function torii(x, y, s) {
+  g.fillStyle = 'rgba(40,70,20,.22)'; g.beginPath(); g.ellipse(x, y, s * .8, s * .14, 0, 0, Math.PI * 2); g.fill();
+  const red = '#e0412f';
+  [-1, 1].forEach(d => cutout(() => { g.beginPath(); g.rect(x + d * s * .42 - s * .06, y - s * 1.1, s * .12, s * 1.1); }, red, { border: 5 }));
+  cutout(() => { g.beginPath(); g.rect(x - s * .62, y - s * .88, s * 1.24, s * .1); }, red, { border: 5 });
+  cutout(() => { g.beginPath(); g.moveTo(x - s * .8, y - s * 1.2); g.quadraticCurveTo(x, y - s * 1.08, x + s * .8, y - s * 1.2); g.lineTo(x + s * .7, y - s * 1.05); g.lineTo(x - s * .7, y - s * 1.05); g.closePath(); }, '#2a2226', { border: 5 });
+}
+function lantern(x, y, s) {
+  cutout(() => { g.beginPath(); g.rect(x - s * .12, y - s * .5, s * .24, s * .5); g.moveTo(x - s * .3, y - s * .5); g.lineTo(x + s * .3, y - s * .5); g.lineTo(x + s * .18, y - s * .85); g.lineTo(x - s * .18, y - s * .85); g.closePath(); g.rect(x - s * .2, y - s * .8, s * .4, s * .25); }, '#b9b4ae', { shadow: [x, y, s * .35, s * .1], border: 5 });
+  g.fillStyle = '#ffd766'; g.fillRect(x - s * .1, y - s * .74, s * .2, s * .12);
+}
+function sign(x, y, text) {
+  cutout(() => { g.beginPath(); g.rect(x - 3, y - 26, 6, 26); }, '#8a5a32', { shadow: [x, y, 22, 6], border: 4 });
+  cutout(() => { g.beginPath(); g.roundRect(x - 34, y - 52, 68, 28, 5); }, '#e8c48a', { border: 5 });
+  g.fillStyle = '#4a2a12'; g.font = `800 11px ${JP_FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, x, y - 38);
+}
+function flower(x, y, c) { cutout(circles([[x - 3, y, 2.6], [x + 3, y, 2.6], [x, y - 3, 2.6], [x, y + 3, 2.6]]), c, { border: 3, sheen: false }); g.fillStyle = '#ffcf3a'; g.beginPath(); g.arc(x, y, 2, 0, Math.PI * 2); g.fill(); }
+// personagem de papel (chibi)
+function person(x, y, s, skin, hair, shirt, pants, cap) {
+  cutout(() => {
+    g.beginPath();
+    g.roundRect(x - s * .18, y - s * .5, s * .36, s * .38, 6);
+    g.rect(x - s * .15, y - s * .14, s * .12, s * .14); g.rect(x + s * .03, y - s * .14, s * .12, s * .14);
+    g.moveTo(x + s * .26, y - s * .8); g.arc(x, y - s * .8, s * .26, 0, Math.PI * 2);
+  }, skin, { shadow: [x, y, s * .3, s * .08], border: 6, sheen: false });
+  g.save(); g.beginPath(); g.roundRect(x - s * .18, y - s * .5, s * .36, s * .38, 6); g.clip(); g.fillStyle = shirt; g.fillRect(x - s, y - s, s * 2, s); g.restore();
+  g.fillStyle = pants; g.fillRect(x - s * .15, y - s * .14, s * .12, s * .14); g.fillRect(x + s * .03, y - s * .14, s * .12, s * .14);
+  g.fillStyle = hair; g.beginPath(); g.arc(x, y - s * .86, s * .26, Math.PI * 1.05, Math.PI * 1.95); g.fill();
+  if (cap) { g.fillStyle = cap; g.beginPath(); g.arc(x, y - s * .88, s * .27, Math.PI, 0); g.fill(); g.fillRect(x - s * .05, y - s * .9, s * .38, s * .07); }
+  g.fillStyle = '#1a1420'; [-1, 1].forEach(d => { g.beginPath(); g.ellipse(x + d * s * .09, y - s * .76, s * .03, s * .05, 0, 0, Math.PI * 2); g.fill(); });
+  g.fillStyle = 'rgba(255,120,140,.5)'; [-1, 1].forEach(d => { g.beginPath(); g.ellipse(x + d * s * .16, y - s * .68, s * .04, s * .025, 0, 0, Math.PI * 2); g.fill(); });
+  g.lineWidth = 1.3; g.strokeStyle = 'rgba(60,40,30,.55)';
+  g.beginPath(); g.arc(x, y - s * .8, s * .26, 0, Math.PI * 2); g.stroke();
+}
+function spiritCut(c, x, y, s) {
+  const off = mkCanvas(s * 4, s * 4), og = off.getContext('2d');
+  drawSpirit(og, s * 2, s * 2, s * 2, c, 1.3);
+  const out = mkCanvas(off.width, off.height), o2 = out.getContext('2d');
+  const sil = mkCanvas(off.width, off.height), sg = sil.getContext('2d'); sg.drawImage(off, 0, 0); sg.globalCompositeOperation = 'source-in'; sg.fillStyle = '#fff'; sg.fillRect(0, 0, off.width, off.height);
+  for (let a = 0; a < 16; a++) o2.drawImage(sil, Math.cos(a / 16 * Math.PI * 2) * 7, Math.sin(a / 16 * Math.PI * 2) * 7);
+  o2.drawImage(off, 0, 0);
+  g.fillStyle = 'rgba(40,70,20,.25)'; g.beginPath(); g.ellipse(x, y, s * .42, s * .12, 0, 0, Math.PI * 2); g.fill();
+  g.drawImage(out, x - s, y - s * 1.45, s * 2, s * 2);
+}
+function bubble(x, y, text) {
+  g.save(); g.font = `800 15px ${JP_FONT}`; const tw = g.measureText(text).width + 26;
+  cutout(() => { g.beginPath(); g.roundRect(x - tw / 2, y - 40, tw, 32, 14); g.moveTo(x - 8, y - 9); g.lineTo(x, y + 2); g.lineTo(x + 8, y - 9); }, '#fffaf0', { border: 4, sheen: false });
+  g.fillStyle = '#2a1a10'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, x, y - 24); g.restore();
+}
+
+// ----- cena -----
+g.fillStyle = '#1b3a18'; g.fillRect(0, 0, Wd, Ht);
+g.save(); g.beginPath(); g.rect(0, TOP, Wd, BOT - TOP); g.clip();
+const grd = g.createLinearGradient(0, TOP, 0, BOT); grd.addColorStop(0, '#a9dc86'); grd.addColorStop(1, '#8fcf6c'); g.fillStyle = grd; g.fillRect(0, TOP, Wd, BOT - TOP);
+for (let i = 0; i < 26; i++) { const r = mulberry32(i + 5); g.fillStyle = r() < .5 ? 'rgba(255,255,255,.07)' : 'rgba(40,90,20,.07)'; g.beginPath(); g.ellipse(r() * Wd, TOP + r() * (BOT - TOP), 20 + r() * 40, 10 + r() * 20, 0, 0, Math.PI * 2); g.fill(); }
+texture(3, 2500, .09);
+// caminho
+const pathShape = () => { g.beginPath(); g.moveTo(170, TOP - 10); g.bezierCurveTo(150, 200, 230, 280, 190, 380); g.bezierCurveTo(160, 460, 205, 520, 190, BOT + 10); g.lineTo(232, BOT + 10); g.bezierCurveTo(248, 520, 205, 460, 234, 380); g.bezierCurveTo(272, 280, 196, 200, 214, TOP - 10); g.closePath(); g.moveTo(40, 262); g.bezierCurveTo(100, 250, 150, 290, 205, 285); g.lineTo(210, 312); g.bezierCurveTo(150, 318, 100, 282, 40, 292); g.closePath(); };
+cutout(pathShape, '#f2d7a0', { border: 6, box: [0, TOP, 0, BOT] });
+g.save(); pathShape(); g.clip(); texture(8, 1500, .12); g.restore();
+// lago
+cutout(() => { g.beginPath(); g.ellipse(300, 470, 62, 34, -.15, 0, Math.PI * 2); }, '#7cc6f2', { border: 7, box: [240, 440, 360, 500] });
+g.strokeStyle = 'rgba(255,255,255,.7)'; g.lineWidth = 2; [[280, 462, 14], [318, 478, 10], [300, 490, 7]].forEach(([x, y, r]) => { g.beginPath(); g.ellipse(x, y, r, r * .35, 0, 0, Math.PI * 2); g.stroke(); });
+[[285, 468], [318, 460]].forEach(([x, y]) => cutout(() => { g.beginPath(); g.ellipse(x, y, 9, 5, 0, 0, Math.PI * 2); }, '#5fb35a', { border: 3, sheen: false }));
+// objetos ordenados pela base (profundidade)
+const objs = [
+  [182, () => house(96, 182, 92, '#e05a45')],
+  [150, () => { house(300, 150, 70, '#d64032'); }],
+  [178, () => torii(300, 178, 58)],
+  [196, () => lantern(250, 196, 36)],
+  [80, () => tree(24, 80, 44, '#5cb85c', '#3f9a44')],
+  [96, () => tree(356, 96, 40, '#5cb85c', '#3f9a44')],
+  [240, () => sakura(340, 240, 50)],
+  [330, () => tree(28, 330, 46, '#4fae55', '#378c3f')],
+  [560, () => tree(40, 560, 50, '#5cb85c', '#3f9a44')],
+  [600, () => tree(345, 600, 46, '#4fae55', '#378c3f')],
+  [320, () => sign(262, 320, 'はじまりの むら')],
+  [352, () => person(104, 352, 50, '#efc19c', '#bdbdbd', '#8a5aa8', '#6a3a88')],
+  [430, () => person(212, 430, 56, '#f5c9a0', '#2a1c14', '#d8383a', '#2c3e78', '#d8383a')],
+  [492, () => spiritCut('火', 212, 492, 34)],
+];
+[[70, 400, '#ff7a8a'], [85, 410, '#fff'], [140, 520, '#ffe45a'], [120, 540, '#ff7a8a'], [270, 380, '#fff'], [330, 540, '#ffe45a'], [250, 560, '#ff7a8a']].forEach(([x, y, c]) => flower(x, y, c));
+objs.sort((a, b) => a[0] - b[0]).forEach(o => o[1]());
+bubble(104, 290, 'こんにちは！');
+g.restore();
+// HUD igual ao do jogo
+function box(x, y, w, h) { g.fillStyle = 'rgba(22,16,42,.95)'; g.strokeStyle = '#f4e7c3'; g.lineWidth = 2; g.beginPath(); g.roundRect(x, y, w, h, 10); g.fill(); g.stroke(); }
+box(8, 10, 118, 42); g.drawImage((() => { const c = mkCanvas(60, 60); drawSpirit(c.getContext('2d'), 30, 31, 44, '火', .6); return c; })(), 12, 13, 36, 36);
+g.fillStyle = '#fff'; g.font = `800 14px ${JP_FONT}`; g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillText('火 Nv5', 52, 24);
+g.fillStyle = '#2a2440'; g.fillRect(52, 36, 64, 6); g.fillStyle = '#5ad16a'; g.fillRect(52, 36, 58, 6);
+box(132, 10, 96, 42); g.fillStyle = '#fff'; g.font = '800 14px system-ui'; g.fillText('💰 300円', 144, 31);
+box(Wd - 54, 8, 46, 46); g.fillStyle = '#f4e7c3'; g.font = '22px system-ui'; g.textAlign = 'center'; g.fillText('☰', Wd - 31, 32);
+// controles
+g.globalAlpha = .9;
+g.fillStyle = 'rgba(20,14,36,.45)'; g.strokeStyle = 'rgba(244,231,195,.5)'; g.lineWidth = 2; g.beginPath(); g.arc(93, Ht - 97, 75, 0, Math.PI * 2); g.fill(); g.stroke();
+g.fillStyle = 'rgba(244,231,195,.18)'; g.beginPath(); g.arc(93, Ht - 97, 28, 0, Math.PI * 2); g.fill();
+const ab = g.createLinearGradient(0, Ht - 160, 0, Ht - 80); ab.addColorStop(0, '#e24a52'); ab.addColorStop(1, '#b0283a');
+g.fillStyle = ab; g.strokeStyle = '#fff'; g.lineWidth = 3; g.beginPath(); g.arc(Wd - 63, Ht - 123, 39, 0, Math.PI * 2); g.fill(); g.stroke();
+g.fillStyle = '#fff'; g.font = '900 24px system-ui'; g.fillText('A', Wd - 63, Ht - 122);
+g.globalAlpha = 1;
+g.fillStyle = 'rgba(255,255,255,.75)'; g.font = '700 12px system-ui'; g.fillText('MOCKUP · estilo papel recortado (Paper Mario)', Wd / 2, Ht - 12);
+</script></body></html>
