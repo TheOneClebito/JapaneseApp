@@ -126,10 +126,12 @@ const PLAQUE = { I: '宿', M: '店', J: '⛩', P: '先' };
 function worldRender(g, w, h, t) {
   const T = G.tile, p = W.player;
   const mw = W.w * T, mh = W.h * T;
-  let cx = (p.px + .5) * T - w / 2, cy = (p.py + .5) * T - h / 2;
+  // enquadra o mapa só na faixa livre (entre HUD e controles)
+  const vt = G.viewTop || 0, vh = (G.viewBottom || h) - vt;
+  let cx = (p.px + .5) * T - w / 2, cy = (p.py + .5) * T - vh / 2;
   cx = mw <= w ? (mw - w) / 2 : clamp(cx, 0, mw - w);
-  cy = mh <= h ? (mh - h) / 2 : clamp(cy, 0, mh - h);
-  cx = Math.round(cx); cy = Math.round(cy);
+  cy = mh <= vh ? (mh - vh) / 2 : clamp(cy, 0, mh - vh);
+  cx = Math.round(cx); cy = Math.round(cy - vt);
   g.fillStyle = W.map.theme === 'cave' ? '#0c0a10' : '#23501f'; g.fillRect(0, 0, w, h);
   const x0 = Math.max(0, Math.floor(cx / T)), y0 = Math.max(0, Math.floor(cy / T));
   const x1 = Math.min(W.w - 1, Math.ceil((cx + w) / T)), y1 = Math.min(W.h - 1, Math.ceil((cy + h) / T));
@@ -171,7 +173,7 @@ function worldRender(g, w, h, t) {
   if (W.banner > 0) {
     const a = Math.min(1, W.banner / .4, (2.6 - W.banner) / .3 + .01);
     g.save(); g.globalAlpha = clamp(a, 0, 1);
-    const bw = Math.min(w * .8, 340), bx = (w - bw) / 2, by = 14 + (G.safeTop || 0);
+    const bw = Math.min(w * .8, 340), bx = (w - bw) / 2, by = G.viewTop ? G.viewTop + 4 : 14 + (G.safeTop || 0);
     g.fillStyle = 'rgba(20,16,40,.92)'; g.strokeStyle = '#f4e7c3'; g.lineWidth = 3;
     roundRect(g, bx, by, bw, 58, 12); g.fill(); g.stroke();
     g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle';

@@ -3,15 +3,31 @@
 //  MAIN — estado, save, controles, loop, transições, título
 // ============================================================
 const SAVE_KEY = 'kotodama.v1';
+const GAME_VERSION = '1.1';
+// limpa o cache do jogo, remove o service worker e recarrega a versão mais nova (o save é mantido)
+async function forceUpdate() {
+  toast('🔄 Atualizando…', 5000);
+  saveGame();
+  try {
+    const ks = await caches.keys();
+    await Promise.all(ks.filter(k => k.startsWith('kotodama-')).map(k => caches.delete(k)));
+    const regs = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(regs.filter(r => /\/game\/$/.test(r.scope)).map(r => r.unregister()));
+    const files = ['./', './index.html', './js/util.js', './js/data.js', './js/sprites.js', './js/quiz.js', './js/world.js', './js/battle.js', './js/ui.js', './js/solitaire.js', './js/main.js',
+      '../kanji-list.js', '../kanji-words.js', '../kanji-strokes.js', '../vocab-decks.js', '../verbs.js'];
+    await Promise.all(files.map(u => fetch(u, { cache: 'reload' }).catch(() => {})));
+  } catch (e) {}
+  location.reload();
+}
 const G = { save: null, scene: 'title', busy: false, tile: 32, dpr: 1, w: 0, h: 0, safeTop: 0, flash: 0, flashCb: null, fade: 0, fadeDir: 0, fadeCb: null };
 const cv = $('#cv'), ctx = cv.getContext('2d');
 
 // ---------- Save ----------
 function newSave() {
   return {
-    v: 1, map: 'village', x: 7, y: 6, dir: 'left', party: [], box: [],
+    v: 2, map: 'village', x: 7, y: 6, dir: 'left', party: [], box: [],
     items: { ofuda: 0, kusuri: 2, onigiri: 0, okashi: 0 }, money: 300,
-    badges: { owned: {}, eq: { romaji: true } }, flags: {}, dex: {}, stats: {},
+    badges: { owned: {}, eq: {} }, flags: {}, dex: {}, stats: {},
     opts: { answer: isTouch() ? 'mc' : 'type', sound: true, voice: true }, play: 0,
   };
 }
@@ -23,6 +39,7 @@ function loadSave() {
     for (const k in d.opts) if (s.opts[k] === undefined) s.opts[k] = d.opts[k];
     for (const k in d.items) if (s.items[k] === undefined) s.items[k] = d.items[k];
     if (!s.badges.eq) s.badges.eq = {}; if (!s.badges.owned) s.badges.owned = {};
+    if (!s.v || s.v < 2) { s.badges.eq.romaji = false; s.v = 2; } // romaji deixa de vir ligado (agora é botão por fala)
     s.party = s.party.filter(i => SPECIES[i.sp]); s.box = s.box.filter(i => SPECIES[i.sp]);
     if (!MAPS[s.map]) Object.assign(s, { map: 'village', x: 7, y: 6 });
     return s;
@@ -88,6 +105,19 @@ function resize() {
   G.tile = 16 * clamp(Math.floor(Math.min(w / (16 * 11), h / (16 * 9))), 2, 4);
   G.safeTop = Math.max(0, (parseFloat(getComputedStyle($('#hud')).top) || 8) - 8);
   if (Solitaire.s && !Solitaire.s.over) Solitaire.render();
+  measureView();
+}
+// área útil do mapa: entre o HUD (em cima) e os controles de toque (embaixo),
+// pra o personagem nunca ficar escondido atrás deles
+function measureView() {
+  G.viewTop = 0; G.viewBottom = G.h;
+  if (document.body.dataset.scene !== G.scene) document.body.dataset.scene = G.scene; // HUD visível antes de medir
+  if (G.scene !== 'world') return;
+  const hud = $('#hud').getBoundingClientRect(), mb = $('#menubtn').getBoundingClientRect();
+  const top = Math.max(hud.bottom, mb.bottom) + 6;
+  const dp = $('#dpad').getBoundingClientRect();
+  const bottom = (document.body.classList.contains('touch') && dp.height) ? dp.top - 6 : G.h;
+  if (bottom - top >= G.tile * 6) { G.viewTop = top; G.viewBottom = bottom; }
 }
 window.addEventListener('resize', resize);
 resize();
@@ -147,7 +177,7 @@ function frame(now) {
   const dt = Math.min(.05, (now - last) / 1000); last = now;
   const t = now / 1000;
   try {
-    if (document.body.dataset.scene !== G.scene) document.body.dataset.scene = G.scene;
+    if (document.body.dataset.scene !== G.scene) { document.body.dataset.scene = G.scene; measureView(); }
     ctx.setTransform(G.dpr, 0, 0, G.dpr, 0, 0); ctx.imageSmoothingEnabled = false;
     if (G.scene === 'title') drawTitle(ctx, G.w, G.h, t);
     else if (G.scene === 'battle') { Battle.update(dt); Battle.render(ctx, G.w, G.h, t); }
@@ -172,6 +202,8 @@ function startGame(s) {
 }
 const existingSave = loadSave();
 if (existingSave) $('#t-cont').style.display = '';
+$('#t-ver').textContent = GAME_VERSION;
+$('#t-upd').onclick = e => { e.preventDefault(); forceUpdate(); };
 $('#t-cont').onclick = () => { audioUnlock(); sfx('confirm'); startGame(existingSave); };
 $('#t-new').onclick = () => {
   audioUnlock();

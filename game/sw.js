@@ -1,5 +1,5 @@
 // Service worker do jogo — funciona offline e se atualiza sozinho.
-const CACHE = 'kotodama-v1';
+const CACHE = 'kotodama-v2';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
   './js/util.js', './js/data.js', './js/sprites.js', './js/quiz.js', './js/world.js',

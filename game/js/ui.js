@@ -17,28 +17,31 @@ function romajiLine(s) {
 
 // ---------- Diálogo ----------
 const Dialog = {
-  open: false, lines: [], i: 0, opts: {}, showTr: false,
+  open: false, lines: [], i: 0, opts: {}, showTr: false, showRo: false,
   show(lines, opts = {}) {
     if (!lines || !lines.length) { opts.onDone && opts.onDone(); return; }
-    this.open = true; this.lines = lines; this.i = 0; this.opts = opts; this.showTr = false;
+    this.open = true; this.lines = lines; this.i = 0; this.opts = opts; this.showTr = false; this.showRo = false;
     G.busy = true; this.render();
   },
   render() {
     const L = this.lines[this.i], el = $('#dialog');
     const tr = this.showTr || badgeOn('trad') || this.opts.forceTrad;
+    const ro = this.showRo || badgeOn('romaji');
     el.innerHTML = `
       <div class="dlg">
         ${this.opts.name ? `<div class="dlg-name jp">${esc(this.opts.name)}</div>` : ''}
         <div class="dlg-jp jp">${jpHTML(L.jp, badgeOn('furi'))}</div>
-        ${badgeOn('romaji') ? `<div class="dlg-ro">${esc(romajiLine(L.jp))}</div>` : ''}
+        ${ro ? `<div class="dlg-ro">${esc(romajiLine(L.jp))}</div>` : ''}
         <div class="dlg-pt" style="display:${tr ? 'block' : 'none'}">${esc(L.pt)}</div>
         <div class="dlg-bar">
+          <button class="dlg-rob">${ro ? 'Aa ✓' : 'Aa romaji'}</button>
           <button class="dlg-tr">${tr ? '訳 ✓' : '訳 traduzir'}</button>
           <button class="dlg-say">🔊</button>
           <span class="dlg-next">${this.i < this.lines.length - 1 ? '▼' : '■'}</span>
         </div>
       </div>`;
     el.classList.add('show');
+    $('.dlg-rob', el).onclick = e => { e.stopPropagation(); this.showRo = !this.showRo; sfx('select'); this.render(); };
     $('.dlg-tr', el).onclick = e => { e.stopPropagation(); this.showTr = !this.showTr; sfx('select'); this.render(); };
     $('.dlg-say', el).onclick = e => { e.stopPropagation(); speak(markupKana(L.jp)); };
     $('.dlg', el).onclick = () => this.next();
@@ -46,7 +49,8 @@ const Dialog = {
   next() {
     if (!this.open) return;
     sfx('select');
-    if (this.i < this.lines.length - 1) { this.i++; this.render(); return; }
+    // cada fala nova começa sem romaji/tradução: tente ler primeiro
+    if (this.i < this.lines.length - 1) { this.i++; this.showTr = false; this.showRo = false; this.render(); return; }
     this.close();
   },
   close() {
@@ -243,7 +247,10 @@ const UI = {
         <small class="dim">Digitar aceita romaji ou kana e tolera 1 errinho. Perguntas de significado são sempre de escolha.</small></div>
       <div class="opt"><b>Som</b> <button class="btn tiny" id="o-snd">${o.sound ? '🔊 Ligado' : '🔇 Desligado'}</button></div>
       <div class="opt"><b>Voz (pronúncia)</b> <button class="btn tiny" id="o-voice">${o.voice ? '🗣 Ligada' : '🤐 Desligada'}</button></div>
+      <div class="opt"><b>Atualizar o jogo</b> <button class="btn tiny" id="o-upd">🔄 Forçar atualização</button>
+        <small class="dim">Baixa a versão mais nova agora. Seu progresso fica salvo. · versão ${GAME_VERSION}</small></div>
       <div class="opt"><b>Apagar progresso</b> <button class="btn tiny danger" id="o-reset">🗑 Recomeçar</button></div>`);
+    $('#o-upd', b).onclick = () => { sfx('confirm'); forceUpdate(); };
     $$('.seg button', b).forEach(x => x.onclick = () => { o.answer = x.dataset.v; sfx('confirm'); this.openOptions(); });
     $('#o-snd', b).onclick = () => { o.sound = !o.sound; sfx('confirm'); this.openOptions(); };
     $('#o-voice', b).onclick = () => { o.voice = !o.voice; sfx('confirm'); this.openOptions(); };
@@ -368,13 +375,15 @@ function makeWriter(el, ch, size, quiz) {
 function refreshHUD() {
   const h = $('#hud'); if (!h || !G.save) return;
   const lead = G.save.party[0];
-  let html = `<div class="hud-money">💰 ${G.save.money}円</div>`;
+  let html = '';
   if (lead) {
     const st = statsOf(lead), f = clamp(lead.hp / st.maxhp, 0, 1);
     html += `<div class="hud-lead"><img src="${spiritIcon(lead.sp, 36)}"><div><b class="jp">${esc(lead.sp)}</b> Nv${lead.lv}
       <div class="mini-hp"><span style="width:${f * 100}%;background:${f > .5 ? '#5ad16a' : f > .2 ? '#f2c14e' : '#ef5a5a'}"></span></div></div></div>`;
   }
+  html += `<div class="hud-money">💰 ${G.save.money}円</div>`;
   h.innerHTML = html;
+  if (typeof measureView === 'function') measureView();
 }
 
 // ---------- Introdução ----------

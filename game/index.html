@@ -41,10 +41,11 @@ input { font: inherit; }
 .el { display: inline-flex; align-items: center; justify-content: center; width: 1.55em; height: 1.55em; border-radius: 50%; border: 2px solid; font-family: var(--jp); font-weight: 900; font-size: .8em; color: #fff; text-shadow: 0 1px 0 rgba(0,0,0,.5); vertical-align: middle; }
 
 /* HUD */
-#hud { position: absolute; top: calc(8px + var(--sat)); left: 8px; display: flex; flex-direction: column; gap: 6px; pointer-events: none; z-index: 5; }
+#hud { position: absolute; top: calc(8px + var(--sat)); left: 8px; display: flex; flex-direction: row; align-items: stretch; gap: 6px; max-width: calc(100vw - 72px); z-index: 5; }
 body:not([data-scene="world"]) #hud, body:not([data-scene="world"]) #menubtn, body:not([data-scene="world"]) #touch { display: none; }
-.hud-money, .hud-lead { background: var(--win); border: 2px solid var(--edge); border-radius: 10px; padding: 4px 10px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-.hud-lead img { width: 34px; height: 34px; }
+.hud-money, .hud-lead { background: var(--win); border: 2px solid var(--edge); border-radius: 10px; padding: 3px 9px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.hud-lead img { width: 30px; height: 30px; }
+#hud .mini-hp { width: 64px; }
 .mini-hp { display: block; width: 90px; height: 6px; background: #2a2440; border-radius: 3px; overflow: hidden; margin-top: 3px; }
 .mini-hp span { display: block; height: 100%; }
 #menubtn { position: absolute; top: calc(8px + var(--sat)); right: 8px; z-index: 5; width: 46px; height: 46px; border-radius: 12px; background: var(--win); border: 2px solid var(--edge); font-size: 22px; }
@@ -263,6 +264,7 @@ body.touch .qn { display: none; }
     <button class="btn tbtn" id="t-cont" style="display:none">▶ Continuar</button>
     <button class="btn tbtn" id="t-new">✨ Novo jogo</button>
     <div class="tsmall">Criaturas feitas dos kanji que você aprendeu · <a href="../">📚 voltar ao app de estudo</a></div>
+    <div class="tsmall"><a href="#" id="t-upd">🔄 forçar atualização</a> · v<span id="t-ver"></span></div>
   </div>
   <div id="toast"></div>
 </div>

@@ -192,9 +192,9 @@ async function hit(side, dmg, crit) {
   target.hp = Math.max(0, target.hp - dmg);
   sfx(crit ? 'crit' : 'hit');
   if (lay) {
-    const x = side === 'e' ? lay.eX : lay.pX;
-    B.fx.push({ kind: 'num', text: '-' + dmg, x, y: lay.floorY - lay.size, color: crit ? '#ffd84a' : '#fff', t0: performance.now(), dur: 900 });
-    for (let i = 0; i < 8; i++) B.fx.push({ kind: 'spark', x, y: lay.floorY - lay.size * .5, vx: rnd(-1, 1), vy: rnd(-1.2, .2), color: crit ? '#ffd84a' : '#ffffff', t0: performance.now(), dur: 500 });
+    const x = side === 'e' ? lay.eX : lay.pX, gy = side === 'e' ? lay.eY : lay.pY, s = side === 'e' ? lay.eS : lay.pS;
+    B.fx.push({ kind: 'num', text: '-' + dmg, x, y: gy - s, color: crit ? '#ffd84a' : '#fff', t0: performance.now(), dur: 900 });
+    for (let i = 0; i < 8; i++) B.fx.push({ kind: 'spark', x, y: gy - s * .5, vx: rnd(-1, 1), vy: rnd(-1.2, .2), color: crit ? '#ffd84a' : '#ffffff', t0: performance.now(), dur: 500 });
   }
   a.flash = 1; tween(a, 'flash', 0, .35);
   for (let i = 0; i < 3; i++) { await tween(a, 'dx', (i % 2 ? -1 : 1) * 8, .04); }
@@ -202,9 +202,11 @@ async function hit(side, dmg, crit) {
   refreshPlates();
 }
 async function lunge(side) {
-  const a = B.anim[side], dir = side === 'p' ? 1 : -1, d = (B.lay ? B.lay.size : 80) * .45;
-  await tween(a, 'dx', dir * d, .14, easeOut);
-  tween(a, 'dx', 0, .22);
+  const a = B.anim[side], L = B.lay || { eX: 1, eY: 0, pX: 0, pY: 1 };
+  // avança na diagonal em direção ao oponente (35% do caminho)
+  const tx = (side === 'p' ? L.eX - L.pX : L.pX - L.eX) * .35, ty = (side === 'p' ? L.eY - L.pY : L.pY - L.eY) * .35;
+  await Promise.all([tween(a, 'dx', tx, .14, easeOut), tween(a, 'dy', ty, .14, easeOut)]);
+  tween(a, 'dx', 0, .22); tween(a, 'dy', 0, .22);
 }
 
 // ---------- Loop principal ----------
@@ -426,23 +428,23 @@ function renderBattle(g, w, h, t) {
   const stageH = Math.max(170, h - (bbox ? bbox.offsetHeight : h * .4));
   const theme = (W.map && W.map.theme) || 'grass';
   drawStage(g, w, stageH, t, theme);
-  const size = Math.min(w * .26, stageH * .4);
-  const floorY = stageH * .82;
-  const pX = w * .28, eX = w * .72;
-  B.lay = { w, stageH, size, floorY, pX, eX };
-  [[pX, 'p'], [eX, 'e']].forEach(([x]) => {
-    const gr = g.createRadialGradient(x, floorY, 5, x, floorY, size * .9);
-    gr.addColorStop(0, 'rgba(255,245,200,.35)'); gr.addColorStop(1, 'rgba(255,245,200,0)');
-    g.fillStyle = gr; g.beginPath(); g.ellipse(x, floorY, size * .9, size * .22, 0, 0, Math.PI * 2); g.fill();
+  // layout estilo Pokémon: inimigo no fundo (alto/direita, menor), você na frente (baixo/esquerda, maior)
+  const eS = Math.min(w * .25, stageH * .27), pS = Math.min(w * .33, stageH * .35);
+  const eX = w * .70, eY = stageH * .52, pX = w * .30, pY = stageH * .88;
+  B.lay = { w, stageH, eX, eY, eS, pX, pY, pS };
+  [[eX, eY, eS], [pX, pY, pS]].forEach(([x, y, s]) => {
+    const gr = g.createRadialGradient(x, y, 4, x, y, s * .95);
+    gr.addColorStop(0, 'rgba(255,245,200,.4)'); gr.addColorStop(1, 'rgba(255,245,200,0)');
+    g.fillStyle = gr; g.beginPath(); g.ellipse(x, y, s * .95, s * .24, 0, 0, Math.PI * 2); g.fill();
   });
   const pa = B.anim.p, ea = B.anim.e;
-  drawSpirit(g, pX + pa.dx, floorY - size * .47 + pa.dy, size, activeP().sp, t, { flash: pa.flash, alpha: pa.alpha, scale: pa.scale });
-  drawSpirit(g, eX + ea.dx, floorY - size * .47 + ea.dy, size, B.enemy.sp, t, { flip: true, flash: ea.flash, alpha: ea.alpha, scale: ea.scale });
-  if (B.seal) drawTalisman(g, eX + (B.seal.shake ? rnd(-5, 5) : 0), floorY - size * .45, size * .35, '封', B.seal.done ? t : 0);
+  drawSpirit(g, eX + ea.dx, eY - eS * .47 + ea.dy, eS, B.enemy.sp, t, { flip: true, flash: ea.flash, alpha: ea.alpha, scale: ea.scale });
+  if (B.seal) drawTalisman(g, eX + (B.seal.shake ? rnd(-5, 5) : 0), eY - eS * .45, eS * .4, '封', B.seal.done ? t : 0);
+  drawSpirit(g, pX + pa.dx, pY - pS * .47 + pa.dy, pS, activeP().sp, t, { flash: pa.flash, alpha: pa.alpha, scale: pa.scale });
   if (B.proj) {
     const f = clamp((performance.now() - B.proj.start) / B.proj.dur, 0, 1);
-    const x = lerp(eX - size * .3, pX + size * .3, f), y = floorY - size * .7 - Math.sin(f * Math.PI) * size * .25;
-    drawTalisman(g, x, y, size * .3, '言', 0, f * 12);
+    const x = lerp(eX - eS * .3, pX + pS * .35, f), y = lerp(eY - eS * .6, pY - pS * .75, f) - Math.sin(f * Math.PI) * stageH * .08;
+    drawTalisman(g, x, y, lerp(eS, pS, f) * .32, '言', 0, f * 12);
   }
   drawAudience(g, w, stageH, t, B.crowd, B.cheer);
   B.cheer = Math.max(0, B.cheer - 0.02);
@@ -462,7 +464,7 @@ function drawTalisman(g, x, y, s, ch, glow, rot = 0) {
 }
 function drawStage(g, w, h, t, theme) {
   g.fillStyle = '#140a1c'; g.fillRect(0, 0, w, h);
-  const fy = h * .66;
+  const fy = h * .42; // horizonte mais alto: chão profundo, inimigo no fundo e você na frente
   const sx = w * .06, sw = w * .88, sy = h * .1;
   const sky = g.createLinearGradient(0, sy, 0, fy);
   if (theme === 'cave') { sky.addColorStop(0, '#2c2238'); sky.addColorStop(1, '#4a3a58'); }
@@ -474,11 +476,11 @@ function drawStage(g, w, h, t, theme) {
     cut('#3e3148', () => { g.beginPath(); g.ellipse(sx + sw * .25, fy, sw * .3, h * .22, 0, Math.PI, 0); g.closePath(); });
     cut('#4a3b56', () => { g.beginPath(); g.ellipse(sx + sw * .78, fy, sw * .28, h * .18, 0, Math.PI, 0); g.closePath(); });
   } else {
-    const sunY = sy + h * .12 + Math.sin(t * .8) * 3;
+    const sunY = sy + h * .085 + Math.sin(t * .8) * 3;
     cut('#ffd23a', () => { g.beginPath(); g.arc(sx + sw * .82, sunY, h * .075, 0, Math.PI * 2); });
     g.fillStyle = '#6a4a10'; g.beginPath(); g.arc(sx + sw * .82 - h * .025, sunY - h * .01, h * .008, 0, Math.PI * 2); g.arc(sx + sw * .82 + h * .025, sunY - h * .01, h * .008, 0, Math.PI * 2); g.fill();
     g.strokeStyle = '#6a4a10'; g.lineWidth = 2; g.beginPath(); g.arc(sx + sw * .82, sunY + h * .01, h * .025, .2, Math.PI - .2); g.stroke();
-    cut('#fff', () => { const cx = sx + sw * (.22 + ((t * .01) % .3)); g.beginPath(); g.ellipse(cx, sy + h * .12, sw * .07, h * .035, 0, 0, Math.PI * 2); g.ellipse(cx + sw * .05, sy + h * .1, sw * .05, h * .035, 0, 0, Math.PI * 2); });
+    cut('#fff', () => { const cx = sx + sw * (.22 + ((t * .01) % .3)); g.beginPath(); g.ellipse(cx, sy + h * .08, sw * .07, h * .03, 0, 0, Math.PI * 2); g.ellipse(cx + sw * .05, sy + h * .065, sw * .05, h * .03, 0, 0, Math.PI * 2); });
     cut('#58b04a', () => { g.beginPath(); g.ellipse(sx + sw * .28, fy, sw * .34, h * .24, 0, Math.PI, 0); g.closePath(); });
     cut('#6fc45c', () => { g.beginPath(); g.ellipse(sx + sw * .74, fy, sw * .32, h * .19, 0, Math.PI, 0); g.closePath(); });
   }
