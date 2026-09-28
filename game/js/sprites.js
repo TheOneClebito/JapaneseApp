@@ -98,7 +98,7 @@ function paintWall(g, win) {
   _px(g, 0, 0, 16, 2, '#8a6a44'); _px(g, 0, 14, 16, 2, '#7a5a38'); _px(g, 0, 0, 1, 16, '#8a6a44'); _px(g, 15, 0, 1, 16, '#8a6a44');
   if (win) { _px(g, 4, 4, 8, 7, '#5a3a1a'); _px(g, 5, 5, 6, 5, '#8fd0ff'); _px(g, 7, 5, 1, 5, '#5a3a1a'); _px(g, 5, 7, 6, 1, '#5a3a1a'); _px(g, 5, 5, 2, 1, '#d8f0ff'); }
 }
-const DOOR_COLOR = { I: '#9a3a2a', M: '#2a4a9a', J: '#c8303a', P: '#4a6a3a', H: '#6b4a2a' };
+const DOOR_COLOR = { I: '#9a3a2a', M: '#2a4a9a', J: '#c8303a', P: '#4a6a3a', H: '#6b4a2a', D: '#6a3a8a', Y: '#3a6a8a', N: '#2a4a9a' };
 function paintDoor(g, k) { paintWall(g, false); _px(g, 3, 3, 10, 13, '#3a2412'); _px(g, 4, 4, 8, 12, DOOR_COLOR[k]); _px(g, 4, 4, 8, 1, shade(DOOR_COLOR[k], .3)); _px(g, 10, 10, 1, 1, '#f4d860'); }
 function paintCaveMouth(g) {
   paintRock(g);
@@ -119,7 +119,7 @@ const TILE_INFO = {
   'T': {}, '~': {}, '#': {}, 'R': {}, 'S': { sign: 1 }, 'C': { chest: 1 },
   'k': {}, 'u': {}, 'q': {}, 'o': {}, // cerejeira, arbusto, pedra, poste de torii (sólidos)
   'a': {}, 'b': {}, 'c': {}, 'd': {}, 's': {}, 'w': {},
-  'I': { door: 'inn' }, 'M': { door: 'shop' }, 'J': { door: 'shrine' }, 'P': { door: 'prof' }, 'H': { door: 'house' },
+  'I': { door: 'inn' }, 'M': { door: 'shop' }, 'J': { door: 'shrine' }, 'P': { door: 'dojo' }, 'H': { door: 'house' }, 'D': { door: 'dojo' }, 'Y': { door: 'library' }, 'N': { door: 'shop' },
 };
 const _tileCache = {};
 function getTile(ch, theme, x, y, t, open) {
@@ -145,7 +145,7 @@ function getTile(ch, theme, x, y, t, open) {
     case 'C': paintChest(g, open, theme); break;
     case 'a': case 'b': case 'c': case 'd': case 's': paintRoof(g, ch); break;
     case 'w': paintWall(g, win); break;
-    case 'I': case 'M': case 'J': case 'P': case 'H': paintDoor(g, ch); break;
+    case 'I': case 'M': case 'J': case 'P': case 'H': case 'D': case 'Y': case 'N': paintDoor(g, ch); break;
     case 'L': paintCaveMouth(g); break;
     case 'X': paintExit(g); break;
     default: _px(g, 0, 0, 16, 16, '#000');

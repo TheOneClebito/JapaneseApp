@@ -302,6 +302,7 @@
 <script src="./writing-sentences.js"></script>
 <script src="./jp-dict.js"></script>
 <script src="./verbs.js"></script>
+<script src="./drills-data.js"></script>
 <script>
 "use strict";
 /* ============================================================
@@ -1138,19 +1139,7 @@ function drawDrill(){
 
 // ---------- Drill: Contadores ----------
 // readings = leituras de 1 a 10 (com mudanças de som). Romaji é derivado por kanaToRomaji.
-const COUNTERS = [
-  { key:'tsu',  label:'genérico (coisas)', icon:'🍎', readings:['ひとつ','ふたつ','みっつ','よっつ','いつつ','むっつ','ななつ','やっつ','ここのつ','とお'] },
-  { key:'nin',  label:'pessoas（人）', icon:'🧑', readings:['ひとり','ふたり','さんにん','よにん','ごにん','ろくにん','ななにん','はちにん','きゅうにん','じゅうにん'] },
-  { key:'dai',  label:'máquinas／veículos（台）', icon:'🚗', readings:['いちだい','にだい','さんだい','よんだい','ごだい','ろくだい','ななだい','はちだい','きゅうだい','じゅうだい'] },
-  { key:'satsu',label:'livros／revistas（冊）', icon:'📚', readings:['いっさつ','にさつ','さんさつ','よんさつ','ごさつ','ろくさつ','ななさつ','はっさつ','きゅうさつ','じゅっさつ'] },
-  { key:'hon',  label:'objetos longos／finos（本）', icon:'🍶', readings:['いっぽん','にほん','さんぼん','よんほん','ごほん','ろっぽん','ななほん','はっぽん','きゅうほん','じゅっぽん'] },
-  { key:'mai',  label:'objetos planos／finos（枚）', icon:'📄', readings:['いちまい','にまい','さんまい','よんまい','ごまい','ろくまい','ななまい','はちまい','きゅうまい','じゅうまい'] },
-  { key:'hai',  label:'copos／xícaras（杯）', icon:'🥤', readings:['いっぱい','にはい','さんばい','よんはい','ごはい','ろっぱい','ななはい','はっぱい','きゅうはい','じゅっぱい'] },
-  { key:'hiki', label:'animais pequenos（匹）', icon:'🐈', readings:['いっぴき','にひき','さんびき','よんひき','ごひき','ろっぴき','ななひき','はっぴき','きゅうひき','じゅっぴき'] },
-  { key:'kai',  label:'andares（階）', icon:'🏢', readings:['いっかい','にかい','さんがい','よんかい','ごかい','ろっかい','ななかい','はっかい','きゅうかい','じゅっかい'] },
-  { key:'ko',   label:'objetos pequenos（個）', icon:'🔵', readings:['いっこ','にこ','さんこ','よんこ','ごこ','ろっこ','ななこ','はっこ','きゅうこ','じゅっこ'] },
-  { key:'soku', label:'pares de calçado（足）', icon:'👟', readings:['いっそく','にそく','さんぞく','よんそく','ごそく','ろくそく','ななそく','はっそく','きゅうそく','じゅっそく'] }
-];
+const COUNTERS = window.COUNTERS_DATA || [];
 let countState = { c:null, n:1, revealed:false };
 function renderCountDrill(keep){
   $('#drill-body').innerHTML = `
@@ -1187,40 +1176,7 @@ function drawCount(){
 }
 
 // ---------- Drill: Adjetivos ----------
-const ADJ = [
-  { kana:'たかい', mean:'alto/caro', type:'i' },
-  { kana:'やすい', mean:'barato', type:'i' },
-  { kana:'おおきい', mean:'grande', type:'i' },
-  { kana:'ちいさい', mean:'pequeno', type:'i' },
-  { kana:'あつい', mean:'quente', type:'i' },
-  { kana:'さむい', mean:'frio', type:'i' },
-  { kana:'おいしい', mean:'gostoso', type:'i' },
-  { kana:'おもしろい', mean:'interessante', type:'i' },
-  { kana:'ながい', mean:'longo', type:'i' },
-  { kana:'はやい', mean:'rápido', type:'i' },
-  { kana:'かわいい', mean:'fofo', type:'i' },
-  { kana:'やさしい', mean:'gentil', type:'i' },
-  { kana:'むずかしい', mean:'difícil', type:'i' },
-  { kana:'いそがしい', mean:'ocupado', type:'i' },
-  { kana:'いい', mean:'bom', type:'i', irr:true },
-  { kana:'わるい', mean:'ruim', type:'i' },
-  { kana:'あたらしい', mean:'novo', type:'i' },
-  { kana:'ふるい', mean:'velho (coisa)', type:'i' },
-  { kana:'ちかい', mean:'perto', type:'i' },
-  { kana:'とおい', mean:'longe', type:'i' },
-  { kana:'しずか', mean:'calmo', type:'na' },
-  { kana:'きれい', mean:'bonito/limpo', type:'na' },
-  { kana:'にぎやか', mean:'movimentado', type:'na' },
-  { kana:'しんせつ', mean:'gentil', type:'na' },
-  { kana:'ゆうめい', mean:'famoso', type:'na' },
-  { kana:'まじめ', mean:'sério', type:'na' },
-  { kana:'じょうぶ', mean:'resistente', type:'na' },
-  { kana:'たいへん', mean:'difícil/trabalhoso', type:'na' },
-  { kana:'べんり', mean:'prático', type:'na' },
-  { kana:'すき', mean:'gostar (de)', type:'na' },
-  { kana:'きらい', mean:'não gostar / detestar', type:'na' },
-  { kana:'だいすき', mean:'adorar / gostar muito', type:'na' }
-];
+const ADJ = window.ADJ_DATA || [];
 const ADJ_FORMS = [
   { key:'neg',     label:'negativo (não é…)' },
   { key:'past',    label:'passado (era…)' },
@@ -1284,28 +1240,7 @@ function drawAdj(){
 // ---------- Drill: Partículas (を・に・で・へ) ----------
 // s:[antes, depois] com a lacuna no meio · ans = partícula certa ·
 // also = alternativas também aceitas · note = por quê.
-const PARTICLES = [
-  { s:['ともだち',' よびます。'], ans:'を', opts:['を','に','へ','が'], pt:'Chamo/convido os amigos.', note:'よぶ (chamar) leva を no objeto.' },
-  { s:['たばこ',' すいます。'], ans:'を', opts:['を','に','で','が'], pt:'Fumo cigarro.', note:'Objeto direto → を.' },
-  { s:['でんわ',' つかいます。'], ans:'を', opts:['を','に','で','へ'], pt:'Uso o telefone.', note:'Objeto direto → を.' },
-  { s:['まど',' あけます。'], ans:'を', opts:['を','が','に','で'], pt:'Abro a janela.', note:'Objeto direto → を.' },
-  { s:['ケーキ',' つくって、ともだちを よびます。'], ans:'を', opts:['を','に','で','へ'], pt:'Faço bolo e chamo os amigos.', note:'つくる age sobre o objeto → を.' },
-  { s:['ペン',' てがみを かきます。'], ans:'で', opts:['で','を','に','へ'], pt:'Escrevo a carta com a caneta.', note:'で = instrumento/meio (com o quê).' },
-  { s:['でんしゃ',' がっこうへ いきます。'], ans:'で', opts:['で','に','を','へ'], pt:'Vou à escola de trem.', note:'で = meio de transporte.' },
-  { s:['７じ',' おきます。'], ans:'に', opts:['に','で','を','へ'], pt:'Acordo às 7h.', note:'に marca a hora exata.' },
-  { s:['まいあさ ６じはん',' ねます。'], ans:'に', opts:['に','で','を','へ'], pt:'Durmo às 6h30 toda manhã.', note:'Horário → に (não esqueça o に!).' },
-  { s:['がっこう',' いきます。'], ans:'へ', also:['に'], opts:['へ','を','で','が'], pt:'Vou para a escola.', note:'へ (ou に) = direção do movimento.' },
-  { s:['こうえん',' あそびます。'], ans:'で', opts:['で','に','へ','を'], pt:'Brinco no parque.', note:'で = lugar onde a ação acontece.' },
-  { s:['うち',' べんきょうします。'], ans:'で', opts:['で','に','を','へ'], pt:'Estudo em casa.', note:'で = lugar da ação.' },
-  { s:['いす',' すわります。'], ans:'に', opts:['に','を','で','へ'], pt:'Sento na cadeira.', note:'すわる (sentar) pede に (destino).' },
-  { s:['ともだち',' あいます。'], ans:'に', also:['と'], opts:['に','を','で','へ'], pt:'Encontro um amigo.', note:'あう (encontrar) pede に (ou と).' },
-  { s:['でんしゃ',' のります。'], ans:'に', opts:['に','を','で','へ'], pt:'Pego/entro no trem.', note:'のる (embarcar) pede に.' },
-  { s:['リオ',' すんでいます。'], ans:'に', opts:['に','で','を','へ'], pt:'Moro no Rio.', note:'すむ (morar) pede に (onde se reside).' },
-  { s:['きょうしつ',' たばこを すいます。'], ans:'で', opts:['で','に','を','へ'], pt:'Fumo na sala de aula.', note:'で = lugar da ação (o objeto たばこ já tem を).' },
-  { s:['あさ、コーヒー',' のみます。'], ans:'を', opts:['を','に','で','が'], pt:'De manhã bebo café.', note:'Objeto direto → を.' },
-  { s:['にほんご',' はなします。'], ans:'で', also:['を'], opts:['で','に','へ','が'], pt:'Falo em japonês.', note:'で = meio (no idioma japonês).' },
-  { s:['へや',' でんきを けします。'], ans:'の', also:['で'], opts:['の','を','に','へ'], pt:'Apago a luz do quarto.', note:'へやの でんき = a luz "do" quarto → の.' }
-];
+const PARTICLES = window.PARTICLES_DATA || [];
 const PART_RULE = `<div class="rule-box">
   <div class="rule-t">Partículas mais comuns</div>
   <div><b>を</b> — objeto direto <span class="rm">パンを たべる</span></div>
@@ -1381,58 +1316,7 @@ function drawPart(){
 // ---------- Drill: Escrever kanji (書きましょう) ----------
 // Mostra a leitura (kana) + significado; você escreve a palavra em kanji
 // (no papel ou de cabeça) e depois confere. r=leitura · m=significado · k=kanji.
-const KAKI_WORDS = [
-  {r:'せんせい', m:'professor(a)', k:'先生'},
-  {r:'がくせい', m:'estudante', k:'学生'},
-  {r:'だいがくせい', m:'universitário(a)', k:'大学生'},
-  {r:'にほん', m:'Japão', k:'日本'},
-  {r:'にほんじん', m:'japonês(a) (pessoa)', k:'日本人'},
-  {r:'おとこのこ', m:'menino', k:'男の子'},
-  {r:'おんなのこ', m:'menina', k:'女の子'},
-  {r:'おんなのひと', m:'mulher / senhora', k:'女の人'},
-  {r:'かざん', m:'vulcão', k:'火山'},
-  {r:'はんぶん', m:'metade', k:'半分'},
-  {r:'よんぶんのさん', m:'três quartos (3/4)', k:'四分の三'},
-  {r:'ごせんえん', m:'5000 ienes', k:'五千円'},
-  {r:'せんえん', m:'1000 ienes', k:'千円'},
-  {r:'ひゃくねん', m:'100 anos', k:'百年'},
-  {r:'いちまんにん', m:'10.000 pessoas', k:'一万人'},
-  {r:'いちまんえん', m:'10.000 ienes', k:'一万円'},
-  {r:'なんねん', m:'que ano / quantos anos', k:'何年'},
-  {r:'なんぷん', m:'quantos minutos', k:'何分'},
-  {r:'ろくじごふん', m:'6h05', k:'六{時|じ}五分'},
-  {r:'ちゅうねん', m:'meia-idade', k:'中年'},
-  {r:'しょうがっこう', m:'escola primária', k:'小学{校|こう}'},
-  {r:'きのした', m:'debaixo da árvore', k:'木の下'},
-  {r:'やまのうえ', m:'no alto da montanha', k:'山の上'},
-  {r:'すいりょく', m:'força hidráulica', k:'水力'},
-  {r:'たいりょく', m:'força física / resistência', k:'体力'},
-  {r:'じんこう', m:'população', k:'人口'},
-  {r:'じょし', m:'garota / feminino', k:'女子'},
-  {r:'だんし', m:'garoto / masculino', k:'男子'},
-  {r:'すきな', m:'que gosta / favorito', k:'好きな'},
-  {r:'あかるい', m:'claro / alegre', k:'明るい'},
-  {r:'やすみ', m:'descanso / folga', k:'休み'},
-  {r:'おおきい', m:'grande', k:'大きい'},
-  {r:'ちいさい', m:'pequeno', k:'小さい'},
-  {r:'なか', m:'dentro / meio', k:'中'},
-  {r:'ほん', m:'livro', k:'本'},
-  {r:'くるま', m:'carro', k:'車'},
-  {r:'ちから', m:'força', k:'力'},
-  {r:'にじゅう', m:'vinte (20)', k:'二十'},
-  {r:'みっか', m:'dia 3 / três dias', k:'三日'},
-  {r:'ここのか', m:'dia 9 / nove dias', k:'九日'},
-  {r:'もり', m:'floresta', k:'森'},
-  {r:'はやし', m:'bosque, mata', k:'林'},
-  {r:'いわ', m:'rocha', k:'岩'},
-  {r:'はたけ', m:'horta, campo cultivado', k:'畑'},
-  {r:'しんりん', m:'floresta (mata)', k:'森林'},
-  {r:'さんりん', m:'matas e montanhas', k:'山林'},
-  {r:'いわやま', m:'montanha rochosa', k:'岩山'},
-  {r:'にんげん', m:'ser humano', k:'人間'},
-  {r:'じかん', m:'tempo, hora', k:'{時|じ}間'},
-  {r:'はなばたけ', m:'campo de flores', k:'{花|はな}畑'}
-];
+const KAKI_WORDS = window.KAKI_DATA || [];
 // mostra furigana em {K|R} SÓ para kanji ainda não aprendidos (fora do Kanjidex)
 function furiUnlearned(s, show){
   const learned = new Set((window.KANJI_DEX||[]).map(k=>k.c));

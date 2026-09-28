@@ -11,7 +11,11 @@ const W = { map: null, key: '', rows: [], w: 0, h: 0, npcs: [], banner: 0, steps
 function loadMap(key, x, y, dir) {
   const m = MAPS[key];
   W.key = key; W.map = m; W.rows = m.rows; W.h = m.rows.length; W.w = m.rows[0].length;
-  W.npcs = (m.npcs || []).map(n => ({ ...n, hx: n.x, hy: n.y, px: n.x, py: n.y, moving: false, t: 0, frame: 0, next: rnd(1.5, 4) }));
+  W.npcs = (m.npcs || []).map(n => {
+    const o = { ...n }; // chefes vencidos saem do caminho
+    if (n.after && G.save.flags[n.after.flag]) Object.assign(o, { x: n.after.x, y: n.after.y, dir: n.after.dir || n.dir });
+    return { ...o, hx: o.x, hy: o.y, px: o.x, py: o.y, moving: false, t: 0, frame: 0, next: rnd(1.5, 4) };
+  });
   // save antigo parado num lugar que virou obstáculo (mapa mudou) → vai pro chão livre mais perto
   if (!walkable(x, y)) {
     let best = null;
@@ -24,6 +28,8 @@ function loadMap(key, x, y, dir) {
   W.steps = 0; W.banner = 2.6;
   W.statics = ART.ready ? buildStatics() : [];
   G.save.map = key; G.save.x = x; G.save.y = y; G.save.dir = p.dir;
+  if (m.visit !== false) { const v = G.save.visited || (G.save.visited = {}); v[key] = true; }
+  if (G.scene === 'world') Music.play(m.music);
   refreshHUD();
 }
 function tileAt(x, y) { return (y < 0 || y >= W.h || x < 0 || x >= W.w) ? '#' : W.rows[y][x]; }
@@ -104,6 +110,8 @@ function worldInteract() {
 function talkNpc(n) {
   n.dir = OPP[W.player.dir];
   if (n.id === 'sensei' && !G.save.flags.starter) return startIntro();
+  if (n.id === 'riddle') return Dialog.show(DLG.riddleIntro, { name: n.name, look: n.look, onDone: () => UI.openRiddle(n) });
+  if (n.id === 'healer') return Dialog.show(DLG.healer, { name: n.name, look: n.look, onDone: () => { healAll(); sfx('heal'); toast('💤 Todos os kotodama recuperaram as forças!'); refreshHUD(); saveGame(); } });
   if (n.trainer) {
     const tr = n.trainer;
     if (G.save.flags[tr.flag]) return Dialog.show(DLG[tr.post], { name: n.name, look: n.look });
@@ -118,6 +126,7 @@ function openChest(x, y) {
   G.save.flags[c.flag] = true; sfx('capture');
   const got = [];
   for (const k in c.items) { G.save.items[k] = (G.save.items[k] || 0) + c.items[k]; got.push(`${ITEMS[k].jp} ×${c.items[k]}`); }
+  if (c.money) { G.save.money += c.money; got.push(c.money + '円'); }
   if (c.badge) { G.save.badges.owned[c.badge] = true; got.push(`insígnia “${BADGES[c.badge].name}”`); }
   saveGame();
   Dialog.show([{ jp: 'たからばこを あけました！', pt: 'Você abriu o baú! Ganhou: ' + got.join(', ') + '.' }], { name: '', forceTrad: true });
@@ -128,7 +137,8 @@ function openDoor(kind) {
   if (kind === 'inn') UI.openInn();
   else if (kind === 'shop') UI.openShop();
   else if (kind === 'shrine') UI.openShrine();
-  else if (kind === 'prof') Dialog.show(DLG.profDoor, { name: '' });
+  else if (kind === 'dojo') UI.openDojo();
+  else if (kind === 'library') UI.openLibrary();
   else Dialog.show(DLG.house, { name: '' });
 }
 
@@ -162,7 +172,13 @@ function worldRenderArt(g, w, h, t) {
   list.sort((a, b) => a.by - b.by);
   const sc = T / 16;
   for (const it of list) {
-    if (it.s) { drawStatic(g, it.s, ox, oy, T); continue; }
+    if (it.s) {
+      // copa de árvore na frente do herói fica transparente (senão ele some nos corredores da floresta)
+      const behind = it.s.k === 'tree' && it.by > p.py + 1.002 && Math.abs(it.s.x - p.px) < 1.2 && p.py >= it.s.y - 1.4 && p.py < it.s.y;
+      if (behind) { g.save(); g.globalAlpha = .45; drawStatic(g, it.s, ox, oy, T); g.restore(); }
+      else drawStatic(g, it.s, ox, oy, T);
+      continue;
+    }
     const e = it.e, sx = e.px * T + ox, sy = e.py * T + oy;
     g.fillStyle = 'rgba(0,0,0,.25)'; g.beginPath(); g.ellipse(sx + T / 2, sy + T * .9, T * .32, T * .11, 0, 0, Math.PI * 2); g.fill();
     if (!drawCharArt(g, it.hero ? 'hero' : e.look, e.dir || 'down', e.anim || 0, sx, sy - sc, T))
@@ -179,6 +195,19 @@ function worldRenderArt(g, w, h, t) {
 }
 function drawWorldOverlays(g, w, h, t, cx, cy) {
   const T = G.tile, p = W.player;
+  if (W.map.theme === 'forest') {
+    // copa das árvores: sombra verde e raios de luz que balançam
+    g.fillStyle = 'rgba(10,40,24,.26)'; g.fillRect(0, 0, w, h);
+    g.save(); g.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 3; i++) {
+      const x = ((i * 0.37 + t * 0.012) % 1.2 - .1) * w;
+      const gr = g.createLinearGradient(x, 0, x + w * .25, h);
+      gr.addColorStop(0, 'rgba(255,250,200,.10)'); gr.addColorStop(1, 'rgba(255,250,200,0)');
+      g.fillStyle = gr; g.beginPath(); g.moveTo(x, 0); g.lineTo(x + w * .12, 0); g.lineTo(x + w * .35, h); g.lineTo(x + w * .2, h); g.closePath(); g.fill();
+    }
+    g.restore();
+  }
+  if (W.map.theme === 'mountain') { g.fillStyle = 'rgba(200,220,255,.08)'; g.fillRect(0, 0, w, h); }
   if (W.map.dark) {
     const px = (p.px + .5) * T - cx, py = (p.py + .5) * T - cy;
     const gr = g.createRadialGradient(px, py, T * 2, px, py, T * 5.5);
@@ -188,7 +217,7 @@ function drawWorldOverlays(g, w, h, t, cx, cy) {
   if (W.banner > 0) {
     const a = Math.min(1, W.banner / .4, (2.6 - W.banner) / .3 + .01);
     g.save(); g.globalAlpha = clamp(a, 0, 1);
-    const bw = Math.min(w * .8, 340), bx = (w - bw) / 2, by = G.viewTop ? G.viewTop + 4 : 14 + (G.safeTop || 0);
+    const bw = Math.min(w * .86, 360), bx = (w - bw) / 2, by = G.viewTop ? G.viewTop + 4 : 14 + (G.safeTop || 0);
     g.fillStyle = 'rgba(20,16,40,.92)'; g.strokeStyle = '#f4e7c3'; g.lineWidth = 3;
     roundRect(g, bx, by, bw, 58, 12); g.fill(); g.stroke();
     g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle';

@@ -3,7 +3,7 @@
 //  MAIN — estado, save, controles, loop, transições, título
 // ============================================================
 const SAVE_KEY = 'kotodama.v1';
-const GAME_VERSION = '1.2';
+const GAME_VERSION = '2.0';
 // limpa o cache do jogo, remove o service worker e recarrega a versão mais nova (o save é mantido)
 async function forceUpdate() {
   toast('🔄 Atualizando…', 5000);
@@ -13,8 +13,9 @@ async function forceUpdate() {
     await Promise.all(ks.filter(k => k.startsWith('kotodama-')).map(k => caches.delete(k)));
     const regs = await navigator.serviceWorker.getRegistrations();
     await Promise.all(regs.filter(r => /\/game\/$/.test(r.scope)).map(r => r.unregister()));
-    const files = ['./', './index.html', './js/util.js', './js/data.js', './js/sprites.js', './js/tiles.js', './js/quiz.js', './js/world.js', './js/battle.js', './js/ui.js', './js/solitaire.js', './js/main.js',
-      '../kanji-list.js', '../kanji-words.js', '../kanji-strokes.js', '../vocab-decks.js', '../verbs.js'];
+    const files = ['./', './index.html', './js/util.js', './js/data.js', './js/sprites.js', './js/tiles.js', './js/quiz.js', './js/chapters.js', './js/training.js', './js/world.js', './js/battle.js', './js/ui.js', './js/solitaire.js', './js/main.js',
+      '../kanji-list.js', '../kanji-words.js', '../kanji-strokes.js', '../vocab-decks.js', '../verbs.js', '../drills-data.js',
+      '../kanji-sentences.js', '../writing-sentences.js', '../reading-texts.js', '../tatoeba-sentences.js'];
     await Promise.all(files.map(u => fetch(u, { cache: 'reload' }).catch(() => {})));
   } catch (e) {}
   location.reload();
@@ -25,10 +26,10 @@ const cv = $('#cv'), ctx = cv.getContext('2d');
 // ---------- Save ----------
 function newSave() {
   return {
-    v: 2, map: 'village', x: 7, y: 6, dir: 'left', party: [], box: [],
-    items: { ofuda: 0, kusuri: 2, onigiri: 0, okashi: 0 }, money: 300,
-    badges: { owned: {}, eq: {} }, flags: {}, dex: {}, stats: {},
-    opts: { answer: isTouch() ? 'mc' : 'type', sound: true, voice: true }, play: 0,
+    v: 3, map: 'village', x: 7, y: 6, dir: 'left', party: [], box: [],
+    items: { ofuda: 0, kusuri: 2, onigiri: 0, okashi: 0, omamori: 0 }, money: 300,
+    badges: { owned: {}, eq: {} }, flags: {}, dex: {}, stats: {}, dojo: {}, readDone: {}, visited: {}, solBest: {},
+    opts: { answer: isTouch() ? 'mc' : 'type', sound: true, voice: true, music: true }, play: 0,
   };
 }
 function loadSave() {
@@ -40,12 +41,28 @@ function loadSave() {
     for (const k in d.items) if (s.items[k] === undefined) s.items[k] = d.items[k];
     if (!s.badges.eq) s.badges.eq = {}; if (!s.badges.owned) s.badges.owned = {};
     if (!s.v || s.v < 2) { s.badges.eq.romaji = false; s.v = 2; } // romaji deixa de vir ligado (agora é botão por fala)
+    if (s.v < 3) s.v = 3; // 2.0: insígnias sem custo, sem plateia, novos capítulos (nada a converter)
     s.party = s.party.filter(i => SPECIES[i.sp]); s.box = s.box.filter(i => SPECIES[i.sp]);
     if (!MAPS[s.map]) Object.assign(s, { map: 'village', x: 7, y: 6 });
     return s;
   } catch (e) { return null; }
 }
 function saveGame() { if (!G.save) return; try { localStorage.setItem(SAVE_KEY, JSON.stringify(G.save)); } catch (e) {} }
+
+// ---------- Música (trilhas do Ninja Adventure, CC0) ----------
+const Music = {
+  el: null, cur: null, want: null,
+  play(key) {
+    this.want = key || this.want;
+    if (!G.save || !G.save.opts.music || !this.want) { if (this.el) this.el.pause(); this.cur = null; return; }
+    if (this.cur === this.want && this.el && !this.el.paused) return;
+    if (!this.el) { this.el = new Audio(); this.el.loop = true; this.el.volume = .3; }
+    if (this.cur !== this.want) { this.cur = this.want; this.el.src = 'assets/music/' + this.want + '.mp3'; }
+    const p = this.el.play(); if (p && p.catch) p.catch(() => {});
+  },
+  stop() { if (this.el) this.el.pause(); this.cur = null; },
+};
+document.addEventListener('visibilitychange', () => { if (!Music.el) return; if (document.hidden) Music.el.pause(); else if (G.save && G.save.opts.music && Music.cur) Music.el.play().catch(() => {}); });
 
 // ---------- Controles ----------
 const KEYMAP = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', w: 'up', s: 'down', a: 'left', d: 'right', W: 'up', S: 'down', A: 'left', D: 'right' };

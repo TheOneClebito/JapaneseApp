@@ -51,21 +51,42 @@ const SPECIES = {};
 });
 const spName = c => SPECIES[c] ? `${c} ${SPECIES[c].name}` : c;
 
-// ---------- Golpes = o próprio kanji + palavras que usam ele ----------
+// ---------- Golpes ----------
+// kanji (o próprio kanji: leitura, significado, frases, palavras com ele), palavras,
+// escrever (desenhar o kanji) e TÉCNICAS: cada uma treina uma parte diferente do japonês.
+const TECHS = {
+  part:   { label: 'てにをは',     cat: 'part',   power: 18 },
+  verb:   { label: 'かつよう',     cat: 'verb',   power: 18 },
+  adj:    { label: 'けいようし',   cat: 'adj',    power: 18 },
+  count:  { label: 'かぞえうた',   cat: 'count',  power: 18 },
+  vocab:  { label: 'ことばの あめ', cat: 'vocab',  power: 17 },
+  sent:   { label: 'ぶんしょう',   cat: 'sent',   power: 20 },
+  order:  { label: 'ならべかえ',   cat: 'order',  power: 26 },
+  listen: { label: 'みみすまし',   cat: 'listen', power: 19 },
+  read:   { label: 'よみとき',     cat: 'read',   power: 20 },
+};
+const ELEM_TECHS = { '火': ['verb', 'adj'], '水': ['listen', 'vocab'], '木': ['sent', 'order'], '金': ['count', 'part'], '土': ['part', 'read'] };
 const _moveCache = {};
 function movesFor(c) {
   if (_moveCache[c]) return _moveCache[c];
-  const list = [{ id: 'k:' + c, kind: 'kanji', ref: c, label: c, power: 14, lv: 1 }];
+  const sp = SPECIES[c];
+  const tech = (t, lv) => ({ id: 't:' + t, kind: 'tech', cat: TECHS[t].cat, label: TECHS[t].label, power: TECHS[t].power, lv });
+  const [t1, t2] = ELEM_TECHS[sp.el];
+  const rest = Object.keys(TECHS).filter(t => t !== t1 && t !== t2);
+  const t3 = rest[hashStr(c) % rest.length];
+  const list = [{ id: 'k:' + c, kind: 'kanji', cat: 'kanji', ref: c, label: c, power: 14, lv: 1 }, tech(t1, 1), tech(t2, 6), tech(t3, 12),
+    { id: 'wk:' + c, kind: 'write', cat: 'write', ref: c, label: '書・' + c, power: 30, lv: 8 }];
   const words = (window.KANJI_WORDS || []).filter(w => { const b = markupBase(w.w); return b.includes(c) && b !== c; });
   words.sort((a, b) => markupBase(a.w).length - markupBase(b.w).length);
-  const lvls = [3, 7, 12];
+  const lvls = [4, 10, 15];
   words.slice(0, 3).forEach((w, i) => list.push({
-    id: 'w:' + w.read, kind: 'word', ref: w, label: w.w,
+    id: 'w:' + w.read, kind: 'word', cat: 'word', ref: w, label: w.w,
     power: Math.min(26, 16 + 3 * markupBase(w.w).length), lv: lvls[i],
   }));
+  list.sort((a, b) => a.lv - b.lv);
   return (_moveCache[c] = list);
 }
-function movesKnown(inst) { return movesFor(inst.sp).filter(m => m.lv <= inst.lv).slice(-4); }
+function movesKnown(inst) { return movesFor(inst.sp).filter(m => m.lv <= inst.lv); }
 
 // ---------- Status ----------
 function statsOf(inst) {
@@ -99,16 +120,17 @@ const ITEMS = {
   ofuda:   { jp: 'おふだ',   pt: 'Talismã: sela um espírito selvagem', price: 30, capture: true },
   kusuri:  { jp: 'くすり',   pt: 'Remédio: recupera 30 HP', price: 25, heal: 30 },
   onigiri: { jp: 'おにぎり', pt: 'Bolinho de arroz: recupera todo o HP', price: 60, healFull: true },
-  okashi:  { jp: 'おかし',   pt: 'Doces: a plateia adora! Enche a torcida', price: 50, crowd: 100 },
+  okashi:  { jp: 'おかし',   pt: 'Doces: o próximo golpe tem o dobro de poder', price: 50, boost: true },
+  omamori: { jp: 'おまもり', pt: 'Amuleto: revive um kotodama desmaiado com metade do HP', price: 90, revive: true },
 };
 
-// ---------- Insígnias (ajudas opcionais: tiram um pouco de XP) ----------
+// ---------- Insígnias (ajudas opcionais, sem custo nenhum) ----------
 const BADGES = {
-  romaji: { name: 'Romaji',      icon: 'Aa', pt: 'Mostra romaji embaixo das falas e das opções em kana.', pen: 0.10 },
-  furi:   { name: 'Furigana',    icon: 'ふ', pt: 'Mostra a leitura em cima de todos os kanji (menos na pergunta de leitura).', pen: 0.15 },
-  trad:   { name: 'Tradução',    icon: '訳', pt: 'Mostra a tradução das falas automaticamente.', pen: 0.10 },
-  tempo:  { name: 'Tempo Lento', icon: '⏳', pt: 'Dá 50% mais tempo nos desafios.', pen: 0.15 },
-  dica:   { name: 'Dica',        icon: '💡', pt: 'Mostra a primeira letra da resposta quando é pra digitar.', pen: 0.10 },
+  romaji: { name: 'Romaji',      icon: 'Aa', pt: 'Mostra romaji embaixo das falas e das opções em kana.' },
+  furi:   { name: 'Furigana',    icon: 'ふ', pt: 'Mostra a leitura em cima de todos os kanji (menos na pergunta de leitura).' },
+  trad:   { name: 'Tradução',    icon: '訳', pt: 'Mostra a tradução das falas e frases automaticamente.' },
+  tempo:  { name: 'Tempo Lento', icon: '⏳', pt: 'Dá 50% mais tempo nos desafios.' },
+  dica:   { name: 'Dica',        icon: '💡', pt: 'Mostra a primeira letra da resposta quando é pra digitar.' },
 };
 
 // ---------- Visual dos personagens ----------
@@ -126,6 +148,10 @@ const LOOKS = {
   trainer:  { skin: '#f5c9a0', hair: '#e8a02a', shirt: '#2a8a5a', pants: '#2a2a2a', style: 'spiky' },
   boss:     { skin: '#c89a78', hair: '#5a5a5a', shirt: '#6a6070', pants: '#3a3440', style: 'bald' },
 };
+// visuais novos (a arte vem do pacote; o desenho por código é só reserva)
+['trainer2', 'trainer3', 'fighter', 'samurai2', 'tengu', 'masked', 'shaman'].forEach(k => { LOOKS[k] = { ...LOOKS.trainer, shirt: '#3a3a8a' }; });
+['villager', 'villager3', 'villager4', 'noble', 'inspector', 'oldman2', 'monk2'].forEach(k => { LOOKS[k] = { ...LOOKS.traveler }; });
+['cat', 'cat2'].forEach(k => { LOOKS[k] = { ...LOOKS.kid, shirt: '#e8a040', pants: '#e8a040' }; });
 
 // ---------- Falas (japonês com leitura marcada: {漢字|よみ}) ----------
 const DLG = {
@@ -143,13 +169,15 @@ const DLG = {
     { jp: 'この おふだを あげます。よわい ことだまを つかまえて ください。', pt: 'Te dou estes talismãs (ofuda). Capture kotodama enfraquecidos.' },
     { jp: 'それから、バッジも あげます。', pt: 'Além disso, te dou insígnias também.' },
     { jp: 'メニューで バッジを つけても いいですよ。', pt: 'Pode equipar as insígnias no menu.' },
-    { jp: 'でも、バッジを つけない ほうが XPが おおいです。', pt: 'Mas sem insígnias você ganha mais XP.' },
+    { jp: 'バッジは ただです。つけても XPは へりません。', pt: 'As insígnias são de graça. Mesmo usando, o XP não diminui.' },
+    { jp: 'わたしの うちは どうじょうです。いつでも れんしゅうに きて ください。', pt: 'Minha casa é um dojo. Venha treinar quando quiser.' },
     { jp: 'じゃ、いって らっしゃい！', pt: 'Então, boa viagem!' },
   ],
   sensei: [
     { jp: 'たかい くさの なかを あるいて ください。ことだまが でます。', pt: 'Ande pelo mato alto. Kotodama aparecem.' },
     { jp: 'つかれた とき、やどやで やすんで ください。', pt: 'Quando cansar, descanse na pousada.' },
     { jp: 'じんじゃで ことだまを あわせる ことが できます。', pt: 'No santuário você pode fundir kotodama.' },
+    { jp: 'わたしの どうじょうで れんしゅうしても いいですよ。おかねも もらえます。', pt: 'Pode treinar no meu dojo. Você ganha dinheiro também.' },
   ],
   kid: [
     { jp: 'ぼくは ケンタです。ななさいです！', pt: 'Eu sou o Kenta. Tenho 7 anos!' },
@@ -185,7 +213,8 @@ const DLG = {
   ],
   badgeguy: [
     { jp: 'バッジを しっていますか。', pt: 'Você conhece as insígnias?' },
-    { jp: 'バッジは たすけて くれます。でも、XPが すくなく なります。', pt: 'As insígnias te ajudam. Mas o XP diminui.' },
+    { jp: 'バッジは たすけて くれます。XPも へりません。', pt: 'As insígnias te ajudam. E o XP não diminui.' },
+    { jp: 'メニューで つけたり、はずしたり して ください。', pt: 'Coloque e tire pelo menu.' },
   ],
   taroPre: [
     { jp: 'おい！ ぼくと バトルを しませんか！', pt: 'Ei! Não quer batalhar comigo?' },
@@ -201,7 +230,7 @@ const DLG = {
   bossWin: [
     { jp: '…まけました。あなたは ほんとうに つよいです。', pt: '...Perdi. Você é realmente forte.' },
     { jp: 'この おふだと おかねを あげます。', pt: 'Te dou estes talismãs e dinheiro.' },
-    { jp: 'だい いっしょう クリア！ つづきは また こんど…。', pt: 'Capítulo 1 completo! A continuação fica pra próxima...' },
+    { jp: 'だい いっしょう クリア！ きたの みちから さくらまちへ いけます。', pt: 'Capítulo 1 completo! Pelo caminho ao norte você chega em Sakuramachi.' },
   ],
   bossPost: [
     { jp: 'また きて ください。もっと つよく なって くださいね。', pt: 'Volte sempre. Fique ainda mais forte, tá?' },
@@ -209,7 +238,7 @@ const DLG = {
   signVillage: [{ jp: 'みなみ：ルート１', pt: 'Sul: Rota 1' }],
   signRoute: [{ jp: 'くさむらに ことだまが います。ちゅうい！', pt: 'Há kotodama no mato. Cuidado!' }],
   house: [{ jp: 'かぎが かかっています。', pt: 'Está trancado.' }],
-  profDoor: [{ jp: '{先生|せんせい}の うちです。{先生|せんせい}は そとに います。', pt: 'É a casa do professor. Ele está lá fora.' }],
+  profDoor: [{ jp: '{先生|せんせい}の どうじょうです。', pt: 'É o dojo do professor.' }],
   chestEmpty: [{ jp: 'からっぽです。', pt: 'Está vazio.' }],
 };
 
@@ -219,7 +248,7 @@ const DLG = {
 // L entrada da caverna  X saída da caverna
 const MAPS = {
   village: {
-    name: 'はじまりの むら', pt: 'Vila do Começo', theme: 'grass',
+    name: 'はじまりの むら', pt: 'Vila do Começo', theme: 'grass', music: 'village',
     rows: [
       'TTTTTTTTTTTTTTTTTTTTTTTT',
       'T.f....k...==......f..kT',
@@ -256,7 +285,7 @@ const MAPS = {
     ],
   },
   route1: {
-    name: 'ルート１', pt: 'Rota 1', theme: 'grass',
+    name: 'ルート１', pt: 'Rota 1', theme: 'grass', music: 'route',
     enc: { rate: 0.14, lv: [2, 5], pool: ['日','月','木','山','川','田','人','口','火','水','金','土','子','女','一','二','三','四','五'] },
     rows: [
       'TTTTTTTTT==TTTTTTTTT',
@@ -307,11 +336,11 @@ const MAPS = {
     ],
   },
   cave: {
-    name: 'いわやの どうくつ', pt: 'Caverna Iwaya', theme: 'cave', dark: true,
+    name: 'いわやの どうくつ', pt: 'Caverna Iwaya', theme: 'cave', dark: true, music: 'cave',
     enc: { rate: 0.09, lv: [5, 9], pool: ['六','七','八','九','十','百','千','万','円','年','上','下','中','大','小','本','半','分','力','何','先','生','学','私','車','門'], rare: [['岩', 0.4], ['男', 0.4]] },
     rows: [
-      '######################',
-      '#########____#########',
+      '###########X##########',
+      '###########_##########',
       '########______########',
       '#######________#######',
       '#######________#######',
@@ -332,28 +361,13 @@ const MAPS = {
     warps: [
       { x: 10, y: 16, to: 'route1', tx: 9, ty: 28, dir: 'up' },
       { x: 11, y: 16, to: 'route1', tx: 10, ty: 28, dir: 'up' },
+      { x: 11, y: 0, to: 'route2', tx: 7, ty: 28, dir: 'up' },
     ],
     chests: { '5,9': { flag: 'chestCave', items: { onigiri: 1 }, badge: 'tempo' } },
     npcs: [
-      { id: 'boss', x: 11, y: 2, dir: 'down', look: 'boss', name: 'いわの ばんにん',
-        trainer: { flag: 'bossBeaten', pre: 'bossPre', post: 'bossPost', win: 'bossWin', team: [['土', 7], ['山', 8], ['岩', 10]], reward: 500, items: { ofuda: 5 }, boss: true } },
+      { id: 'boss', x: 11, y: 2, dir: 'down', look: 'boss', name: 'いわの ばんにん', after: { flag: 'bossBeaten', x: 13, y: 3, dir: 'left' },
+        trainer: { flag: 'bossBeaten', pre: 'bossPre', post: 'bossPost', win: 'bossWin', team: [['土', 7], ['山', 8], ['岩', 10]], reward: 500, items: { ofuda: 5 }, boss: 1 } },
     ],
   },
 };
 
-// kanji novos (adicionados no app depois) entram automaticamente na caverna
-(function autoPool() {
-  const placed = new Set([...MAPS.route1.enc.pool, ...MAPS.cave.enc.pool, ...MAPS.cave.enc.rare.map(r => r[0]), ...FUSION_ONLY]);
-  Object.keys(SPECIES).forEach(c => { if (!placed.has(c)) MAPS.cave.enc.pool.push(c); });
-})();
-
-// onde cada espírito aparece (para o 図鑑)
-function whereFound(c) {
-  const out = [];
-  if (MAPS.route1.enc.pool.includes(c)) out.push('Rota 1 (mato alto)');
-  if (MAPS.cave.enc.pool.includes(c)) out.push('Caverna Iwaya');
-  if (MAPS.cave.enc.rare.some(r => r[0] === c)) out.push('Caverna Iwaya (raro)');
-  FUSIONS.filter(f => f.r === c).forEach(f => out.push(`Fusão: ${f.a} + ${f.b}`));
-  if (['火', '水', '木'].includes(c)) out.push('Presente do professor');
-  return out.length ? out.join(' · ') : '???';
-}

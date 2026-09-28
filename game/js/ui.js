@@ -148,8 +148,8 @@ const UI = {
         </div>
       </div>
       <h4>Golpes</h4>
-      <div class="moves">${movesFor(i.sp).map(m => `<div class="mv ${m.lv > i.lv ? 'locked' : ''}"><span class="jp">${jpHTML(m.label, true)}</span>
-        <small>${m.kind === 'word' ? esc(m.ref.mean) : 'kanji'} · poder ${m.power} ${m.lv > i.lv ? '· 🔒 Nv' + m.lv : ''}</small></div>`).join('')}</div>
+      <div class="moves">${movesFor(i.sp).map(m => `<div class="mv ${m.lv > i.lv ? 'locked' : ''}"><span class="jp"><span class="mvc">${CATS[m.cat].ic}</span> ${jpHTML(m.label, true)}</span>
+        <small>${esc(CATS[m.cat].pt)}${m.kind === 'word' ? ' · ' + esc(m.ref.mean) : ''} · poder ${m.power} ${m.lv > i.lv ? '· 🔒 Nv' + m.lv : ''}</small></div>`).join('')}</div>
       <div class="hwbox"><div id="hw-anim"></div></div>
       <div class="brow">
         <button class="btn" id="s-anim">✍️ Ver traços</button>
@@ -208,7 +208,7 @@ const UI = {
     const b = this.panel('どうぐ · Itens', `
       <div class="ilist">${Object.keys(ITEMS).map(k => `<div class="irow"><b class="jp">${ITEMS[k].jp}</b> ×${inv[k] || 0}
         <small class="dim">${esc(ITEMS[k].pt)}</small>
-        ${(ITEMS[k].heal || ITEMS[k].healFull) && inv[k] > 0 ? `<button class="btn tiny" data-k="${k}">Usar</button>` : ''}</div>`).join('')}</div>
+        ${(ITEMS[k].heal || ITEMS[k].healFull || ITEMS[k].revive) && inv[k] > 0 ? `<button class="btn tiny" data-k="${k}">Usar</button>` : ''}</div>`).join('')}</div>
       <p class="dim">💰 ${G.save.money}円</p>`);
     $$('[data-k]', b).forEach(x => x.onclick = () => this.pickTarget(x.dataset.k));
   },
@@ -217,8 +217,14 @@ const UI = {
       <span class="pinfo"><b class="jp">${esc(i.sp)}</b> Nv${i.lv} <small>${i.hp}/${statsOf(i).maxhp} HP</small></span></button>`).join('')}</div>`, { onClose: () => {} });
     $$('.prow', b).forEach(x => x.onclick = () => {
       const i = G.save.party[+x.dataset.i], st = statsOf(i), it = ITEMS[k];
-      if (i.hp >= st.maxhp) { toast('HP já está cheio!'); return; }
-      i.hp = it.healFull ? st.maxhp : Math.min(st.maxhp, i.hp + it.heal);
+      if (it.revive) {
+        if (i.hp > 0) { toast('Esse kotodama não está desmaiado!'); return; }
+        i.hp = Math.ceil(st.maxhp / 2);
+      } else {
+        if (i.hp <= 0) { toast('Desmaiado! Use おまもり ou descanse na pousada.'); return; }
+        if (i.hp >= st.maxhp) { toast('HP já está cheio!'); return; }
+        i.hp = it.healFull ? st.maxhp : Math.min(st.maxhp, i.hp + it.heal);
+      }
       G.save.items[k]--; sfx('heal'); toast(`${esc(i.sp)} recuperou HP!`);
       this.openItems();
     });
@@ -228,14 +234,12 @@ const UI = {
   openBadges() {
     const own = G.save.badges.owned, eq = G.save.badges.eq;
     const keys = Object.keys(BADGES).filter(k => own[k]);
-    let pen = 0; keys.forEach(k => { if (eq[k]) pen += BADGES[k].pen; });
-    const mult = Math.max(.4, 1 - pen);
     const b = this.panel('バッジ · Insígnias', `
-      <p class="dim">Insígnias ajudam, mas tiram XP. Estilo Paper Mario: você escolhe a dificuldade.</p>
+      <p class="dim">Ajudas opcionais: ligue as que quiser, <b>sem perder nada</b>. Conforme você melhora, vá desligando pra treinar de verdade.</p>
       <div class="blist">${keys.map(k => `<button class="brow2 ${eq[k] ? 'on' : ''}" data-k="${k}">
-        <span class="bic">${BADGES[k].icon}</span><span><b>${BADGES[k].name}</b> <small>(−${Math.round(BADGES[k].pen * 100)}% XP)</small><br><small class="dim">${esc(BADGES[k].pt)}</small></span>
+        <span class="bic">${BADGES[k].icon}</span><span><b>${BADGES[k].name}</b><br><small class="dim">${esc(BADGES[k].pt)}</small></span>
         <span class="btog">${eq[k] ? 'ON' : 'OFF'}</span></button>`).join('')}</div>
-      <div class="mfoot">XP das batalhas: <b>×${mult.toFixed(2)}</b>${G.save.opts.answer === 'type' ? ' · modo Digitar: <b>×1.5</b>' : ''}</div>
+      ${G.save.opts.answer === 'type' ? '<div class="mfoot">Modo Digitar ligado: <b>+50% XP</b></div>' : ''}
       <p class="dim">Mais insígnias estão escondidas em baús pelo mundo…</p>`);
     $$('.brow2', b).forEach(x => x.onclick = () => { const k = x.dataset.k; eq[k] = !eq[k]; sfx(eq[k] ? 'confirm' : 'cancel'); this.openBadges(); });
   },
@@ -248,6 +252,7 @@ const UI = {
         <div class="seg"><button data-v="mc" class="${o.answer === 'mc' ? 'on' : ''}">🔘 Escolher</button><button data-v="type" class="${o.answer === 'type' ? 'on' : ''}">⌨️ Digitar (+50% XP)</button></div>
         <small class="dim">Digitar aceita romaji ou kana e tolera 1 errinho. Perguntas de significado são sempre de escolha.</small></div>
       <div class="opt"><b>Som</b> <button class="btn tiny" id="o-snd">${o.sound ? '🔊 Ligado' : '🔇 Desligado'}</button></div>
+      <div class="opt"><b>Música</b> <button class="btn tiny" id="o-mus">${o.music ? '🎵 Ligada' : '🔇 Desligada'}</button></div>
       <div class="opt"><b>Voz (pronúncia)</b> <button class="btn tiny" id="o-voice">${o.voice ? '🗣 Ligada' : '🤐 Desligada'}</button></div>
       <div class="opt"><b>Atualizar o jogo</b> <button class="btn tiny" id="o-upd">🔄 Forçar atualização</button>
         <small class="dim">Baixa a versão mais nova agora. Seu progresso fica salvo. · versão ${GAME_VERSION}</small></div>
@@ -256,18 +261,21 @@ const UI = {
     $$('.seg button', b).forEach(x => x.onclick = () => { o.answer = x.dataset.v; sfx('confirm'); this.openOptions(); });
     $('#o-snd', b).onclick = () => { o.sound = !o.sound; sfx('confirm'); this.openOptions(); };
     $('#o-voice', b).onclick = () => { o.voice = !o.voice; sfx('confirm'); this.openOptions(); };
+    $('#o-mus', b).onclick = () => { o.music = !o.music; sfx('confirm'); if (o.music) Music.play(W.map && W.map.music); else Music.stop(); this.openOptions(); };
     $('#o-reset', b).onclick = () => { if (confirm('Apagar TODO o progresso do jogo? (o app de estudo não é afetado)')) { localStorage.removeItem(SAVE_KEY); location.reload(); } };
   },
   openHelp() {
     this.panel('❓ Como jogar', `<div class="help">
       <p>🕹 <b>Andar:</b> setas / WASD ou o direcional na tela. <b>Falar/interagir:</b> Z, Enter, Espaço ou <b>A</b>. <b>Menu:</b> X, Esc ou ☰.</p>
-      <p>⚔️ <b>Atacar:</b> cada golpe é um desafio de japonês. Responda rápido pra tirar <b>EXCELENTE</b> (dano ×1.5).</p>
-      <p>🛡 <b>Defender:</b> quando o inimigo ataca, um talismã voa até você: responda antes dele chegar! Bem rápido = <b>SUPERGUARDA</b> (bloqueia tudo e contra-ataca).</p>
-      <p>⭐ <b>Torcida:</b> acertos enchem as estrelas. Com 5, libera o <b>ESPECIAL</b> (3 desafios seguidos).</p>
+      <p>⚔️ <b>Atacar:</b> cada golpe é um desafio, e cada tipo treina uma coisa: <span class="jp">漢</span> kanji (leitura, significado, frases, palavras), <span class="jp">書</span> escrever o kanji com o dedo, e técnicas como <span class="jp">てにをは</span> (partículas), <span class="jp">かつよう</span> (verbos), <span class="jp">けいようし</span> (adjetivos), <span class="jp">かぞえうた</span> (contadores), <span class="jp">ならべかえ</span> (montar frase), <span class="jp">みみすまし</span> (ouvir)… Responda rápido pra tirar <b>EXCELENTE</b> (dano ×1.5).</p>
+      <p>🛡 <b>Defender:</b> quando o inimigo ataca, um talismã voa até você com uma pergunta de qualquer assunto: responda antes dele chegar! Bem rápido = <b>SUPERGUARDA</b> (bloqueia tudo e contra-ataca).</p>
+      <p>🔥 <b>Combo:</b> acertos seguidos (atacando ou defendendo) aumentam o dano dos seus golpes, até +50%.</p>
+      <p>🥋 <b>Dojo:</b> na casa do professor (e em Sakuramachi) tem treinos sem tempo de cada assunto, que dão 円 e XP.</p>
+      <p>📚 <b>Biblioteca:</b> em Sakuramachi, leia as histórias do app e responda perguntas.</p>
       <p>🧿 <b>Capturar:</b> use <b class="jp">おふだ</b> num kotodama enfraquecido e diga a leitura do kanji dele.</p>
       <p>⛩ <b>Fusão:</b> no santuário, junte dois kotodama pra formar um kanji novo (<span class="jp">木+木=林</span>!). Você escreve o kanji com o dedo.</p>
       <p>🔥 <b>Elementos:</b> <span class="jp">木</span> vence <span class="jp">土</span>, <span class="jp">土</span> vence <span class="jp">水</span>, <span class="jp">水</span> vence <span class="jp">火</span>, <span class="jp">火</span> vence <span class="jp">金</span>, <span class="jp">金</span> vence <span class="jp">木</span> (×1.5).</p>
-      <p>🏅 <b>Insígnias</b> ajudam mas reduzem o XP. O modo <b>Digitar</b> dá +50% XP.</p>
+      <p>🏅 <b>Insígnias</b> são ajudas (romaji, furigana, tradução…) e não custam nada. O modo <b>Digitar</b> dá +50% XP.</p>
       <p>🧠 O que você mais erra aparece mais (nas perguntas e nos encontros).</p>
       <p>📚 Tudo que você adicionar no app de estudo (kanji, palavras, verbos, vocabulário) entra no jogo automaticamente.</p>
       <p class="dim">🎨 Arte do cenário e personagens: <i>Ninja Adventure Asset Pack</i> por Pixel-Boy &amp; AAA (CC0).</p></div>`);
@@ -297,7 +305,12 @@ const UI = {
         <button class="btn" id="inn-cards">🃏 Paciência dos Números (ganhe 円)</button>
         <button class="btn sec" id="inn-box">📦 Organizar equipe e caixa</button>
       </div>`);
-    $('#inn-rest', b).onclick = () => { healAll(); sfx('heal'); toast('💤 Todos os kotodama estão descansados!'); refreshHUD(); saveGame(); };
+    $('#inn-rest', b).onclick = () => {
+      healAll(); sfx('heal'); toast('💤 Todos os kotodama estão descansados!');
+      // se todo mundo desmaiar, você volta pra última pousada onde descansou
+      const p = W.player; G.save.lastInn = { map: W.key, x: p.x, y: p.y };
+      refreshHUD(); saveGame();
+    };
     $('#inn-cards', b).onclick = () => { this.close(); Solitaire.open(); };
     $('#inn-box', b).onclick = () => this.openParty(() => {});
   },
@@ -358,11 +371,11 @@ const UI = {
 };
 
 // ---------- Escrita de kanji (Hanzi Writer) ----------
-function makeWriter(el, ch, size, quiz) {
+function makeWriter(el, ch, size, quiz, outline = true) {
   if (!el || !window.HanziWriter) return null;
   try {
     return HanziWriter.create(el, ch, {
-      width: size, height: size, padding: 8, showOutline: true, showCharacter: !quiz,
+      width: size, height: size, padding: 8, showOutline: outline, showCharacter: !quiz,
       strokeColor: '#2a1a3a', outlineColor: '#d9d2ea', drawingColor: '#c0282a', highlightColor: '#f2c14e',
       strokeAnimationSpeed: 1.2, delayBetweenStrokes: 180,
       charDataLoader: (c, onLoad, onErr) => {

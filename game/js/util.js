@@ -124,6 +124,17 @@ function naiForm(v) {
   const map = { 'う':'わ','く':'か','ぐ':'が','す':'さ','つ':'た','ぬ':'な','ぶ':'ば','む':'ま','る':'ら' };
   return k.slice(0, -1) + (map[k.slice(-1)] || 'ら') + 'ない';
 }
+const I_ROW = { 'う': 'い', 'く': 'き', 'ぐ': 'ぎ', 'す': 'し', 'つ': 'ち', 'ぬ': 'に', 'ぶ': 'び', 'む': 'み', 'る': 'り' };
+function masuForm(v) {
+  const k = v.kana;
+  if (v.type === 'irregular') {
+    if (k.endsWith('くる')) return k.slice(0, -2) + 'きます';
+    if (k.endsWith('する')) return k.slice(0, -2) + 'します';
+  }
+  if (v.type === 'ichidan') return k.slice(0, -1) + 'ます';
+  return k.slice(0, -1) + (I_ROW[k.slice(-1)] || 'り') + 'ます';
+}
+function taForm(v) { const t = teForm(v); return t.slice(0, -1) + (t.endsWith('で') ? 'だ' : 'た'); }
 
 // ---------- Voz (TTS) ----------
 let _voices = [];
