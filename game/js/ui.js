@@ -27,8 +27,10 @@ const Dialog = {
     const L = this.lines[this.i], el = $('#dialog');
     const tr = this.showTr || badgeOn('trad') || this.opts.forceTrad;
     const ro = this.showRo || badgeOn('romaji');
+    const face = ART.ready && this.opts.look ? faceURL(this.opts.look) : null;
     el.innerHTML = `
-      <div class="dlg">
+      <div class="dlg${face ? ' has-face' : ''}">
+        ${face ? `<img class="dlg-face" src="${face}" alt="">` : ''}
         ${this.opts.name ? `<div class="dlg-name jp">${esc(this.opts.name)}</div>` : ''}
         <div class="dlg-jp jp">${jpHTML(L.jp, badgeOn('furi'))}</div>
         ${ro ? `<div class="dlg-ro">${esc(romajiLine(L.jp))}</div>` : ''}
@@ -267,7 +269,8 @@ const UI = {
       <p>🔥 <b>Elementos:</b> <span class="jp">木</span> vence <span class="jp">土</span>, <span class="jp">土</span> vence <span class="jp">水</span>, <span class="jp">水</span> vence <span class="jp">火</span>, <span class="jp">火</span> vence <span class="jp">金</span>, <span class="jp">金</span> vence <span class="jp">木</span> (×1.5).</p>
       <p>🏅 <b>Insígnias</b> ajudam mas reduzem o XP. O modo <b>Digitar</b> dá +50% XP.</p>
       <p>🧠 O que você mais erra aparece mais (nas perguntas e nos encontros).</p>
-      <p>📚 Tudo que você adicionar no app de estudo (kanji, palavras, verbos, vocabulário) entra no jogo automaticamente.</p></div>`);
+      <p>📚 Tudo que você adicionar no app de estudo (kanji, palavras, verbos, vocabulário) entra no jogo automaticamente.</p>
+      <p class="dim">🎨 Arte do cenário e personagens: <i>Ninja Adventure Asset Pack</i> por Pixel-Boy &amp; AAA (CC0).</p></div>`);
   },
 
   // ----- Loja -----
@@ -388,7 +391,7 @@ function refreshHUD() {
 
 // ---------- Introdução ----------
 function startIntro() {
-  Dialog.show(DLG.intro, { name: '先生', onDone: chooseStarter });
+  Dialog.show(DLG.intro, { name: '先生', look: 'sensei', onDone: chooseStarter });
 }
 function chooseStarter() {
   const opts = ['火', '水', '木'].filter(c => SPECIES[c]);
@@ -408,7 +411,7 @@ function chooseStarter() {
     UI.close();
     const r = toHira(kanjiReadings(c)[0]);
     Dialog.show([{ jp: `{${c}|${r}}ですね！ いい ことだまです。`, pt: `O ${c}! É um ótimo kotodama.` }].concat(DLG.intro2), {
-      name: '先生', onDone: () => { saveGame(); refreshHUD(); toast('Dica: vá para o sul (ルート１) e ande no mato alto!', 3500); },
+      name: '先生', look: 'sensei', onDone: () => { saveGame(); refreshHUD(); toast('Dica: vá para o sul (ルート１) e ande no mato alto!', 3500); },
     });
   });
 }

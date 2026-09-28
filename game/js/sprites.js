@@ -117,6 +117,7 @@ const TILE_INFO = {
   '.': { walk: 1 }, ',': { walk: 1, grass: 1 }, 'f': { walk: 1 }, '=': { walk: 1 }, '_': { walk: 1, caveFloor: 1 },
   'L': { walk: 1 }, 'X': { walk: 1 },
   'T': {}, '~': {}, '#': {}, 'R': {}, 'S': { sign: 1 }, 'C': { chest: 1 },
+  'k': {}, 'u': {}, 'q': {}, 'o': {}, // cerejeira, arbusto, pedra, poste de torii (sólidos)
   'a': {}, 'b': {}, 'c': {}, 'd': {}, 's': {}, 'w': {},
   'I': { door: 'inn' }, 'M': { door: 'shop' }, 'J': { door: 'shrine' }, 'P': { door: 'prof' }, 'H': { door: 'house' },
 };
@@ -133,7 +134,9 @@ function getTile(ch, theme, x, y, t, open) {
     case ',': paintTall(g, anim); break;
     case 'f': paintFlowers(g); break;
     case '=': paintPath(g, v); break;
-    case 'T': paintTree(g); break;
+    case 'T': case 'k': case 'u': paintTree(g); break;
+    case 'q': paintBoulder(g); break;
+    case 'o': paintGrass(g, v); break;
     case '~': paintWater(g, anim); break;
     case '#': paintRock(g); break;
     case '_': paintCaveFloor(g, v); break;

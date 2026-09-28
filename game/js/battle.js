@@ -115,8 +115,8 @@ async function endBattle(result) {
   saveGame();
   if (result === 'win' && b.kind === 'trainer') {
     const tr = b.npc.trainer;
-    if (tr.win) Dialog.show(DLG[tr.win], { name: b.npc.name, onDone: () => { if (tr.boss) toast('🏆 Capítulo 1 completo!', 3500); } });
-    else Dialog.show(DLG[tr.post], { name: b.npc.name });
+    if (tr.win) Dialog.show(DLG[tr.win], { name: b.npc.name, look: b.npc.look, onDone: () => { if (tr.boss) toast('🏆 Capítulo 1 completo!', 3500); } });
+    else Dialog.show(DLG[tr.post], { name: b.npc.name, look: b.npc.look });
   }
   refreshHUD();
 }

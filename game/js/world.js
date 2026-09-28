@@ -15,6 +15,7 @@ function loadMap(key, x, y, dir) {
   const p = W.player;
   Object.assign(p, { x, y, px: x, py: y, dir: dir || 'down', moving: false, t: 0, frame: 0 });
   W.steps = 0; W.banner = 2.6;
+  W.statics = ART.ready ? buildStatics() : [];
   G.save.map = key; G.save.x = x; G.save.y = y; G.save.dir = p.dir;
   refreshHUD();
 }
@@ -29,8 +30,11 @@ function worldUpdate(dt) {
   W.npcs.forEach(n => updateNpc(n, dt));
   if (p.moving) {
     p.t += dt / MOVE_TIME;
-    if (p.t >= 1) { p.moving = false; p.px = p.x; p.py = p.y; p.frame = 0; onArrive(); }
-    else { p.px = lerp(p.fx, p.x, p.t); p.py = lerp(p.fy, p.y, p.t); p.frame = p.t < .5 ? (p.parity ? 1 : 2) : 0; }
+    if (p.t >= 1) { p.moving = false; p.px = p.x; p.py = p.y; p.frame = 0; p.anim = 0; onArrive(); }
+    else {
+      p.px = lerp(p.fx, p.x, p.t); p.py = lerp(p.fy, p.y, p.t); p.frame = p.t < .5 ? (p.parity ? 1 : 2) : 0;
+      p.anim = ((p.parity ? 0 : 2) + (p.t < .5 ? 1 : 2)) % 4; // ciclo de 4 quadros a cada 2 passos
+    }
   }
   if (!p.moving && !G.busy && G.scene === 'world') { const d = Input.dir(); if (d) tryMove(d); }
 }
@@ -63,8 +67,8 @@ function onArrive() {
 function updateNpc(n, dt) {
   if (n.moving) {
     n.t += dt / .28;
-    if (n.t >= 1) { n.moving = false; n.px = n.x; n.py = n.y; n.frame = 0; }
-    else { n.px = lerp(n.fx, n.x, n.t); n.py = lerp(n.fy, n.y, n.t); n.frame = n.t < .5 ? 1 : 0; }
+    if (n.t >= 1) { n.moving = false; n.px = n.x; n.py = n.y; n.frame = 0; n.anim = 0; }
+    else { n.px = lerp(n.fx, n.x, n.t); n.py = lerp(n.fy, n.y, n.t); n.frame = n.t < .5 ? 1 : 0; n.anim = n.t < .5 ? 1 : 2; }
     return;
   }
   if (!n.wander || G.busy) return;
@@ -95,11 +99,11 @@ function talkNpc(n) {
   if (n.id === 'sensei' && !G.save.flags.starter) return startIntro();
   if (n.trainer) {
     const tr = n.trainer;
-    if (G.save.flags[tr.flag]) return Dialog.show(DLG[tr.post], { name: n.name });
-    if (!G.save.party.some(i => i.hp > 0)) return Dialog.show([{ jp: 'ことだまが つかれて います。やどやで やすんで ください。', pt: 'Seus kotodama estão cansados. Descanse na pousada.' }], { name: n.name });
-    return Dialog.show(DLG[tr.pre], { name: n.name, onDone: () => { G.busy = true; flashThen(() => Battle.startTrainer(n)); } });
+    if (G.save.flags[tr.flag]) return Dialog.show(DLG[tr.post], { name: n.name, look: n.look });
+    if (!G.save.party.some(i => i.hp > 0)) return Dialog.show([{ jp: 'ことだまが つかれて います。やどやで やすんで ください。', pt: 'Seus kotodama estão cansados. Descanse na pousada.' }], { name: n.name, look: n.look });
+    return Dialog.show(DLG[tr.pre], { name: n.name, look: n.look, onDone: () => { G.busy = true; flashThen(() => Battle.startTrainer(n)); } });
   }
-  Dialog.show(DLG[n.dlg], { name: n.name });
+  Dialog.show(DLG[n.dlg], { name: n.name, look: n.look });
 }
 function openChest(x, y) {
   const c = (W.map.chests || {})[x + ',' + y]; if (!c) return;
@@ -123,15 +127,73 @@ function openDoor(kind) {
 
 // ---------- Desenho ----------
 const PLAQUE = { I: '宿', M: '店', J: '⛩', P: '先' };
-function worldRender(g, w, h, t) {
-  const T = G.tile, p = W.player;
-  const mw = W.w * T, mh = W.h * T;
-  // enquadra o mapa só na faixa livre (entre HUD e controles)
+// câmera: enquadra o mapa só na faixa livre (entre HUD e controles)
+function camera(w, h) {
+  const T = G.tile, p = W.player, mw = W.w * T, mh = W.h * T;
   const vt = G.viewTop || 0, vh = (G.viewBottom || h) - vt;
   let cx = (p.px + .5) * T - w / 2, cy = (p.py + .5) * T - vh / 2;
   cx = mw <= w ? (mw - w) / 2 : clamp(cx, 0, mw - w);
   cy = mh <= vh ? (mh - vh) / 2 : clamp(cy, 0, mh - vh);
-  cx = Math.round(cx); cy = Math.round(cy - vt);
+  return { cx: Math.round(cx), cy: Math.round(cy - vt) };
+}
+function worldRender(g, w, h, t) {
+  if (ART.ready) { if (!W.statics || !W.statics.length) W.statics = buildStatics(); return worldRenderArt(g, w, h, t); }
+  return worldRenderProc(g, w, h, t);
+}
+// ---------- renderização com a arte do Ninja Adventure ----------
+function worldRenderArt(g, w, h, t) {
+  const T = G.tile, p = W.player, { cx, cy } = camera(w, h), ox = -cx, oy = -cy;
+  g.fillStyle = W.map.theme === 'cave' ? '#0c0a10' : '#1f3a18'; g.fillRect(0, 0, w, h);
+  const x0 = Math.max(0, Math.floor(cx / T)), y0 = Math.max(0, Math.floor(cy / T));
+  const x1 = Math.min(W.w - 1, Math.ceil((cx + w) / T)), y1 = Math.min(W.h - 1, Math.ceil((cy + h) / T));
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) drawGroundArt(g, W.rows[y][x], x, y, x * T + ox, y * T + oy, T);
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) drawFlatArt(g, W.rows[y][x], x, y, x * T + ox, y * T + oy, T);
+  // tudo que tem altura, ordenado pela base (profundidade)
+  const list = W.statics.filter(s => s.x >= x0 - 4 && s.x <= x1 + 2 && s.y >= y0 - 3 && s.y <= y1 + 3).map(s => ({ by: s.by, s }));
+  W.npcs.forEach(n => list.push({ by: n.py + 1.001, e: n }));
+  list.push({ by: p.py + 1.002, e: p, hero: true });
+  list.sort((a, b) => a.by - b.by);
+  const sc = T / 16;
+  for (const it of list) {
+    if (it.s) { drawStatic(g, it.s, ox, oy, T); continue; }
+    const e = it.e, sx = e.px * T + ox, sy = e.py * T + oy;
+    g.fillStyle = 'rgba(0,0,0,.25)'; g.beginPath(); g.ellipse(sx + T / 2, sy + T * .9, T * .32, T * .11, 0, 0, Math.PI * 2); g.fill();
+    if (!drawCharArt(g, it.hero ? 'hero' : e.look, e.dir || 'down', e.anim || 0, sx, sy - sc, T))
+      g.drawImage(getChar(it.hero ? 'hero' : e.look, e.dir || 'down', e.frame || 0), sx - sc, sy + T - 17 * sc, 18 * sc, 18 * sc);
+    const tx = Math.round(e.px), ty = Math.round(e.py);
+    if (tileAt(tx, ty) === ',' && Math.abs(e.px - tx) < .3 && Math.abs(e.py - ty) < .3)
+      g.drawImage(ART.img.nature, 7 * 16, 11 * 16 + 9, 16, 7, tx * T + ox, ty * T + oy + 9 * sc, T, 7 * sc);
+    if (e.trainer && !G.save.flags[e.trainer.flag]) {
+      g.fillStyle = '#ffd84a'; g.strokeStyle = '#2a1030'; g.lineWidth = 3; g.font = `900 ${T * .5}px system-ui`; g.textAlign = 'center';
+      const ey = sy - T * .1 + Math.sin(t * 5) * 2; g.strokeText('!', sx + T / 2, ey); g.fillText('!', sx + T / 2, ey);
+    }
+  }
+  drawWorldOverlays(g, w, h, t, cx, cy);
+}
+function drawWorldOverlays(g, w, h, t, cx, cy) {
+  const T = G.tile, p = W.player;
+  if (W.map.dark) {
+    const px = (p.px + .5) * T - cx, py = (p.py + .5) * T - cy;
+    const gr = g.createRadialGradient(px, py, T * 2, px, py, T * 5.5);
+    gr.addColorStop(0, 'rgba(8,6,12,0)'); gr.addColorStop(1, 'rgba(8,6,12,.9)');
+    g.fillStyle = gr; g.fillRect(0, 0, w, h);
+  }
+  if (W.banner > 0) {
+    const a = Math.min(1, W.banner / .4, (2.6 - W.banner) / .3 + .01);
+    g.save(); g.globalAlpha = clamp(a, 0, 1);
+    const bw = Math.min(w * .8, 340), bx = (w - bw) / 2, by = G.viewTop ? G.viewTop + 4 : 14 + (G.safeTop || 0);
+    g.fillStyle = 'rgba(20,16,40,.92)'; g.strokeStyle = '#f4e7c3'; g.lineWidth = 3;
+    roundRect(g, bx, by, bw, 58, 12); g.fill(); g.stroke();
+    g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.font = `700 22px ${JP_FONT}`; g.fillText(W.map.name, w / 2, by + 22);
+    g.fillStyle = '#c9c2e8'; g.font = '600 13px system-ui, sans-serif'; g.fillText(W.map.pt, w / 2, by + 44);
+    g.restore();
+  }
+}
+// ---------- renderização antiga (fallback se a arte não carregar) ----------
+function worldRenderProc(g, w, h, t) {
+  const T = G.tile, p = W.player;
+  const { cx, cy } = camera(w, h);
   g.fillStyle = W.map.theme === 'cave' ? '#0c0a10' : '#23501f'; g.fillRect(0, 0, w, h);
   const x0 = Math.max(0, Math.floor(cx / T)), y0 = Math.max(0, Math.floor(cy / T));
   const x1 = Math.min(W.w - 1, Math.ceil((cx + w) / T)), y1 = Math.min(W.h - 1, Math.ceil((cy + h) / T));

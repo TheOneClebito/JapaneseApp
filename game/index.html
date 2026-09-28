@@ -68,6 +68,9 @@ body.touch #touch { display: block; }
 .dlg { position: relative; width: min(760px, 100%); background: #fffaf0; color: #2a1a10; border: 3px solid #3a2a1a; border-radius: 16px; padding: 18px 18px 10px; box-shadow: 0 6px 0 rgba(0,0,0,.35); cursor: pointer; animation: pop .15s ease-out; }
 @keyframes pop { from { transform: scale(.94); } }
 .dlg-name { position: absolute; top: -16px; left: 16px; background: #3a2a1a; color: #fff; padding: 3px 12px; border-radius: 10px; font-weight: 700; font-size: 14px; }
+.dlg.has-face { padding-left: 94px; min-height: 104px; }
+.dlg-face { position: absolute; left: 12px; top: 16px; width: 70px; height: 70px; image-rendering: pixelated; background: #e8dcc0; border: 3px solid #3a2a1a; border-radius: 10px; }
+@media (max-width: 480px) { .dlg.has-face { padding-left: 76px; } .dlg-face { width: 54px; height: 54px; left: 10px; } }
 .dlg-jp { font-size: 22px; line-height: 1.7; font-weight: 700; }
 .dlg-ro { color: #7a5a3a; font-size: 14px; margin-top: 2px; font-style: italic; }
 .dlg-pt { color: #3a6a4a; font-size: 14px; margin-top: 6px; border-top: 1px dashed #d8c8a8; padding-top: 6px; }
@@ -278,6 +281,7 @@ body.touch .qn { display: none; }
 <script src="js/data.js"></script>
 <script src="js/sprites.js"></script>
 <script src="js/quiz.js"></script>
+<script src="js/tiles.js"></script>
 <script src="js/world.js"></script>
 <script src="js/battle.js"></script>
 <script src="js/ui.js"></script>

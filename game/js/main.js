@@ -3,7 +3,7 @@
 //  MAIN — estado, save, controles, loop, transições, título
 // ============================================================
 const SAVE_KEY = 'kotodama.v1';
-const GAME_VERSION = '1.1';
+const GAME_VERSION = '1.2';
 // limpa o cache do jogo, remove o service worker e recarrega a versão mais nova (o save é mantido)
 async function forceUpdate() {
   toast('🔄 Atualizando…', 5000);
@@ -13,7 +13,7 @@ async function forceUpdate() {
     await Promise.all(ks.filter(k => k.startsWith('kotodama-')).map(k => caches.delete(k)));
     const regs = await navigator.serviceWorker.getRegistrations();
     await Promise.all(regs.filter(r => /\/game\/$/.test(r.scope)).map(r => r.unregister()));
-    const files = ['./', './index.html', './js/util.js', './js/data.js', './js/sprites.js', './js/quiz.js', './js/world.js', './js/battle.js', './js/ui.js', './js/solitaire.js', './js/main.js',
+    const files = ['./', './index.html', './js/util.js', './js/data.js', './js/sprites.js', './js/tiles.js', './js/quiz.js', './js/world.js', './js/battle.js', './js/ui.js', './js/solitaire.js', './js/main.js',
       '../kanji-list.js', '../kanji-words.js', '../kanji-strokes.js', '../vocab-decks.js', '../verbs.js'];
     await Promise.all(files.map(u => fetch(u, { cache: 'reload' }).catch(() => {})));
   } catch (e) {}
@@ -210,6 +210,16 @@ $('#t-new').onclick = () => {
   if (existingSave && !confirm('Começar um jogo novo? O progresso atual do jogo será apagado.')) return;
   sfx('confirm'); const s = newSave(); G.save = s; saveGame(); startGame(s);
 };
+// carrega a arte (pixel art); se demorar/falhar, o jogo segue com o visual desenhado por código
+(function () {
+  const btns = ['#t-cont', '#t-new'].map(s => $(s)).filter(Boolean);
+  const labels = btns.map(b => b.innerHTML);
+  btns.forEach(b => { b.disabled = true; b.innerHTML = 'Carregando…'; });
+  let done = false;
+  const release = () => { if (done) return; done = true; btns.forEach((b, i) => { b.disabled = false; b.innerHTML = labels[i]; }); };
+  setTimeout(release, 4000);
+  loadArt().then(ok => { if (ok && W.map) W.statics = buildStatics(); release(); });
+})();
 
 // ---------- Offline / atualização ----------
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
