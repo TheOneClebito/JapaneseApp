@@ -12,6 +12,13 @@ function loadMap(key, x, y, dir) {
   const m = MAPS[key];
   W.key = key; W.map = m; W.rows = m.rows; W.h = m.rows.length; W.w = m.rows[0].length;
   W.npcs = (m.npcs || []).map(n => ({ ...n, hx: n.x, hy: n.y, px: n.x, py: n.y, moving: false, t: 0, frame: 0, next: rnd(1.5, 4) }));
+  // save antigo parado num lugar que virou obstáculo (mapa mudou) → vai pro chão livre mais perto
+  if (!walkable(x, y)) {
+    let best = null;
+    for (let r = 1; r < 8 && !best; r++) for (let yy = y - r; yy <= y + r && !best; yy++) for (let xx = x - r; xx <= x + r; xx++)
+      if (walkable(xx, yy) && !(TILE_INFO[tileAt(xx, yy)] || {}).door) { best = [xx, yy]; break; }
+    if (best) [x, y] = best;
+  }
   const p = W.player;
   Object.assign(p, { x, y, px: x, py: y, dir: dir || 'down', moving: false, t: 0, frame: 0 });
   W.steps = 0; W.banner = 2.6;
