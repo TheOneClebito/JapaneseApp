@@ -349,5 +349,43 @@ window.READINGS = [
       { q:'O que o irmão mais novo dela virou em abril?', a:'Aluno do 3º ano do ensino médio (高校3年生).' },
       { q:'O que ela convida o Jimmy a fazer em agosto?', a:'Acampar no lago em Hokkaido (湖へキャンプ).' }
     ]
+  },
+  {
+    id:'b3-muyashi', title:'ムヤシさんの インタビュー', sub:'Entrevista — o fotógrafo de Nagano', level:'Básico 3',
+    lines:[
+      { jp:'きしゃ：ムヤシさんは しゃしんかですね。いつも {日本|にほん}の {山|やま}の しゃしんを とって いますね。', pt:'Repórter: O senhor é fotógrafo, né? Está sempre tirando fotos das montanhas do Japão.' },
+      { jp:'きしゃ：ムヤシさんの うちは どこですか。', pt:'Repórter: Onde é a sua casa?' },
+      { jp:'ムヤシ：{長野|ながの}です。ふるい {日本|にほん}の うちを かいました。', pt:'Muyashi: É em Nagano. Comprei uma casa japonesa antiga.' },
+      { jp:'ムヤシ：たたみの へやは とても べんりですから、だいすきです。', pt:'Muyashi: O quarto de tatame é muito prático, por isso adoro.' },
+      { jp:'ムヤシ：たたみの へやで しごとを します。ごはんも たべます。そして、ねます。', pt:'Muyashi: No quarto de tatame eu trabalho. Também como. E durmo.' },
+      { jp:'きしゃ：ムヤシさんは タンザニアから きましたね。{長野|ながの}は さむいですね。', pt:'Repórter: O senhor veio da Tanzânia, né? Nagano é frio, hein.' },
+      { jp:'ムヤシ：ええ、とても さむいです。{大|おお}きい こたつを かいました。', pt:'Muyashi: Sim, é muito frio. Comprei um kotatsu grande (mesa com aquecedor).' },
+      { jp:'ムヤシ：でも、{長野|ながの}の ふゆが だいすきです。ふゆの {山|やま}は とても きれいですから。', pt:'Muyashi: Mas eu adoro o inverno de Nagano. Porque as montanhas no inverno são muito bonitas.' },
+      { jp:'きしゃ：{日本|にほん}で どんな {人|ひと}に あいましたか。', pt:'Repórter: Que tipo de pessoas o senhor conheceu no Japão?' },
+      { jp:'ムヤシ：みんな しんせつで、りょうりが じょうずです。', pt:'Muyashi: Todos são gentis e cozinham bem.' },
+      { jp:'ムヤシ：わたしは おいしい ものを たべる ことが すきですから、とても しあわせです。', pt:'Muyashi: Como eu gosto de comer coisas gostosas, sou muito feliz.' },
+      { jp:'きしゃ：{日本|にほん}の まいにちは どうですか。', pt:'Repórter: Como é o dia a dia no Japão?' },
+      { jp:'ムヤシ：とても おもしろいです。{日本|にほん}が だいすきです。', pt:'Muyashi: É muito interessante. Eu adoro o Japão.' },
+      { jp:'きしゃ：ありがとう ございました。', pt:'Repórter: Muito obrigado.' }
+    ],
+    vocab:[
+      { jp:'しゃしんか', pt:'fotógrafo' },
+      { jp:'きしゃ', pt:'repórter' },
+      { jp:'たたみ', pt:'tatame' },
+      { jp:'べんり（な）', pt:'prático, conveniente' },
+      { jp:'こたつ', pt:'mesa com aquecedor' },
+      { jp:'ふゆ', pt:'inverno' },
+      { jp:'しんせつ（な）', pt:'gentil' },
+      { jp:'しあわせ（な）', pt:'feliz' },
+      { jp:'〜から', pt:'porque…' }
+    ],
+    questions:[
+      { q:'Qual é a profissão do Muyashi?', a:'Fotógrafo (しゃしんか). Tira fotos das montanhas do Japão.' },
+      { q:'Onde fica a casa dele e como ela é?', a:'Em Nagano (長野). É uma casa japonesa antiga (ふるい日本のうち).' },
+      { q:'Por que ele gosta do quarto de tatame? O que faz lá?', a:'Porque é prático (べんり). Trabalha, come e dorme lá.' },
+      { q:'O que ele comprou por causa do frio?', a:'Um kotatsu grande (大きいこたつ).' },
+      { q:'Por que ele adora o inverno de Nagano?', a:'Porque as montanhas ficam muito bonitas (ふゆの山はきれいですから).' },
+      { q:'Por que ele é feliz no Japão?', a:'As pessoas cozinham bem e ele gosta de comer coisas gostosas.' }
+    ]
   }
 ];

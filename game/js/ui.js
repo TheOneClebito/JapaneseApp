@@ -96,6 +96,7 @@ const UI = {
         <button class="mbtn" data-a="badges">🏅<span>Insígnias</span></button>
         <button class="mbtn" data-a="save">💾<span>Salvar</span></button>
         <button class="mbtn" data-a="opts">⚙️<span>Opções</span></button>
+        <button class="mbtn" data-a="dojo">🥋<span>Dojo (treinos)</span></button>
         <button class="mbtn" data-a="help">❓<span>Como jogar</span></button>
         <button class="mbtn" data-a="study">📚<span>App de estudo</span></button>
       </div>
@@ -110,6 +111,7 @@ const UI = {
       else if (a === 'save') { saveGame(); toast('💾 Jogo salvo!'); }
       else if (a === 'opts') this.openOptions();
       else if (a === 'help') this.openHelp();
+      else if (a === 'dojo') this.openDojo();
       else if (a === 'study') location.href = '../';
     });
   },

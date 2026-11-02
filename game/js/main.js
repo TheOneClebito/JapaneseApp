@@ -3,7 +3,7 @@
 //  MAIN — estado, save, controles, loop, transições, título
 // ============================================================
 const SAVE_KEY = 'kotodama.v1';
-const GAME_VERSION = '2.0';
+const GAME_VERSION = '2.1';
 // limpa o cache do jogo, remove o service worker e recarrega a versão mais nova (o save é mantido)
 async function forceUpdate() {
   toast('🔄 Atualizando…', 5000);
@@ -222,6 +222,9 @@ if (existingSave) $('#t-cont').style.display = '';
 $('#t-ver').textContent = GAME_VERSION;
 $('#t-upd').onclick = e => { e.preventDefault(); forceUpdate(); };
 $('#t-cont').onclick = () => { audioUnlock(); sfx('confirm'); startGame(existingSave); };
+// atalho: pula o mapa e abre os treinos sem tempo
+if (existingSave && existingSave.flags.starter) $('#t-dojo').style.display = '';
+$('#t-dojo').onclick = () => { audioUnlock(); sfx('confirm'); startGame(existingSave); UI.openDojo(); };
 $('#t-new').onclick = () => {
   audioUnlock();
   if (existingSave && !confirm('Começar um jogo novo? O progresso atual do jogo será apagado.')) return;
@@ -229,7 +232,7 @@ $('#t-new').onclick = () => {
 };
 // carrega a arte (pixel art); se demorar/falhar, o jogo segue com o visual desenhado por código
 (function () {
-  const btns = ['#t-cont', '#t-new'].map(s => $(s)).filter(Boolean);
+  const btns = ['#t-cont', '#t-dojo', '#t-new'].map(s => $(s)).filter(Boolean);
   const labels = btns.map(b => b.innerHTML);
   btns.forEach(b => { b.disabled = true; b.innerHTML = 'Carregando…'; });
   let done = false;

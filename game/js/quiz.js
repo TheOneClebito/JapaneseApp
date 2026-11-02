@@ -35,6 +35,7 @@ const CATS = {
   listen: { ic: '聞', pt: 'Ouvir' },
   read:   { ic: '読', pt: 'Leitura (textos)' },
   write:  { ic: '書', pt: 'Escrever kanji' },
+  b3:     { ic: '試', pt: 'Prova Básico 3' },
 };
 
 // ---------- Fontes de conteúdo (tudo vem do app de estudo) ----------
@@ -65,6 +66,8 @@ function allLines() {
   (window.READINGS || []).forEach(r => (r.lines || []).forEach((l, i) => { if (l.jp && l.pt) _lines.push({ r, i, jp: l.jp, pt: l.pt }); }));
   return _lines;
 }
+const b3Writing = () => allWriting().filter(w => w.level === 'Prova Básico 3');
+const b3Deck = () => (((window.VOCAB_DECKS || []).find(d => d.id === 'b3-prova') || { cards: [] }).cards).map(c => ({ jp: c.jp, kana: c.jp, mean: c.mean, ex: c.ex, exTr: c.exTr }));
 const plainK = s => markupBase(String(s || '').replace(/\[([^|\]]+)\|([^\]]+)\]/g, '$1'));
 
 function mcOptions(correct, pool, n = 4) {
@@ -427,6 +430,16 @@ function buildCat(cat) {
     }
     case 'read': return Q.readLine(adaptivePick(allLines(), L => 'rl:' + L.r.id + ':' + L.i));
     case 'write': return Q.write(adaptivePick(kanjiKeys(), c => 'wk:' + c));
+    case 'b3': {
+      // só o conteúdo da prova do Básico 3: frases pessoais, vocabulário novo e a entrevista do Muyashi
+      const ws = b3Writing(), deck = b3Deck(), lines = allLines().filter(L => L.r.id === 'b3-muyashi');
+      if (r < .3 && ws.length) return Q.composeOrder(adaptivePick(ws, w => 'co:' + w.id)) || Q.composeMC(pick(ws));
+      if (r < .6 && ws.length) return Q.composeMC(adaptivePick(ws, w => 'cm:' + w.id));
+      if (r < .72 && lines.length) return Q.readLine(adaptivePick(lines, L => 'rl:' + L.r.id + ':' + L.i));
+      if (r < .86 && deck.length) return Q.vocabMean(adaptivePick(deck, v => 'vm:' + v.jp));
+      if (deck.length) return Q.vocabRev(adaptivePick(deck, v => 'vr:' + v.jp));
+      return null;
+    }
   }
   return null;
 }
@@ -443,6 +456,7 @@ function catAvailable(cat) {
     case 'order': return allWriting().length > 2;
     case 'listen': return allVocab().length > 4 || allTatoeba().length > 4;
     case 'read': return allLines().length > 4;
+    case 'b3': return b3Writing().length > 2;
     default: return true;
   }
 }
