@@ -3,7 +3,7 @@
 //  MAIN — estado, save, controles, loop, transições, título
 // ============================================================
 const SAVE_KEY = 'kotodama.v1';
-const GAME_VERSION = '2.1';
+const GAME_VERSION = '2.2';
 // limpa o cache do jogo, remove o service worker e recarrega a versão mais nova (o save é mantido)
 async function forceUpdate() {
   toast('🔄 Atualizando…', 5000);
@@ -29,7 +29,7 @@ function newSave() {
     v: 3, map: 'village', x: 7, y: 6, dir: 'left', party: [], box: [],
     items: { ofuda: 0, kusuri: 2, onigiri: 0, okashi: 0, omamori: 0 }, money: 300,
     badges: { owned: {}, eq: {} }, flags: {}, dex: {}, stats: {}, dojo: {}, readDone: {}, visited: {}, solBest: {},
-    opts: { answer: isTouch() ? 'mc' : 'type', sound: true, voice: true, music: true }, play: 0,
+    opts: { answer: isTouch() ? 'mc' : 'type', sound: true, voice: true, music: true, levels: [1, 2, 3, 4] }, play: 0,
   };
 }
 function loadSave() {

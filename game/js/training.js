@@ -49,10 +49,18 @@ Object.assign(UI, {
     const b = this.panel('道場 · Dojo', `
       <p class="jp">どうじょうへ ようこそ！ たくさん れんしゅうしましょう。</p>
       <p class="dim">Treinos <b>sem tempo</b>, com a resposta explicada no fim de cada pergunta. Cada acerto dá 円 e XP pro kotodama da frente (★ = seu recorde).</p>
+      <div class="lvbar"><span>Níveis:</span>${LEVELS.map(n => `<button class="lvchip ${lvOk(n) ? 'on' : ''}" data-lv="${n}">${lvOk(n) ? '☑' : '☐'} Básico ${n}</button>`).join('')}</div>
+      ${cats.length ? '' : '<p class="dim">Nada pra treinar com esses níveis. Marque outro nível.</p>'}
       <div class="dojo-grid">${cats.map(c => `<button class="dojo-b" data-c="${c}"><span class="dic jp">${CATS[c].ic}</span><span>${esc(CATS[c].pt)}</span><small>${best[c] ? '★ ' + best[c].best + '/' + (DOJO_LEN[c] || 10) : 'novo'}</small></button>`).join('')}
-        <button class="dojo-b mix" data-c="mix"><span class="dic">🎲</span><span>Misto (tudo)</span><small>${best.mix ? '★ ' + best.mix.best + '/10' : 'novo'}</small></button></div>`,
+        <button class="dojo-b mix" data-c="mix"><span class="dic">🎲</span><span>Misto (níveis marcados)</span><small>${best.mix ? '★ ' + best.mix.best + '/10' : 'novo'}</small></button></div>`,
       { onClose: () => Music.play(W.map.music) });
     $$('.dojo-b', b).forEach(x => x.onclick = () => { sfx('confirm'); this.runDrill(x.dataset.c); });
+    // marcar/desmarcar níveis: os treinos passam a sortear só conteúdo desses níveis
+    $$('.lvchip', b).forEach(x => x.onclick = () => {
+      const n = +x.dataset.lv, L = levelsOn().slice(), i = L.indexOf(n);
+      if (i >= 0) { if (L.length === 1) { toast('Deixe pelo menos um nível marcado'); return; } L.splice(i, 1); } else L.push(n);
+      G.save.opts.levels = L.sort(); sfx('select'); saveGame(); this.openDojo();
+    });
   },
   runDrill(cat) {
     const total = DOJO_LEN[cat] || 10, cats = DOJO_CATS.filter(c => c !== 'write' && catAvailable(c));

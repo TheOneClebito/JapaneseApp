@@ -147,5 +147,38 @@ window.KANJI_WORDS = [
   { w:'{花|はな}畑', read:'はなばたけ', mean:'campo de flores' },
   { w:'岩', read:'いわ', mean:'rocha / rochedo' },
   { w:'岩山', read:'いわやま', mean:'montanha rochosa' },
-  { w:'十二{時|じ}半', read:'じゅうにじはん', mean:'12h30 (meio-dia e meia)' }
+  { w:'十二{時|じ}半', read:'じゅうにじはん', mean:'12h30 (meio-dia e meia)' },
+  // 目 (Básico 4)
+  { w:'目', read:'め', mean:'olho' },
+  // 耳 (Básico 4)
+  { w:'耳', read:'みみ', mean:'orelha' },
+  // 手 (Básico 4)
+  { w:'手', read:'て', mean:'mão' },
+  { w:'上手', read:'じょうず', mean:'habilidoso, bom em' },
+  { w:'下手', read:'へた', mean:'inábil, ruim em' },
+  // 足 (Básico 4)
+  { w:'足', read:'あし', mean:'pé, perna' },
+  // 雨 (Básico 4)
+  { w:'雨', read:'あめ', mean:'chuva' },
+  { w:'大雨', read:'おおあめ', mean:'chuva forte' },
+  // 竹 (Básico 4)
+  { w:'竹', read:'たけ', mean:'bambu' },
+  { w:'竹の子', read:'たけのこ', mean:'broto de bambu' },
+  { w:'竹田さん', read:'たけださん', mean:'Sr. Takeda' },
+  { w:'竹林', read:'ちくりん', mean:'bosque de bambu' },
+  // 米 (Básico 4)
+  { w:'米', read:'こめ', mean:'arroz' },
+  { w:'米{国|こく}', read:'べいこく', mean:'EUA' },
+  { w:'中米', read:'ちゅうべい', mean:'América Central' },
+  { w:'{南|なん}米', read:'なんべい', mean:'América do Sul' },
+  // 貝 (Básico 4)
+  { w:'貝', read:'かい', mean:'marisco, concha' },
+  { w:'貝がら', read:'かいがら', mean:'concha' },
+  // 石 (Básico 4)
+  { w:'石', read:'いし', mean:'pedra' },
+  { w:'石{油|ゆ}', read:'せきゆ', mean:'petróleo' },
+  { w:'{化|か}石', read:'かせき', mean:'fóssil' },
+  // 糸 (Básico 4)
+  { w:'糸', read:'いと', mean:'fio, linha' },
+  { w:'{毛|け}糸', read:'けいと', mean:'fio de lã' }
 ];

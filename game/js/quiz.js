@@ -46,7 +46,7 @@ function allVocab() {
   const seen = new Set(); _vocab = [];
   (window.VOCAB_DECKS || []).forEach(d => d.cards.forEach(c => {
     if (/[A-Za-z]/.test(c.jp) || seen.has(c.jp)) return;
-    seen.add(c.jp); _vocab.push({ jp: c.jp, kana: c.kana || c.jp, mean: c.mean, ex: c.ex, exTr: c.exTr });
+    seen.add(c.jp); _vocab.push({ jp: c.jp, kana: c.kana || c.jp, mean: c.mean, ex: c.ex, exTr: c.exTr, lv: +((d.id.match(/^b(\d)/) || [0, 2])[1]) });
   }));
   return _vocab;
 }
@@ -63,7 +63,7 @@ let _lines = null;
 function allLines() {
   if (_lines) return _lines;
   _lines = [];
-  (window.READINGS || []).forEach(r => (r.lines || []).forEach((l, i) => { if (l.jp && l.pt) _lines.push({ r, i, jp: l.jp, pt: l.pt }); }));
+  (window.READINGS || []).forEach(r => (r.lines || []).forEach((l, i) => { if (l.jp && l.pt) _lines.push({ r, i, jp: l.jp, pt: l.pt, lv: lvNum(r.level) }); }));
   return _lines;
 }
 const b3Writing = () => allWriting().filter(w => w.level === 'Prova Básico 3');
@@ -381,85 +381,82 @@ const kanjiKeys = () => Object.keys(SPECIES);
 const wordItems = () => allWords().map(w => ({ base: markupBase(w.w), read: w.read, mean: w.mean }))
   .concat(allKaki().map(k => ({ base: markupBase(k.k), read: k.r, mean: k.m })));
 
+// ---------- Níveis do curso (Básico 1–4): filtro do Dojo ----------
+const LEVELS = [1, 2, 3, 4];
+function levelsOn() { const L = G.save && G.save.opts.levels; return (L && L.length) ? L : LEVELS; }
+const lvOk = n => levelsOn().includes(n);
+const W_LEVEL = { 'Básico': 1, 'Básico 2': 2, 'Básico 3': 3, 'Dar/Receber': 3, 'Gostos/ações': 3, 'Prova Básico 3': 3, '～てもいいですか': 3, '～てはいけません': 3, '～てください': 3, 'Básico 4': 4 };
+const lvNum = s => { const m = String(s || '').match(/\d/); return m ? +m[0] : 2; };
+const lvWriting = w => w.lv || W_LEVEL[w.level] || lvNum(w.level);
+const lvKanji = c => (SPECIES[c] && SPECIES[c].level) || 2;
+// nível de um texto = o kanji aprendido mais avançado que aparece nele (só kana = Básico 2)
+const lvText = s => [...plainK(s)].reduce((m, ch) => SPECIES[ch] ? Math.max(m, lvKanji(ch)) : m, 0) || 2;
+// o que pode ser SORTEADO (as alternativas erradas continuam vindo de tudo)
+const poolKanji = () => kanjiKeys().filter(c => lvOk(lvKanji(c)));
+const poolWords = () => allWords().filter(w => lvOk(lvText(w.w)));
+const poolSpell = () => wordItems().filter(i => lvOk(lvText(i.base)));
+const poolVocab = () => allVocab().filter(v => lvOk(v.lv));
+const poolWriting = () => allWriting().filter(w => lvOk(lvWriting(w)));
+const poolSents = () => allSents().filter(s => lvOk(lvText(s.s)));
+const poolLines = () => allLines().filter(L => lvOk(L.lv));
+
 // gera uma pergunta de uma categoria (conteúdo geral)
 function qForCat(cat) {
   for (let t = 0; t < 4; t++) {
     const q = buildCat(cat);
     if (q && (!isRecent(q.key) || t === 3)) return q;
   }
-  return Q.kanjiMean(pick(kanjiKeys()));
+  return Q.kanjiMean(pick(poolKanji().length ? poolKanji() : kanjiKeys()));
 }
-function buildCat(cat) {
-  const r = Math.random();
+// cada categoria = lista de [peso, gerador], só com o que existe nos níveis marcados
+function catBuilders(cat) {
+  const B = [], add = (ok, w, f) => { if (ok) B.push([w, f]); };
   switch (cat) {
-    case 'kanji': {
-      const c = adaptivePick(kanjiKeys(), c => 'kr:' + c);
-      return r < .45 ? Q.kanjiRead(c) : r < .75 ? Q.kanjiPick(c) : Q.kanjiMean(c);
-    }
-    case 'word': {
-      if (r < .4) return Q.wordRead(adaptivePick(allWords(), w => 'wr:' + w.read));
-      if (r < .7) return Q.wordMean(adaptivePick(allWords(), w => 'wm:' + w.read));
-      return Q.spellPick(adaptivePick(wordItems(), i => 'sp:' + i.read)) || Q.wordRead(pick(allWords()));
-    }
-    case 'vocab': {
-      if (r < .6) return Q.vocabMean(adaptivePick(allVocab(), v => 'vm:' + v.jp));
-      return Q.vocabRev(adaptivePick(allVocab(), v => 'vr:' + v.jp));
-    }
-    case 'verb': {
-      const form = wpick([['te', 3], ['nai', 2.5], ['ta', 2], ['masu', 1.5]], x => x[1])[0];
-      return Q.verbForm(adaptivePick(allVerbs(), v => 'v' + form + ':' + v.kana), form);
-    }
-    case 'adj': {
-      const form = pick(['neg', 'past', 'pastneg', 'te']);
-      return Q.adjForm(adaptivePick(allAdj(), a => 'a' + form + ':' + a.kana), form);
-    }
-    case 'part': return Q.particle(adaptivePick(allParts(), p => 'pa:' + p.s.join('_')));
-    case 'count': {
-      const c = adaptivePick(allCounters(), c => 'ct:' + c.key), n = rint(1, 10);
-      return Q.counter(c, n);
-    }
-    case 'sent': {
-      if (r < .4 && allSents().length) return Q.sentRead(adaptivePick(allSents(), s => 'sr:' + s.s));
-      if (r < .7 && allWriting().length) return Q.composeMC(adaptivePick(allWriting(), w => 'cm:' + w.id));
-      return Q.vocabEx(adaptivePick(allVocab().filter(v => v.ex && v.exTr), v => 've:' + v.jp));
-    }
-    case 'order': return Q.composeOrder(adaptivePick(allWriting(), w => 'co:' + w.id));
-    case 'listen': {
-      if (r < .55 && allTatoeba().length) return Q.listenTatoeba(adaptivePick(allTatoeba(), t => 'lt:' + t.id));
-      return Q.listenVocab(adaptivePick(allVocab(), v => 'lv:' + v.jp));
-    }
-    case 'read': return Q.readLine(adaptivePick(allLines(), L => 'rl:' + L.r.id + ':' + L.i));
-    case 'write': return Q.write(adaptivePick(kanjiKeys(), c => 'wk:' + c));
-    case 'b3': {
+    case 'kanji': { const K = poolKanji();
+      add(K.length, .45, () => Q.kanjiRead(adaptivePick(K, c => 'kr:' + c)));
+      add(K.length > 1, .3, () => Q.kanjiPick(adaptivePick(K, c => 'kp:' + c)));
+      add(K.length, .25, () => Q.kanjiMean(adaptivePick(K, c => 'km:' + c))); break; }
+    case 'word': { const Wd = poolWords(), It = poolSpell();
+      add(Wd.length, .4, () => Q.wordRead(adaptivePick(Wd, w => 'wr:' + w.read)));
+      add(Wd.length, .3, () => Q.wordMean(adaptivePick(Wd, w => 'wm:' + w.read)));
+      add(It.length, .3, () => Q.spellPick(adaptivePick(It, i => 'sp:' + i.read))); break; }
+    case 'vocab': { const V = poolVocab();
+      add(V.length > 1, .6, () => Q.vocabMean(adaptivePick(V, v => 'vm:' + v.jp)));
+      add(V.length > 1, .4, () => Q.vocabRev(adaptivePick(V, v => 'vr:' + v.jp))); break; }
+    case 'verb': { // ます = Básico 2 · て/ない/た = Básico 3
+      const vs = allVerbs(); if (vs.length < 3) break;
+      [['masu', 1.5, 2], ['te', 3, 3], ['nai', 2.5, 3], ['ta', 2, 3]].forEach(([f, w, lv]) =>
+        add(lvOk(lv), w, () => Q.verbForm(adaptivePick(vs, v => 'v' + f + ':' + v.kana), f))); break; }
+    case 'adj': add(lvOk(2) && allAdj().length > 2, 1, () => { const f = pick(['neg', 'past', 'pastneg', 'te']); return Q.adjForm(adaptivePick(allAdj(), a => 'a' + f + ':' + a.kana), f); }); break;
+    case 'part': add(lvOk(2) && allParts().length > 2, 1, () => Q.particle(adaptivePick(allParts(), p => 'pa:' + p.s.join('_')))); break;
+    case 'count': add(lvOk(2) && allCounters().length > 1, 1, () => Q.counter(adaptivePick(allCounters(), c => 'ct:' + c.key), rint(1, 10))); break;
+    case 'sent': { const S = poolSents(), Wr = poolWriting(), VE = poolVocab().filter(v => v.ex && v.exTr);
+      add(S.length, .4, () => Q.sentRead(adaptivePick(S, s => 'sr:' + s.s)));
+      add(Wr.length, .3, () => Q.composeMC(adaptivePick(Wr, w => 'cm:' + w.id)));
+      add(VE.length, .3, () => Q.vocabEx(adaptivePick(VE, v => 've:' + v.jp))); break; }
+    case 'order': { const Wr = poolWriting();
+      add(Wr.length > 1, 1, () => { const w = adaptivePick(Wr, w => 'co:' + w.id); return Q.composeOrder(w) || Q.composeMC(w); }); break; }
+    case 'listen': { const V = poolVocab().filter(v => !v.jp.startsWith('〜'));
+      add(lvOk(2) && allTatoeba().length > 3, .55, () => Q.listenTatoeba(adaptivePick(allTatoeba(), t => 'lt:' + t.id)));
+      add(V.length > 1, .45, () => Q.listenVocab(adaptivePick(V, v => 'lv:' + v.jp))); break; }
+    case 'read': { const Ln = poolLines();
+      add(Ln.length > 1, 1, () => Q.readLine(adaptivePick(Ln, L => 'rl:' + L.r.id + ':' + L.i))); break; }
+    case 'write': { const K = poolKanji();
+      add(K.length, 1, () => Q.write(adaptivePick(K, c => 'wk:' + c))); break; }
+    case 'b3': { if (!lvOk(3)) break;
       // só o conteúdo da prova do Básico 3: frases pessoais, vocabulário novo e a entrevista do Muyashi
       const ws = b3Writing(), deck = b3Deck(), lines = allLines().filter(L => L.r.id === 'b3-muyashi');
-      if (r < .3 && ws.length) return Q.composeOrder(adaptivePick(ws, w => 'co:' + w.id)) || Q.composeMC(pick(ws));
-      if (r < .6 && ws.length) return Q.composeMC(adaptivePick(ws, w => 'cm:' + w.id));
-      if (r < .72 && lines.length) return Q.readLine(adaptivePick(lines, L => 'rl:' + L.r.id + ':' + L.i));
-      if (r < .86 && deck.length) return Q.vocabMean(adaptivePick(deck, v => 'vm:' + v.jp));
-      if (deck.length) return Q.vocabRev(adaptivePick(deck, v => 'vr:' + v.jp));
-      return null;
-    }
+      add(ws.length, .3, () => Q.composeOrder(adaptivePick(ws, w => 'co:' + w.id)) || Q.composeMC(pick(ws)));
+      add(ws.length, .3, () => Q.composeMC(adaptivePick(ws, w => 'cm:' + w.id)));
+      add(lines.length, .12, () => Q.readLine(adaptivePick(lines, L => 'rl:' + L.r.id + ':' + L.i)));
+      add(deck.length, .14, () => Q.vocabMean(adaptivePick(deck, v => 'vm:' + v.jp)));
+      add(deck.length, .14, () => Q.vocabRev(adaptivePick(deck, v => 'vr:' + v.jp))); break; }
   }
-  return null;
+  return B;
 }
-// categorias disponíveis (dependem dos dados que existem)
-function catAvailable(cat) {
-  switch (cat) {
-    case 'word': return allWords().length > 4;
-    case 'vocab': return allVocab().length > 4;
-    case 'verb': return allVerbs().length > 2;
-    case 'adj': return allAdj().length > 2;
-    case 'part': return allParts().length > 2;
-    case 'count': return allCounters().length > 1;
-    case 'sent': return allSents().length + allWriting().length > 4;
-    case 'order': return allWriting().length > 2;
-    case 'listen': return allVocab().length > 4 || allTatoeba().length > 4;
-    case 'read': return allLines().length > 4;
-    case 'b3': return b3Writing().length > 2;
-    default: return true;
-  }
-}
+function buildCat(cat) { const B = catBuilders(cat); return B.length ? wpick(B, x => x[0])[1]() : null; }
+// categorias disponíveis (dependem dos dados e dos níveis marcados)
+function catAvailable(cat) { return catBuilders(cat).length > 0; }
 
 // golpe do kanji: varia entre leitura, significado, escolher o kanji, frase e palavras com ele
 function qKanjiFamily(c) {

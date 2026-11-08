@@ -32,6 +32,7 @@ const KANJI_ELEMENT = {
   '百':'火','千':'水','万':'木','円':'金','年':'木','上':'火','下':'水','中':'土','大':'土','小':'水',
   '本':'木','半':'金','分':'金','力':'火','何':'水','明':'火','休':'木','体':'土','好':'火','男':'土',
   '林':'木','森':'木','間':'金','畑':'火','岩':'土',
+  '目':'火','耳':'金','手':'土','足':'土','雨':'水','竹':'木','米':'木','貝':'水','石':'土','糸':'木',
 };
 const ELEM_KEYS = ['火', '水', '木', '金', '土'];
 function elementOf(c) { return KANJI_ELEMENT[c] || ELEM_KEYS[hashStr(c) % 5]; }
@@ -46,6 +47,7 @@ const SPECIES = {};
   SPECIES[k.c] = {
     id: k.c, kanji: k.c, el: elementOf(k.c), strokes: strokesOf(k.c),
     mean: k.mean, on: k.on || [], kun: k.kun || [], week: k.week || 1,
+    level: k.level || ((k.week || 1) <= 3 ? 2 : (k.week || 1) <= 7 ? 3 : 4),
     name: nm.charAt(0).toUpperCase() + nm.slice(1),
   };
 });
