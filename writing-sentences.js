@@ -232,5 +232,10 @@ window.WRITING = [
   { id:'b4i12', diff:'hard', level:'Básico 4', pt:'O Brasil tem mais ou menos quantos feriados em um ano?', accept:['ブラジルの さいじつは いちねんかんに なんにち ぐらいですか。','ブラジルの さいじつは いちねんに なんにち ぐらいですか。'] },
   { id:'b4i13', diff:'med', level:'Básico 4', pt:'No Japão são 15 dias por ano.', accept:['にほんの さいじつは いちねんに じゅうごにちです。','にほんは いちねんに じゅうごにちです。','いちねんに じゅうごにちです。'] },
   { id:'b4i14', diff:'easy', level:'Básico 4', pt:'Então é igual, né.', accept:['じゃあ、おなじですね。','じゃあ おなじですね。'] },
+  { id:'b4i16', diff:'easy', level:'Básico 4', pt:'Gosto dos dois.', accept:['どちらも すきです。'] },
+  { id:'b4i17', diff:'med', level:'Básico 4', pt:'Gosto dos dois, então não consigo escolher.', accept:['どちらも すきですから、きめられません。','どちらも すきですから きめられません。'] },
+  { id:'b4i18', diff:'med', level:'Básico 4', pt:'Qual época do ano é a mais quente?', accept:['いちねんの なかで いつが いちばん あついですか。'] },
+  { id:'b4i19', diff:'easy', level:'Básico 4', pt:'Janeiro é o mais quente.', accept:['いちがつが いちばん あついです。'] },
+  { id:'b4i20', diff:'med', level:'Básico 4', pt:'Dos esportes, gosto mais de natação.', accept:['スポーツの なかで すいえいが いちばん すきです。','すいえいが いちばん すきです。'] },
   { id:'b4i15', diff:'med', level:'Básico 4', pt:'Nunca contei.', accept:['かぞえた ことは ありません。','かぞえた ことが ありません。'] }
 ];

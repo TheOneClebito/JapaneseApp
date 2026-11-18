@@ -387,6 +387,10 @@ window.VOCAB_DECKS = [
     { jp:'なんにち', mean:'quantos dias / que dia (何日)', ex:'なんにち ぐらいですか。', exTr:'Mais ou menos quantos dias?' },
     { jp:'〜ぐらい', mean:'mais ou menos, cerca de', ex:'いちじかん ぐらい まちました。', exTr:'Esperei cerca de uma hora.' },
     { jp:'カレンダー', mean:'calendário', ex:'カレンダーを みて ください。', exTr:'Olhe o calendário.' },
-    { jp:'えーと', mean:'hmm, deixa eu ver', ex:'えーと、じゅうごにちです。', exTr:'Hmm, são 15 dias.' }
+    { jp:'えーと', mean:'hmm, deixa eu ver', ex:'えーと、じゅうごにちです。', exTr:'Hmm, são 15 dias.' },
+    { jp:'どちらも', mean:'ambos, os dois', ex:'どちらも すきです。', exTr:'Gosto dos dois.' },
+    { jp:'きめられません', mean:'não consigo escolher / decidir', ex:'どちらも すきですから、きめられません。', exTr:'Gosto dos dois, então não consigo escolher.' },
+    { jp:'すいえい', mean:'natação', ex:'スポーツの なかで すいえいが いちばん すきです。', exTr:'Dos esportes, gosto mais de natação.' },
+    { jp:'いつ', mean:'quando', ex:'いちねんの なかで いつが いちばん あついですか。', exTr:'Qual época do ano é a mais quente?' }
   ]}
 ];

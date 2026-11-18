@@ -1,5 +1,5 @@
 // Service worker do jogo — funciona offline e se atualiza sozinho.
-const CACHE = 'kotodama-v8';
+const CACHE = 'kotodama-v9';
 const CHARS = ['Boy', 'Child', 'Hunter', 'Master', 'Monk', 'NinjaBlue', 'OldMan', 'OldWoman', 'Princess', 'Samurai', 'Villager2', 'Woman',
   'NinjaRed', 'NinjaGreen', 'FighterWhite', 'Villager', 'Villager3', 'Villager4', 'Noble', 'Monk2', 'Tengu', 'SamuraiBlue', 'Shaman', 'NinjaMasked', 'OldMan2', 'Inspector', 'Cat', 'CatBlack'];
 const FX = ['Flam', 'Water', 'Plant', 'Rock', 'Thunder', 'Spark', 'CutX', 'Shield'];
