@@ -216,5 +216,21 @@ window.WRITING = [
   { id:'b4c21', diff:'easy', level:'Básico 4', pt:'Depende da pessoa.', accept:['ひとに よります。'] },
   { id:'b4c22', diff:'easy', level:'Básico 4', pt:'Eu concordo.', accept:['さんせいです。','わたしも さんせいです。'] },
   { id:'b4c23', diff:'med', level:'Básico 4', pt:'No meu dia de folga eu jogo golfe.', accept:['やすみの ひに ゴルフを します。','やすみの ひは ゴルフを します。'] },
-  { id:'b4c24', diff:'med', level:'Básico 4', pt:'O clima do Brasil e do Japão não é igual.', accept:['ブラジルと にほんは きこうが おなじじゃ ありません。','ブラジルと にほんの きこうは おなじじゃ ありません。'] }
+  { id:'b4c24', diff:'med', level:'Básico 4', pt:'O clima do Brasil e do Japão não é igual.', accept:['ブラジルと にほんは きこうが おなじじゃ ありません。','ブラジルと にほんの きこうは おなじじゃ ありません。'] },
+  // ---- Básico 4 — L1: 〜がいちばん / 〜の中で + diálogo dos feriados ----
+  { id:'b4i1', diff:'med', level:'Básico 4', pt:'Entre carne de boi, frango e porco, de qual você gosta mais?', accept:['ぎゅうにくと とりにくと ぶたにくと なにが いちばん すきですか。','ぎゅうにくと とりにくと ぶたにくでは なにが いちばん すきですか。','ぎゅうにくと とりにくと ぶたにくと どれが いちばん すきですか。','ぎゅうにくと とりにくと ぶたにくでは どれが いちばん すきですか。'] },
+  { id:'b4i2', diff:'easy', level:'Básico 4', pt:'Eu gosto mais de frango (de todos).', accept:['とりにくが いちばん すきです。','わたしは とりにくが いちばん すきです。'] },
+  { id:'b4i3', diff:'med', level:'Básico 4', pt:'Entre Pará, Rio e Paraná, onde é mais frio?', accept:['パラーと リオと パラナと どこが いちばん さむいですか。','パラーと リオと パラナでは どこが いちばん さむいですか。'] },
+  { id:'b4i4', diff:'easy', level:'Básico 4', pt:'O Paraná é o mais frio.', accept:['パラナが いちばん さむいです。'] },
+  { id:'b4i5', diff:'med', level:'Básico 4', pt:'Entre o José, o Léo e a Ana, quem é o mais alto?', accept:['ジョゼさんと レオさんと アナさんと だれが いちばん せが たかいですか。','ジョゼさんと レオさんと アナさんでは だれが いちばん せが たかいですか。'] },
+  { id:'b4i6', diff:'easy', level:'Básico 4', pt:'O Léo é o mais alto.', accept:['レオさんが いちばん せが たかいです。'] },
+  { id:'b4i7', diff:'med', level:'Básico 4', pt:'Na sua família, quem é o mais alto?', accept:['かぞくの なかで だれが いちばん せが たかいですか。'] },
+  { id:'b4i8', diff:'med', level:'Básico 4', pt:'Entre as frutas, de qual você gosta mais?', accept:['くだものの なかで なにが いちばん すきですか。','くだものの なかで どれが いちばん すきですか。'] },
+  { id:'b4i9', diff:'med', level:'Básico 4', pt:'No Brasil, onde é o lugar mais quente?', accept:['ブラジルの なかで どこが いちばん あついですか。'] },
+  { id:'b4i10', diff:'med', level:'Básico 4', pt:'Entre os esportes, de qual você gosta mais?', accept:['スポーツの なかで なにが いちばん すきですか。','スポーツの なかで どれが いちばん すきですか。'] },
+  { id:'b4i11', diff:'easy', level:'Básico 4', pt:'Eu gosto mais de futebol (de todos).', accept:['サッカーが いちばん すきです。','わたしは サッカーが いちばん すきです。'] },
+  { id:'b4i12', diff:'hard', level:'Básico 4', pt:'O Brasil tem mais ou menos quantos feriados em um ano?', accept:['ブラジルの さいじつは いちねんかんに なんにち ぐらいですか。','ブラジルの さいじつは いちねんに なんにち ぐらいですか。'] },
+  { id:'b4i13', diff:'med', level:'Básico 4', pt:'No Japão são 15 dias por ano.', accept:['にほんの さいじつは いちねんに じゅうごにちです。','にほんは いちねんに じゅうごにちです。','いちねんに じゅうごにちです。'] },
+  { id:'b4i14', diff:'easy', level:'Básico 4', pt:'Então é igual, né.', accept:['じゃあ、おなじですね。','じゃあ おなじですね。'] },
+  { id:'b4i15', diff:'med', level:'Básico 4', pt:'Nunca contei.', accept:['かぞえた ことは ありません。','かぞえた ことが ありません。'] }
 ];

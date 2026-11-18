@@ -369,5 +369,24 @@ window.VOCAB_DECKS = [
     { jp:'かい', mean:'marisco, concha (貝)', ex:'かいを たべます。', exTr:'Como mariscos.' },
     { jp:'いし', mean:'pedra (石)', ex:'いしが おおきいです。', exTr:'A pedra é grande.' },
     { jp:'いと', mean:'fio, linha (糸)', ex:'あかい いとです。', exTr:'É uma linha vermelha.' }
+  ]},
+  { id:'b4-l1-ichiban', name:'Básico 4 — いちばん e feriados (L1)', cards:[
+    { jp:'いちばん', mean:'o mais… / número um', ex:'とりにくが いちばん すきです。', exTr:'Gosto mais de frango (do que de todos).' },
+    { jp:'〜の なかで', mean:'dentre…, entre os…', ex:'かぞくの なかで だれが いちばん せが たかいですか。', exTr:'Na família, quem é o mais alto?' },
+    { jp:'どれ', mean:'qual (entre 3 ou mais coisas)', ex:'どれが いちばん やすいですか。', exTr:'Qual é o mais barato?' },
+    { jp:'ぎゅうにく', mean:'carne de boi (牛肉)', ex:'ぎゅうにくが すきです。', exTr:'Gosto de carne de boi.' },
+    { jp:'とりにく', mean:'frango (鳥肉)', ex:'とりにくが いちばん すきです。', exTr:'Gosto mais de frango.' },
+    { jp:'ぶたにく', mean:'carne de porco (ぶた肉)', ex:'ぶたにくは あまり たべません。', exTr:'Não como muita carne de porco.' },
+    { jp:'せが たかい', mean:'alto (pessoa)', ex:'レオさんが いちばん せが たかいです。', exTr:'O Léo é o mais alto.' },
+    { jp:'せが ひくい', mean:'baixo (pessoa)', ex:'わたしは せが ひくいです。', exTr:'Eu sou baixo.' },
+    { jp:'さいじつ', mean:'feriado (さい日)', ex:'ブラジルの さいじつは なんにち ぐらいですか。', exTr:'Quantos feriados tem o Brasil?' },
+    { jp:'かぞえます', mean:'contar', ex:'ひを かぞえます。', exTr:'Conto os dias.' },
+    { jp:'くに', mean:'país (国)', ex:'どの くにが いちばん おおきいですか。', exTr:'Qual país é o maior?' },
+    { jp:'ひとびと', mean:'pessoas (人々)', ex:'リオの ひとびとは あかるいです。', exTr:'As pessoas do Rio são alegres.' },
+    { jp:'いちねんかん', mean:'um ano (duração) (一年間)', ex:'いちねんかんに じゅうごにち です。', exTr:'São 15 dias por ano.' },
+    { jp:'なんにち', mean:'quantos dias / que dia (何日)', ex:'なんにち ぐらいですか。', exTr:'Mais ou menos quantos dias?' },
+    { jp:'〜ぐらい', mean:'mais ou menos, cerca de', ex:'いちじかん ぐらい まちました。', exTr:'Esperei cerca de uma hora.' },
+    { jp:'カレンダー', mean:'calendário', ex:'カレンダーを みて ください。', exTr:'Olhe o calendário.' },
+    { jp:'えーと', mean:'hmm, deixa eu ver', ex:'えーと、じゅうごにちです。', exTr:'Hmm, são 15 dias.' }
   ]}
 ];

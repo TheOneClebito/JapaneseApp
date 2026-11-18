@@ -387,5 +387,37 @@ window.READINGS = [
       { q:'Por que ele adora o inverno de Nagano?', a:'Porque as montanhas ficam muito bonitas (ふゆの山はきれいですから).' },
       { q:'Por que ele é feliz no Japão?', a:'As pessoas cozinham bem e ele gosta de comer coisas gostosas.' }
     ]
+  },
+  {
+    id:'b4-saijitsu', title:'さい日は 何日ぐらい？', sub:'Diálogo — feriados no Brasil e no Japão (L1)', level:'Básico 4',
+    lines:[
+      { jp:'みさき：ブラジルの さい{日|じつ}は {一年間|いちねんかん}に {何日|なんにち}ぐらいですか。', pt:'Misaki: Quantos feriados o Brasil tem, mais ou menos, em um ano?' },
+      { jp:'ジュリア：そうですね。かぞえた ことは ありませんが、えーと、', pt:'Julia: Deixa eu ver. Nunca contei, mas, hmm…' },
+      { jp:'（カレンダーを {見|み}て）{国|くに}の さい{日|じつ}が {12日|じゅうににち}と リオの さい{日|じつ}が {3日|みっか}ですから、', pt:'(olhando o calendário) Como os feriados nacionais são 12 dias e os feriados do Rio são 3 dias,' },
+      { jp:'リオの {人々|ひとびと}には、{一年間|いちねんかん}に {15日間|じゅうごにちかん}ですね。', pt:'para as pessoas do Rio são 15 dias por ano, né.' },
+      { jp:'{日本|にほん}の さい{日|じつ}は どうですか。', pt:'E os feriados do Japão?' },
+      { jp:'みさき：えーと、{一年|いちねん}に {15日|じゅうごにち}ですよ。', pt:'Misaki: Hmm, são 15 dias por ano.' },
+      { jp:'ジュリア：そうですか。じゃあ、おなじですね。', pt:'Julia: É mesmo? Então é igual, né.' }
+    ],
+    vocab:[
+      { jp:'さい日（さいじつ）', pt:'feriado' },
+      { jp:'かぞえる', pt:'contar' },
+      { jp:'くに（国）', pt:'país' },
+      { jp:'人々（ひとびと）', pt:'pessoas (plural)' },
+      { jp:'おなじ', pt:'mesmo, igual' },
+      { jp:'一年 / 一年間', pt:'um ano (duração)' },
+      { jp:'15日 / 15日間', pt:'quinze dias (duração)' },
+      { jp:'〜ぐらい', pt:'mais ou menos, cerca de' },
+      { jp:'かぞえた ことは ありません', pt:'nunca contei' },
+      { jp:'えーと', pt:'hmm, deixa eu ver' }
+    ],
+    questions:[
+      { q:'Qual é o assunto da conversa?', a:'Quantos feriados (さい日) cada país tem por ano.' },
+      { q:'Quantos feriados nacionais tem o Brasil?', a:'12 dias (国のさい日が12日).' },
+      { q:'E quantos feriados o Rio tem a mais?', a:'3 dias (リオのさい日が3日).' },
+      { q:'Então quantos feriados têm as pessoas do Rio?', a:'15 dias por ano (一年間に15日間).' },
+      { q:'E o Japão?', a:'Também 15 dias por ano (一年に15日).' },
+      { q:'Qual é a conclusão da Julia?', a:'Que é igual (おなじですね).' }
+    ]
   }
 ];
