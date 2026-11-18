@@ -265,6 +265,29 @@
   .rq-q{font-size:14px; margin-bottom:6px;}
   .rq-show{background:none; border:1px solid var(--line); color:var(--accent2); border-radius:8px; padding:5px 10px; font-size:12px; cursor:pointer;}
   .rq-a{font-size:14px; color:var(--good); margin-top:8px;}
+
+  /* ---- Revisão (grammar-notes.js) ---- */
+  .gn-lv{font-size:15px; margin:18px 0 8px; color:var(--accent2);}
+  .gn-lv small{color:var(--muted); font-weight:400; font-size:12px; margin-left:6px;}
+  details.gn{background:var(--card); border:1px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden;}
+  details.gn summary{list-style:none; cursor:pointer; padding:12px 34px 12px 14px; display:flex; flex-direction:column; gap:2px; position:relative;}
+  details.gn summary::-webkit-details-marker{display:none;}
+  details.gn summary::after{content:'▸'; position:absolute; right:14px; top:13px; color:var(--muted); transition:transform .15s;}
+  details.gn[open] summary::after{transform:rotate(90deg);}
+  details.gn[open] summary{border-bottom:1px solid var(--line);}
+  .gn-t{font-weight:700; font-size:15px;}
+  .gn-s{color:var(--muted); font-size:12px;}
+  .gn-b{padding:10px 14px 14px; font-size:14px; line-height:1.6;}
+  .gn-p{margin:8px 0;}
+  .gn-f{background:var(--card2); border-left:3px solid var(--accent); border-radius:8px; padding:8px 10px; margin:8px 0; font-weight:600;}
+  .gn-tip{background:rgba(0,212,184,.08); border:1px solid rgba(0,212,184,.4); border-radius:10px; padding:8px 10px; margin:8px 0; font-size:13px;}
+  .gn-ex{border-left:3px solid var(--accent2); padding:4px 0 4px 10px; margin:10px 0;}
+  .gn-jp{font-size:17px;} .gn-ro{color:var(--accent2); font-size:13px;} .gn-pt{color:var(--muted); font-size:13px;}
+  .gn-tw{overflow-x:auto; margin:8px 0;}
+  .gn-tbl{border-collapse:collapse; font-size:13px; min-width:100%;}
+  .gn-tbl th,.gn-tbl td{border:1px solid var(--line); padding:5px 7px; text-align:left; vertical-align:top;}
+  .gn-tbl th{background:var(--card2);}
+  .gn-tree{white-space:pre-wrap; font-family:'Courier New',monospace; font-size:12px; background:var(--card2); border-radius:8px; padding:8px; margin:8px 0;}
 </style>
 </head>
 <body>
@@ -284,6 +307,7 @@
   <button data-tab="study"><span class="ic">📖</span>Estudar</button>
   <button data-tab="kanji"><span class="ic">漢</span>Kanji</button>
   <button data-tab="drills"><span class="ic">🎯</span>Treino</button>
+  <button data-tab="review"><span class="ic">📘</span>Revisão</button>
   <button data-tab="manage"><span class="ic">🗂️</span>Cards</button>
   <button data-tab="settings"><span class="ic">⚙️</span>Ajustes</button>
 </nav>
@@ -303,6 +327,7 @@
 <script src="./jp-dict.js"></script>
 <script src="./verbs.js"></script>
 <script src="./drills-data.js"></script>
+<script src="./grammar-notes.js"></script>
 <script>
 "use strict";
 /* ============================================================
@@ -759,6 +784,7 @@ function render(){
   else if(tab==='study') renderStudy();
   else if(tab==='kanji') renderKanji();
   else if(tab==='drills') renderDrills();
+  else if(tab==='review') renderReview();
   else if(tab==='manage') renderManage();
   else if(tab==='settings') renderSettings();
 }
@@ -2321,6 +2347,22 @@ function openDeckModal(id){
 }
 
 // ---------- Ajustes ----------
+// ---------- Revisão: explicações de gramática (grammar-notes.js), sem exercícios ----------
+function renderReview(){
+  const sel = state.settings.revLevels || [];   // vazio = todos
+  const chip = (v,l)=>`<button class="chip ${(v===0? !sel.length : sel.includes(v))?'on':''}" data-rv="${v}">${l}</button>`;
+  view.innerHTML = `
+    <h2 class="sec-title">📘 Revisão — explicações</h2>
+    <div class="hint" style="text-align:left;margin-bottom:10px">Só consulta, sem exercícios. Toque num tópico pra abrir.</div>
+    <div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:6px">${chip(0,'Tudo')}${[1,2,3,4].map(n=>chip(n,'Básico '+n)).join('')}</div>
+    <div id="rv-list">${window.grammarListHTML ? grammarListHTML(sel) : ''}</div>`;
+  view.querySelectorAll('[data-rv]').forEach(b=>b.onclick=()=>{
+    const v=+b.dataset.rv; let s=(state.settings.revLevels||[]).slice();
+    if(!v) s=[]; else { const i=s.indexOf(v); if(i>=0) s.splice(i,1); else s.push(v); }
+    state.settings.revLevels=s; save(); renderReview();
+  });
+}
+
 function renderSettings(){
   const s = state.settings;
   loadVoices();

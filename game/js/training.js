@@ -49,12 +49,14 @@ Object.assign(UI, {
     const b = this.panel('道場 · Dojo', `
       <p class="jp">どうじょうへ ようこそ！ たくさん れんしゅうしましょう。</p>
       <p class="dim">Treinos <b>sem tempo</b>, com a resposta explicada no fim de cada pergunta. Cada acerto dá 円 e XP pro kotodama da frente (★ = seu recorde).</p>
+      <button class="btn sec rv-open" id="dj-rev">📘 Revisão — explicações (sem exercícios)</button>
       <div class="lvbar"><span>Níveis:</span>${LEVELS.map(n => `<button class="lvchip ${lvOk(n) ? 'on' : ''}" data-lv="${n}">${lvOk(n) ? '☑' : '☐'} Básico ${n}</button>`).join('')}</div>
       ${cats.length ? '' : '<p class="dim">Nada pra treinar com esses níveis. Marque outro nível.</p>'}
       <div class="dojo-grid">${cats.map(c => `<button class="dojo-b" data-c="${c}"><span class="dic jp">${CATS[c].ic}</span><span>${esc(CATS[c].pt)}</span><small>${best[c] ? '★ ' + best[c].best + '/' + (DOJO_LEN[c] || 10) : 'novo'}</small></button>`).join('')}
         <button class="dojo-b mix" data-c="mix"><span class="dic">🎲</span><span>Misto (níveis marcados)</span><small>${best.mix ? '★ ' + best.mix.best + '/10' : 'novo'}</small></button></div>`,
       { onClose: () => Music.play(W.map.music) });
     $$('.dojo-b', b).forEach(x => x.onclick = () => { sfx('confirm'); this.runDrill(x.dataset.c); });
+    $('#dj-rev', b).onclick = () => { sfx('confirm'); this.openReview(true); };
     // marcar/desmarcar níveis: os treinos passam a sortear só conteúdo desses níveis
     $$('.lvchip', b).forEach(x => x.onclick = () => {
       const n = +x.dataset.lv, L = levelsOn().slice(), i = L.indexOf(n);
@@ -96,6 +98,23 @@ Object.assign(UI, {
       { onClose: () => Music.play(W.map.music) });
     $('#dr-again', b).onclick = () => { sfx('confirm'); this.runDrill(cat); };
     $('#dr-back', b).onclick = () => { sfx('cancel'); this.openDojo(); };
+  },
+
+  // ----- Revisão: só explicações (grammar-notes.js). Filtro próprio, separado dos níveis dos treinos -----
+  openReview(fromDojo) {
+    const sel = G.save.opts.revLevels || [];   // vazio = tudo
+    const chip = (v, l) => `<button class="lvchip ${(v === 0 ? !sel.length : sel.includes(v)) ? 'on' : ''}" data-rv="${v}">${l}</button>`;
+    const b = this.panel('📘 Revisão', `
+      <div class="lvbar">${chip(0, 'Tudo')}${LEVELS.map(n => chip(n, 'Básico ' + n)).join('')}</div>
+      <div class="rv-wrap">${window.grammarListHTML ? grammarListHTML(sel) : ''}</div>
+      ${fromDojo ? '<div class="brow"><button class="btn sec" id="rv-back">↩ Voltar ao Dojo</button></div>' : ''}`,
+      { wide: true, onClose: fromDojo ? () => Music.play(W.map.music) : null });
+    $$('[data-rv]', b).forEach(x => x.onclick = () => {
+      const v = +x.dataset.rv; let s = (G.save.opts.revLevels || []).slice();
+      if (!v) s = []; else { const i = s.indexOf(v); if (i >= 0) s.splice(i, 1); else s.push(v); }
+      G.save.opts.revLevels = s; sfx('select'); saveGame(); this.openReview(fromDojo);
+    });
+    const bk = $('#rv-back', b); if (bk) bk.onclick = () => { sfx('cancel'); this.openDojo(); };
   },
 
   // ----- Biblioteca -----

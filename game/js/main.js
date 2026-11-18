@@ -3,7 +3,7 @@
 //  MAIN — estado, save, controles, loop, transições, título
 // ============================================================
 const SAVE_KEY = 'kotodama.v1';
-const GAME_VERSION = '2.2';
+const GAME_VERSION = '2.3';
 // limpa o cache do jogo, remove o service worker e recarrega a versão mais nova (o save é mantido)
 async function forceUpdate() {
   toast('🔄 Atualizando…', 5000);
@@ -14,7 +14,7 @@ async function forceUpdate() {
     const regs = await navigator.serviceWorker.getRegistrations();
     await Promise.all(regs.filter(r => /\/game\/$/.test(r.scope)).map(r => r.unregister()));
     const files = ['./', './index.html', './js/util.js', './js/data.js', './js/sprites.js', './js/tiles.js', './js/quiz.js', './js/chapters.js', './js/training.js', './js/world.js', './js/battle.js', './js/ui.js', './js/solitaire.js', './js/main.js',
-      '../kanji-list.js', '../kanji-words.js', '../kanji-strokes.js', '../vocab-decks.js', '../verbs.js', '../drills-data.js',
+      '../kanji-list.js', '../kanji-words.js', '../kanji-strokes.js', '../vocab-decks.js', '../verbs.js', '../drills-data.js', '../grammar-notes.js',
       '../kanji-sentences.js', '../writing-sentences.js', '../reading-texts.js', '../tatoeba-sentences.js'];
     await Promise.all(files.map(u => fetch(u, { cache: 'reload' }).catch(() => {})));
   } catch (e) {}

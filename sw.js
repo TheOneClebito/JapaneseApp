@@ -1,5 +1,5 @@
 // Service worker — cache-first offline para o app funcionar sem internet.
-const CACHE = 'jpstudy-v44';
+const CACHE = 'jpstudy-v45';
 const ASSETS = [
   './',
   './index.html',
@@ -16,6 +16,7 @@ const ASSETS = [
   './jp-dict.js',
   './verbs.js',
   './drills-data.js',
+  './grammar-notes.js',
   './fonts/pressstart.woff2',
   './icons/icon-192.png',
   './icons/icon-512.png',

@@ -1,5 +1,5 @@
 // Service worker do jogo — funciona offline e se atualiza sozinho.
-const CACHE = 'kotodama-v7';
+const CACHE = 'kotodama-v8';
 const CHARS = ['Boy', 'Child', 'Hunter', 'Master', 'Monk', 'NinjaBlue', 'OldMan', 'OldWoman', 'Princess', 'Samurai', 'Villager2', 'Woman',
   'NinjaRed', 'NinjaGreen', 'FighterWhite', 'Villager', 'Villager3', 'Villager4', 'Noble', 'Monk2', 'Tengu', 'SamuraiBlue', 'Shaman', 'NinjaMasked', 'OldMan2', 'Inspector', 'Cat', 'CatBlack'];
 const FX = ['Flam', 'Water', 'Plant', 'Rock', 'Thunder', 'Spark', 'CutX', 'Shield'];
@@ -10,7 +10,7 @@ const ASSETS = [
   './js/battle.js', './js/ui.js', './js/solitaire.js', './js/main.js',
   './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png',
   '../hanzi-writer.min.js', '../kanji-strokes.js', '../kanji-list.js', '../kanji-words.js',
-  '../vocab-decks.js', '../verbs.js', '../drills-data.js', '../kanji-sentences.js', '../writing-sentences.js',
+  '../vocab-decks.js', '../verbs.js', '../drills-data.js', '../grammar-notes.js', '../kanji-sentences.js', '../writing-sentences.js',
   '../reading-texts.js', '../tatoeba-sentences.js', '../fonts/pressstart.woff2',
   ...TILES.map(t => `./assets/tiles/${t}.png`),
   ...CHARS.flatMap(c => [`./assets/chars/${c}/SpriteSheet.png`, `./assets/chars/${c}/Faceset.png`]),
