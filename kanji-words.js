@@ -180,5 +180,24 @@ window.KANJI_WORDS = [
   { w:'{化|か}石', read:'かせき', mean:'fóssil' },
   // 糸 (Básico 4)
   { w:'糸', read:'いと', mean:'fio, linha' },
-  { w:'{毛|け}糸', read:'けいと', mean:'fio de lã' }
+  { w:'{毛|け}糸', read:'けいと', mean:'fio de lã' },
+  // Básico 4 — palavras do exercício (目上, 目次, 雨水…)
+  { w:'目上', read:'めうえ', mean:'(pessoa) superior' },
+  { w:'目{次|じ}', read:'もくじ', mean:'índice' },
+  { w:'目{的|てき}', read:'もくてき', mean:'objetivo' },
+  { w:'耳{鼻科|びか}', read:'じびか', mean:'otorrinolaringologia' },
+  { w:'{右|みぎ}手', read:'みぎて', mean:'mão direita' },
+  { w:'{運転|うんてん}手', read:'うんてんしゅ', mean:'motorista' },
+  { w:'手{紙|がみ}', read:'てがみ', mean:'carta' },
+  { w:'{不|ふ}足', read:'ふそく', mean:'insuficiente, falta' },
+  { w:'足りる', read:'たりる', mean:'ser suficiente, bastar' },
+  { w:'足りません', read:'たりません', mean:'não é suficiente, falta' },
+  { w:'一足', read:'いっそく', mean:'um par (de calçados)' },
+  { w:'四足', read:'よんそく', mean:'quatro pares' },
+  { w:'雨水', read:'あまみず', mean:'água da chuva' },
+  { w:'小雨', read:'こさめ', mean:'chuva fina, garoa' },
+  { w:'雨{天|てん}', read:'うてん', mean:'tempo chuvoso' },
+  { w:'雨の日', read:'あめのひ', mean:'dia de chuva' },
+  { w:'石川{県|けん}', read:'いしかわけん', mean:'província de Ishikawa' },
+  { w:'竹下さん', read:'たけしたさん', mean:'Sr. Takeshita' }
 ];

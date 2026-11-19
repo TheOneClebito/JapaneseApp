@@ -392,5 +392,21 @@ window.VOCAB_DECKS = [
     { jp:'きめられません', mean:'não consigo escolher / decidir', ex:'どちらも すきですから、きめられません。', exTr:'Gosto dos dois, então não consigo escolher.' },
     { jp:'すいえい', mean:'natação', ex:'スポーツの なかで すいえいが いちばん すきです。', exTr:'Dos esportes, gosto mais de natação.' },
     { jp:'いつ', mean:'quando', ex:'いちねんの なかで いつが いちばん あついですか。', exTr:'Qual época do ano é a mais quente?' }
+  ]},
+  { id:'b4-l1-kanji', name:'Básico 4 — Palavras dos kanji novos', cards:[
+    { jp:'みみが とおい', mean:'ouvir mal, ser meio surdo', ex:'そふは みみが とおいです。', exTr:'Meu avô ouve mal.' },
+    { jp:'たりる', mean:'ser suficiente, bastar (足りる)', ex:'おかねが たりません。', exTr:'O dinheiro não é suficiente.' },
+    { jp:'せきゆ', mean:'petróleo (石油)', ex:'アラブから せきゆを かいます。', exTr:'Compro petróleo dos árabes.' },
+    { jp:'くつした', mean:'meia(s) (靴下)', ex:'くつしたを よんそく かいました。', exTr:'Comprei quatro pares de meias.' },
+    { jp:'〜そく', mean:'contador de pares de calçado (足)', ex:'くつを いっそく かいました。', exTr:'Comprei um par de sapatos.' },
+    { jp:'めうえ', mean:'(pessoa) superior (目上)', ex:'めうえの ひとに けいごを つかいます。', exTr:'Uso linguagem polida com superiores.' },
+    { jp:'もくじ', mean:'índice (目次)', ex:'ほんの もくじを みます。', exTr:'Olho o índice do livro.' },
+    { jp:'もくてき', mean:'objetivo (目的)', ex:'りょこうの もくてきは なんですか。', exTr:'Qual é o objetivo da viagem?' },
+    { jp:'こさめ', mean:'chuva fina, garoa (小雨)', ex:'きょうは こさめです。', exTr:'Hoje está garoando.' },
+    { jp:'あまみず', mean:'água da chuva (雨水)', ex:'あまみずを つかいます。', exTr:'Uso a água da chuva.' },
+    { jp:'うんてんしゅ', mean:'motorista (運転手)', ex:'ちちは うんてんしゅです。', exTr:'Meu pai é motorista.' },
+    { jp:'じびか', mean:'otorrino (耳鼻科)', ex:'じびかへ いきます。', exTr:'Vou ao otorrino.' },
+    { jp:'ふそく', mean:'falta, insuficiência (不足)', ex:'すいみん ふそくです。', exTr:'Estou com falta de sono.' },
+    { jp:'みぎて', mean:'mão direita (右手)', ex:'みぎてで かきます。', exTr:'Escrevo com a mão direita.' }
   ]}
 ];

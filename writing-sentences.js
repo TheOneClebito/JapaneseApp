@@ -237,5 +237,16 @@ window.WRITING = [
   { id:'b4i18', diff:'med', level:'Básico 4', pt:'Qual época do ano é a mais quente?', accept:['いちねんの なかで いつが いちばん あついですか。'] },
   { id:'b4i19', diff:'easy', level:'Básico 4', pt:'Janeiro é o mais quente.', accept:['いちがつが いちばん あついです。'] },
   { id:'b4i20', diff:'med', level:'Básico 4', pt:'Dos esportes, gosto mais de natação.', accept:['スポーツの なかで すいえいが いちばん すきです。','すいえいが いちばん すきです。'] },
-  { id:'b4i15', diff:'med', level:'Básico 4', pt:'Nunca contei.', accept:['かぞえた ことは ありません。','かぞえた ことが ありません。'] }
+  { id:'b4i15', diff:'med', level:'Básico 4', pt:'Nunca contei.', accept:['かぞえた ことは ありません。','かぞえた ことが ありません。'] },
+  // ---- Básico 4 — frases de leitura com os kanji novos ----
+  { id:'b4f1', diff:'med', level:'Básico 4', pt:'Como está chovendo, não vou.', accept:['あめが ふって いますから、いきません。','あめが ふっていますから、いきません。'] },
+  { id:'b4f2', diff:'med', level:'Básico 4', pt:'Meu avô ouve mal (é meio surdo).', accept:['そふは みみが とおいです。'] },
+  { id:'b4f3', diff:'med', level:'Básico 4', pt:'Faltam mil ienes.', accept:['おかねが せんえん たりません。'] },
+  { id:'b4f4', diff:'easy', level:'Básico 4', pt:'A Costa Rica fica na América Central.', accept:['コスタリカは ちゅうべいに あります。'] },
+  { id:'b4f5', diff:'easy', level:'Básico 4', pt:'A Ann tem olhos grandes.', accept:['アンさんは めが おおきいです。'] },
+  { id:'b4f6', diff:'easy', level:'Básico 4', pt:'Os japoneses comem arroz.', accept:['にほんじんは こめを たべます。'] },
+  { id:'b4f7', diff:'med', level:'Básico 4', pt:'Em dias de chuva, escrevo cartas no quarto.', accept:['あめの ひは へやで てがみを かきます。'] },
+  { id:'b4f8', diff:'med', level:'Básico 4', pt:'O Japão compra petróleo dos países árabes.', accept:['にほんは アラブから せきゆを かいます。'] },
+  { id:'b4f9', diff:'hard', level:'Básico 4', pt:'Ainda não sou muito bom em japonês.', accept:['わたしは まだ にほんごが あまり じょうずでは ありません。','わたしは まだ にほんごが あまり じょうずじゃ ありません。','まだ にほんごが あまり じょうずでは ありません。','まだ にほんごが あまり じょうずじゃ ありません。'] },
+  { id:'b4f10', diff:'hard', level:'Básico 4', pt:'O Sr. Takeda comprou um par de sapatos e quatro pares de meias.', accept:['たけださんは くつを いっそくと くつしたを よんそく かいました。'] }
 ];

@@ -47,5 +47,20 @@ window.KANJI_SENTENCES = [
   { s:'この [森|もり]には 大きい 木が たくさん あります。', pt:'Nesta floresta há muitas árvores grandes.' },
   { s:'私と 山田さんの [間|あいだ]に 川が あります。', pt:'Entre mim e o Yamada há um rio.' },
   { s:'[畑|はたけ]で やさいを つくります。', pt:'Cultivo verduras na horta.' },
-  { s:'大きい [岩|いわ]の 上に ねこが います。', pt:'Há um gato em cima de uma pedra grande.' }
+  { s:'大きい [岩|いわ]の 上に ねこが います。', pt:'Há um gato em cima de uma pedra grande.' },
+  // ---- Básico 4: 目耳手足雨竹米貝石糸 ----
+  { s:'[雨|あめ]が ふって いますから、いきません。', pt:'Como está chovendo, não vou.' },
+  { s:'そふは [耳|みみ]が とおいです。', pt:'Meu avô ouve mal (é meio surdo).' },
+  { s:'お金が 千円 [足りません|たりません]。', pt:'Faltam mil ienes.' },
+  { s:'お金が [千円|せんえん] 足りません。', pt:'Faltam mil ienes.' },
+  { s:'コスタリカは [中米|ちゅうべい]に あります。', pt:'A Costa Rica fica na América Central.' },
+  { s:'アンさんは [目|め]が 大きいです。', pt:'A Ann tem olhos grandes.' },
+  { s:'日本人は [米|こめ]を たべます。', pt:'Os japoneses comem arroz.' },
+  { s:'[雨|あめ]の日は へやで 手{紙|がみ}を かきます。', pt:'Em dias de chuva, escrevo cartas no quarto.' },
+  { s:'雨の日は へやで [手紙|てがみ]を かきます。', pt:'Em dias de chuva, escrevo cartas no quarto.' },
+  { s:'日本は アラブから [石油|せきゆ]を かいます。', pt:'O Japão compra petróleo dos países árabes.' },
+  { s:'私は まだ 日本{語|ご}が あまり [上手|じょうず]では ありません。', pt:'Ainda não sou muito bom em japonês.' },
+  { s:'[竹田|たけだ]さんは くつを 一足と {靴下|くつした}を 四足 かいました。', pt:'O Sr. Takeda comprou um par de sapatos e quatro pares de meias.' },
+  { s:'竹田さんは くつを [一足|いっそく]と {靴下|くつした}を 四足 かいました。', pt:'O Sr. Takeda comprou um par de sapatos e quatro pares de meias.' },
+  { s:'竹田さんは くつを 一足と {靴下|くつした}を [四足|よんそく] かいました。', pt:'O Sr. Takeda comprou um par de sapatos e quatro pares de meias.' }
 ];

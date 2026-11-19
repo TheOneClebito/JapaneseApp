@@ -50,6 +50,8 @@ Object.assign(UI, {
       <p class="jp">どうじょうへ ようこそ！ たくさん れんしゅうしましょう。</p>
       <p class="dim">Treinos <b>sem tempo</b>, com a resposta explicada no fim de cada pergunta. Cada acerto dá 円 e XP pro kotodama da frente (★ = seu recorde).</p>
       <button class="btn sec rv-open" id="dj-rev">📘 Revisão — explicações (sem exercícios)</button>
+      <div class="lvbar"><span>Responder:</span><button class="lvchip ${G.save.opts.answer !== 'type' ? 'on' : ''}" data-ans="mc">🔘 Escolher</button><button class="lvchip ${G.save.opts.answer === 'type' ? 'on' : ''}" data-ans="type">⌨️ Escrever</button></div>
+      ${G.save.opts.answer === 'type' ? '<p class="dim" style="margin:2px 0 4px">Modo escrever: você digita a leitura, a palavra ou a frase inteira (romaji ou kana). Kanji, Palavras, Vocabulário e Frases só sorteiam perguntas de digitar.</p>' : ''}
       <div class="lvbar"><span>Níveis:</span>${LEVELS.map(n => `<button class="lvchip ${lvOk(n) ? 'on' : ''}" data-lv="${n}">${lvOk(n) ? '☑' : '☐'} Básico ${n}</button>`).join('')}</div>
       ${cats.length ? '' : '<p class="dim">Nada pra treinar com esses níveis. Marque outro nível.</p>'}
       <div class="dojo-grid">${cats.map(c => `<button class="dojo-b" data-c="${c}"><span class="dic jp">${CATS[c].ic}</span><span>${esc(CATS[c].pt)}</span><small>${best[c] ? '★ ' + best[c].best + '/' + (DOJO_LEN[c] || 10) : 'novo'}</small></button>`).join('')}
@@ -57,8 +59,9 @@ Object.assign(UI, {
       { onClose: () => Music.play(W.map.music) });
     $$('.dojo-b', b).forEach(x => x.onclick = () => { sfx('confirm'); this.runDrill(x.dataset.c); });
     $('#dj-rev', b).onclick = () => { sfx('confirm'); this.openReview(true); };
+    $$('[data-ans]', b).forEach(x => x.onclick = () => { G.save.opts.answer = x.dataset.ans; sfx('select'); saveGame(); this.openDojo(); });
     // marcar/desmarcar níveis: os treinos passam a sortear só conteúdo desses níveis
-    $$('.lvchip', b).forEach(x => x.onclick = () => {
+    $$('.lvchip[data-lv]', b).forEach(x => x.onclick = () => {
       const n = +x.dataset.lv, L = levelsOn().slice(), i = L.indexOf(n);
       if (i >= 0) { if (L.length === 1) { toast('Deixe pelo menos um nível marcado'); return; } L.splice(i, 1); } else L.push(n);
       G.save.opts.levels = L.sort(); sfx('select'); saveGame(); this.openDojo();

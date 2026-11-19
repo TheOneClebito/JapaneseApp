@@ -419,5 +419,30 @@ window.READINGS = [
       { q:'E o Japão?', a:'Também 15 dias por ano (一年に15日).' },
       { q:'Qual é a conclusão da Julia?', a:'Que é igual (おなじですね).' }
     ]
+  },
+  {
+    id:'b4-kanji-frases', title:'{漢字|かんじ}の ぶん', sub:'Leia as frases — kanji novos do Básico 4', level:'Básico 4',
+    lines:[
+      { jp:'{雨|あめ}が ふって いますから、いきません。', pt:'Como está chovendo, não vou.' },
+      { jp:'そふは {耳|みみ}が とおいです。', pt:'Meu avô ouve mal (é meio surdo).' },
+      { jp:'お{金|かね}が {千円|せんえん} {足|た}りません。', pt:'Faltam mil ienes.' },
+      { jp:'コスタリカは {中米|ちゅうべい}に あります。', pt:'A Costa Rica fica na América Central.' },
+      { jp:'アンさんは {目|め}が {大|おお}きいです。', pt:'A Ann tem olhos grandes.' },
+      { jp:'{日本人|にほんじん}は {米|こめ}を たべます。', pt:'Os japoneses comem arroz.' },
+      { jp:'{雨|あめ}の{日|ひ}は へやで {手紙|てがみ}を かきます。', pt:'Em dias de chuva, escrevo cartas no quarto.' },
+      { jp:'{日本|にほん}は アラブから {石油|せきゆ}を かいます。', pt:'O Japão compra petróleo dos países árabes.' },
+      { jp:'{私|わたし}は まだ {日本語|にほんご}が あまり {上手|じょうず}では ありません。', pt:'Ainda não sou muito bom em japonês.' },
+      { jp:'{竹田|たけだ}さんは くつを {一足|いっそく}と {靴下|くつした}を {四足|よんそく} かいました。', pt:'O Sr. Takeda comprou um par de sapatos e quatro pares de meias.' }
+    ],
+    vocab:[
+      { jp:'耳が とおい（みみがとおい）', pt:'ouvir mal, ser meio surdo' },
+      { jp:'足りる（たりる）', pt:'ser suficiente' },
+      { jp:'中米（ちゅうべい）', pt:'América Central' },
+      { jp:'石油（せきゆ）', pt:'petróleo' },
+      { jp:'手紙（てがみ）', pt:'carta' },
+      { jp:'靴下（くつした）', pt:'meia(s)' },
+      { jp:'〜足（〜そく）', pt:'contador de pares de calçado' },
+      { jp:'そふ', pt:'meu avô' }
+    ]
   }
 ];
