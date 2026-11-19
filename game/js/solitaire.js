@@ -17,10 +17,18 @@ const SOL_MODES = {
     }),
   },
   counters: {
-    name: 'Contadores', icon: '🍶', n: 10, desc: '本・枚・匹・冊・台・杯・個… cuidado com as mudanças de som (いっぽん, さんびき…)!',
+    name: 'Contadores', icon: '🍶', n: 10, desc: '本・枚・匹・冊・台・杯・足… cuidado com as mudanças de som (いっぽん, さんびき…)! Contadores com kanji que você já aprendeu também vêm escritos (三足, 六本).',
     styles: () => {
       const out = {};
-      shuffle((window.COUNTERS_DATA || []).filter(c => c.key !== 'tsu' && c.key !== 'nin').slice()).slice(0, 5).forEach(c => { const r = c.readings.slice(); r.icon = c.icon; out[c.key] = r; });
+      // kanji do contador (o que vem entre （）no rótulo); se você já aprendeu, entram cartas escritas (三足, 六本…)
+      const kOf = c => ((c.label.match(/（(.)）/) || [])[1]) || '';
+      const known = c => kOf(c) && learned().has(kOf(c));
+      const pool = shuffle((window.COUNTERS_DATA || []).filter(c => c.key !== 'tsu' && c.key !== 'nin').slice());
+      const pickC = pool.filter(known).concat(pool.filter(c => !known(c))).slice(0, 5);
+      pickC.forEach(c => {
+        const r = c.readings.slice(); r.icon = c.icon; out[c.key] = r;
+        if (known(c)) { const k = K12.slice(0, 10).map(n => n + kOf(c)); k.icon = c.icon; out[c.key + '_k'] = k; }
+      });
       return Object.keys(out).length ? out : SOL_MODES.classic.styles();
     },
   },
