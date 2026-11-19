@@ -219,6 +219,7 @@ window.GRAMMAR_NOTES = [
     { ex:['いちねんの なかで いつが いちばん あついですか。', 'ichinen no naka de itsu ga ichiban atsui desu ka.', 'Qual época do ano é a mais quente?'] },
     { ex:['いちがつが いちばん あついです。', 'ichigatsu ga ichiban atsui desu.', 'Janeiro é o mais quente.'] },
     { ex:['かぞくの なかで だれが いちばん せが たかいですか。', 'kazoku no naka de dare ga ichiban se ga takai desu ka.', 'Na sua família, quem é o mais alto?'] },
+    { tip:'Cuidado: <b>なんにん</b> (何人) = "QUANTAS pessoas", não "quem". Pra "quem" use <b>だれ</b>. E <b>何+substantivo</b> ("何くつ") não existe: pra "qual (coisa)" entre várias, use <b>どれ</b> → くつの なかで どれが いちばん やすいですか。' },
     { tip:'Na resposta, repita o que veio na pergunta (りょうりが, せが…): <b>〜が いちばん りょうりが じょうずです</b>. E não use さん pra gente da sua própria família.' },
     { tbl:[['quantos itens', 'pergunta', 'resposta'],
            ['2', 'A と B と <b>どちら</b>が…?', 'A <b>の ほうが</b>…'],

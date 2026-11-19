@@ -39,7 +39,7 @@ function panelQuestion(box, q, onNext, nextLabel = 'Próxima ▸') {
   });
 }
 
-const DOJO_CATS = ['b3', 'vocab', 'kanji', 'word', 'verb', 'adj', 'part', 'count', 'sent', 'order', 'listen', 'read', 'write'];
+const DOJO_CATS = ['b3', 'gap', 'vocab', 'kanji', 'word', 'verb', 'adj', 'part', 'count', 'sent', 'order', 'listen', 'read', 'write'];
 const DOJO_LEN = { write: 5, order: 6 };
 Object.assign(UI, {
   openDojo() {

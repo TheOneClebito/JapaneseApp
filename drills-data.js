@@ -127,3 +127,23 @@ window.KAKI_DATA = [
   {r:'じかん', m:'tempo, hora', k:'{時|じ}間'},
   {r:'はなばたけ', m:'campo de flores', k:'{花|はな}畑'}
 ];
+
+// ---- Complete a lacuna (interrogativos e comparações) — lv = Básico ----
+window.GAP_DATA = [
+  { lv:4, s:['かぞくの なかで ', 'が いちばん うたが じょうずですか。'], ans:'だれ', also:[], opts:['だれ', 'なに', 'どこ', 'なんにん'], pt:'Na família, quem canta melhor?', note:'Pessoa → だれ. (なんにん = QUANTAS pessoas)' },
+  { lv:4, s:['くつの なかで ', 'が いちばん やすいですか。'], ans:'どれ', also:[], opts:['どれ', 'だれ', 'どこ', 'どちら'], pt:'Entre os sapatos, qual é o mais barato?', note:'Qual COISA entre 3 ou mais → どれ.' },
+  { lv:4, s:['いちねんの なかで ', 'が いちばん あついですか。'], ans:'いつ', also:['なんがつ'], opts:['いつ', 'どこ', 'だれ', 'どれ'], pt:'Qual época do ano é a mais quente?', note:'Tempo/época → いつ (ou なんがつ, "que mês").' },
+  { lv:4, s:['ブラジルの なかで ', 'が いちばん あついですか。'], ans:'どこ', also:[], opts:['どこ', 'だれ', 'いつ', 'どちら'], pt:'No Brasil, onde é o lugar mais quente?', note:'Lugar entre 3 ou mais → どこ.' },
+  { lv:4, s:['ホンコンと シンガポールと ', 'が あたたかいですか。'], ans:'どちら', also:[], opts:['どちら', 'どこ', 'どれ', 'だれ'], pt:'Qual é mais quente, Hong Kong ou Singapura?', note:'Só 2 opções → どちら, mesmo sendo lugares.' },
+  { lv:4, s:['バスと ちかてつと ', 'が はやいですか。'], ans:'どちら', also:[], opts:['どちら', 'どれ', 'なに', 'どこ'], pt:'Qual é mais rápido, ônibus ou metrô?', note:'2 opções → どちら.' },
+  { lv:4, s:['ぎゅうにくと とりにくと ぶたにくと ', 'が いちばん すきですか。'], ans:'なに', also:['どれ'], opts:['なに', 'だれ', 'どこ', 'どちら'], pt:'Entre boi, frango e porco, de qual gosta mais?', note:'Coisa entre 3 → なに (ou どれ).' },
+  { lv:4, s:['ジョゼさんと レオさんと アナさんと ', 'が いちばん せが たかいですか。'], ans:'だれ', also:[], opts:['だれ', 'どれ', 'なに', 'どちら'], pt:'Entre José, Léo e Ana, quem é o mais alto?', note:'Pessoa entre 3 → だれ.' },
+  { lv:4, s:['ちかてつ', ' バスより はやいです。'], ans:'の ほうが', also:[], opts:['の ほうが', 'より', 'と', 'が いちばん'], pt:'O metrô é mais rápido que o ônibus.', note:'の ほうが marca quem VENCE a comparação.' },
+  { lv:4, s:['ちかてつの ほうが バス', ' はやいです。'], ans:'より', also:[], opts:['より', 'の ほうが', 'と', 'で'], pt:'O metrô é mais rápido que o ônibus.', note:'より = "do que" (com quem se compara).' },
+  { lv:4, s:['ブラジルは にほん', ' おおきいです。'], ans:'より', also:[], opts:['より', 'の ほうが', 'と', 'が'], pt:'O Brasil é maior que o Japão.', note:'A は B より ~ = A é mais ~ que B.' },
+  { lv:4, s:['しんかんせんと でんしゃと バスと なにが ', ' はやいですか。'], ans:'いちばん', also:[], opts:['いちばん', 'の ほうが', 'より', 'どちら'], pt:'Entre trem-bala, trem e ônibus, qual é o mais rápido?', note:'3 ou mais → いちばん.' },
+  { lv:4, s:['にほんと ブラジルと どちらが じんこうが ', 'ですか。'], ans:'おおい', also:[], opts:['おおい', 'おおきい', 'たかい', 'ながい'], pt:'Qual tem mais população, Japão ou Brasil?', note:'População é おおい/すくない (não おおきい).' },
+  { lv:4, s:['うちで たべる こと', ' そとで たべる ことと どちらが やすいですか。'], ans:'と', also:[], opts:['と', 'の', 'が', 'より'], pt:'O que é mais barato, comer em casa ou fora?', note:'A ことと B ことと どちらが…' },
+  { lv:4, s:['ふたりは たいじゅうが ', 'です。'], ans:'おなじ', also:[], opts:['おなじ', 'いちばん', 'どちら', 'より'], pt:'Os dois têm o mesmo peso.', note:'おなじ = igual.' },
+  { lv:4, s:['どちらも すきですから、', '。'], ans:'きめられません', also:[], opts:['きめられません', 'おなじです', 'いちばんです', 'よりです'], pt:'Gosto dos dois, então não consigo escolher.', note:'きめられません = não consigo escolher.' }
+];

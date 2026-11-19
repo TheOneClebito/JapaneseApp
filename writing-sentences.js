@@ -248,5 +248,15 @@ window.WRITING = [
   { id:'b4f7', diff:'med', level:'Básico 4', pt:'Em dias de chuva, escrevo cartas no quarto.', accept:['あめの ひは へやで てがみを かきます。'] },
   { id:'b4f8', diff:'med', level:'Básico 4', pt:'O Japão compra petróleo dos países árabes.', accept:['にほんは アラブから せきゆを かいます。'] },
   { id:'b4f9', diff:'hard', level:'Básico 4', pt:'Ainda não sou muito bom em japonês.', accept:['わたしは まだ にほんごが あまり じょうずでは ありません。','わたしは まだ にほんごが あまり じょうずじゃ ありません。','まだ にほんごが あまり じょうずでは ありません。','まだ にほんごが あまり じょうずじゃ ありません。'] },
-  { id:'b4f10', diff:'hard', level:'Básico 4', pt:'O Sr. Takeda comprou um par de sapatos e quatro pares de meias.', accept:['たけださんは くつを いっそくと くつしたを よんそく かいました。'] }
+  { id:'b4f10', diff:'hard', level:'Básico 4', pt:'O Sr. Takeda comprou um par de sapatos e quatro pares de meias.', accept:['たけださんは くつを いっそくと くつしたを よんそく かいました。'] },
+  // ---- Básico 4 — interrogativos certos (だれ / どれ / いつ / どちら) ----
+  { id:'b4q1', diff:'med', level:'Básico 4', pt:'Na família, quem canta melhor?', accept:['かぞくの なかで だれが いちばん うたが じょうずですか。'] },
+  { id:'b4q2', diff:'easy', level:'Básico 4', pt:'Minha mãe é quem canta melhor.', accept:['ははが いちばん うたが じょうずです。'] },
+  { id:'b4q3', diff:'med', level:'Básico 4', pt:'Entre os sapatos, qual é o mais barato?', accept:['くつの なかで どれが いちばん やすいですか。'] },
+  { id:'b4q4', diff:'med', level:'Básico 4', pt:'O sapato de 500 ienes é o mais barato.', accept:['ごひゃくえんの くつが いちばん やすいです。'] },
+  { id:'b4q5', diff:'med', level:'Básico 4', pt:'Em que mês do ano faz mais calor?', accept:['いちねんの なかで なんがつが いちばん あついですか。','いちねんで なんがつが いちばん あついですか。'] },
+  { id:'b4q6', diff:'med', level:'Básico 4', pt:'Qual tem mais população, Japão ou Brasil?', accept:['にほんと ブラジルと どちらが じんこうが おおいですか。'] },
+  { id:'b4q7', diff:'easy', level:'Básico 4', pt:'O Brasil tem mais população.', accept:['ブラジルの ほうが じんこうが おおいです。'] },
+  { id:'b4q8', diff:'med', level:'Básico 4', pt:'Qual é mais quente, Hong Kong ou Singapura?', accept:['ホンコンと シンガポールと どちらが あたたかいですか。'] },
+  { id:'b4q9', diff:'easy', level:'Básico 4', pt:'Singapura é mais quente.', accept:['シンガポールの ほうが あたたかいです。'] }
 ];

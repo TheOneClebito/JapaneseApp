@@ -391,6 +391,9 @@ window.VOCAB_DECKS = [
     { jp:'どちらも', mean:'ambos, os dois', ex:'どちらも すきです。', exTr:'Gosto dos dois.' },
     { jp:'きめられません', mean:'não consigo escolher / decidir', ex:'どちらも すきですから、きめられません。', exTr:'Gosto dos dois, então não consigo escolher.' },
     { jp:'すいえい', mean:'natação', ex:'スポーツの なかで すいえいが いちばん すきです。', exTr:'Dos esportes, gosto mais de natação.' },
+    { jp:'じんこう', mean:'população (人口)', ex:'ブラジルは じんこうが おおいです。', exTr:'O Brasil tem muita população.' },
+    { jp:'あたたかい', mean:'quente, morno, agradável (clima)', ex:'シンガポールの ほうが あたたかいです。', exTr:'Singapura é mais quente.' },
+    { jp:'なんがつ', mean:'que mês (何月)', ex:'なんがつが いちばん あついですか。', exTr:'Qual mês é o mais quente?' },
     { jp:'いつ', mean:'quando', ex:'いちねんの なかで いつが いちばん あついですか。', exTr:'Qual época do ano é a mais quente?' }
   ]},
   { id:'b4-l1-kanji', name:'Básico 4 — Palavras dos kanji novos', cards:[

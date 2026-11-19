@@ -36,6 +36,7 @@ const CATS = {
   read:   { ic: '読', pt: 'Leitura (textos)' },
   write:  { ic: '書', pt: 'Escrever kanji' },
   b3:     { ic: '試', pt: 'Prova Básico 3' },
+  gap:    { ic: '空', pt: 'Complete a frase' },
 };
 
 // ---------- Fontes de conteúdo (tudo vem do app de estudo) ----------
@@ -269,6 +270,18 @@ const Q = {
       speak: full,
     };
   },
+  // lacuna: interrogativos (どちら/どれ/だれ/どこ/いつ) e comparações; dá pra escolher ou digitar
+  gap(it) {
+    const full = it.s[0] + it.ans + it.s[1], ok = [it.ans].concat(it.also || []);
+    return {
+      key: 'gp:' + it.s.join('_'), cat: 'gap', ask: 'Complete a frase:', extra: 3,
+      prompt: `<span class="qs">${esc(it.s[0])}<span class="qgap">？</span>${esc(it.s[1])}</span><div class="qsub">${esc(it.pt)}</div>`,
+      typed: true, accept: ok, okVals: ok,
+      options: shuffle(it.opts.slice()).map(x => ({ v: x, html: `<span class="qkopt">${esc(x)}</span>`, ro: kanaToRomaji(x) })),
+      answer: `<b class="jp">${esc(full)}</b><div class="dim">${esc(it.note || '')}</div>`,
+      speak: full,
+    };
+  },
   counter(c, n) {
     const ok = c.readings[n - 1];
     const base = c.readings[1].replace(/^に/, ''); // leitura "sem mudança de som"
@@ -443,6 +456,8 @@ function catBuilders(cat) {
       add(Ln.length > 1, 1, () => Q.readLine(adaptivePick(Ln, L => 'rl:' + L.r.id + ':' + L.i))); break; }
     case 'write': { const K = poolKanji();
       add(K.length, 1, () => Q.write(adaptivePick(K, c => 'wk:' + c))); break; }
+    case 'gap': { const Gp = (window.GAP_DATA || []).filter(g => lvOk(g.lv));
+      add(Gp.length > 1, 1, () => Q.gap(adaptivePick(Gp, g => 'gp:' + g.s.join('_'))), 1); break; }
     case 'b3': { if (!lvOk(3)) break;
       // só o conteúdo da prova do Básico 3: frases pessoais, vocabulário novo e a entrevista do Muyashi
       const ws = b3Writing(), deck = b3Deck(), lines = allLines().filter(L => L.r.id === 'b3-muyashi');

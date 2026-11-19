@@ -3,7 +3,7 @@
 //  MAIN — estado, save, controles, loop, transições, título
 // ============================================================
 const SAVE_KEY = 'kotodama.v1';
-const GAME_VERSION = '2.5';
+const GAME_VERSION = '2.6';
 // limpa o cache do jogo, remove o service worker e recarrega a versão mais nova (o save é mantido)
 async function forceUpdate() {
   toast('🔄 Atualizando…', 5000);
