@@ -258,5 +258,16 @@ window.WRITING = [
   { id:'b4q6', diff:'med', level:'Básico 4', pt:'Qual tem mais população, Japão ou Brasil?', accept:['にほんと ブラジルと どちらが じんこうが おおいですか。'] },
   { id:'b4q7', diff:'easy', level:'Básico 4', pt:'O Brasil tem mais população.', accept:['ブラジルの ほうが じんこうが おおいです。'] },
   { id:'b4q8', diff:'med', level:'Básico 4', pt:'Qual é mais quente, Hong Kong ou Singapura?', accept:['ホンコンと シンガポールと どちらが あたたかいですか。'] },
-  { id:'b4q9', diff:'easy', level:'Básico 4', pt:'Singapura é mais quente.', accept:['シンガポールの ほうが あたたかいです。'] }
+  { id:'b4q9', diff:'easy', level:'Básico 4', pt:'Singapura é mais quente.', accept:['シンガポールの ほうが あたたかいです。'] },
+  // ---- Básico 4 — よみましょう: a família musical ----
+  { id:'b4y1', diff:'med', level:'Básico 4', pt:'Meu pai fala vários idiomas estrangeiros.', accept:['ちちは がいこくごを いろいろ はなします。'] },
+  { id:'b4y2', diff:'easy', level:'Básico 4', pt:'O francês é o que ele fala melhor.', accept:['フランスごが いちばん じょうずです。'] },
+  { id:'b4y3', diff:'med', level:'Básico 4', pt:'No piano, minha mãe é muito melhor.', accept:['ピアノは ははの ほうが ずっと じょうずです。'] },
+  { id:'b4y4', diff:'hard', level:'Básico 4', pt:'Minha mãe é especialmente boa em assar bolos.', accept:['ははは とくに ケーキを やく ことが じょうずです。','ははは とくに ケーキを やく ことが とても じょうずです。'] },
+  { id:'b4y5', diff:'hard', level:'Básico 4', pt:'Minha irmã gosta de ler e vai com frequência à biblioteca.', accept:['いもうとは ほんを よむ ことが すきで、よく としょかんへ いきます。','いもうとは ほんを よむ ことが すきで、よく としょかんに いきます。'] },
+  { id:'b4y6', diff:'hard', level:'Básico 4', pt:'Eu gosto mais de desenhar do que de tocar violino.', accept:['わたしは バイオリンを ひく ことより えを かく ことの ほうが すきです。','バイオリンを ひく ことより えを かく ことの ほうが すきです。'] },
+  { id:'b4y7', diff:'med', level:'Básico 4', pt:'Eu me formei na faculdade no ano passado.', accept:['きょねん だいがくを そつぎょうしました。','わたしは きょねん だいがくを そつぎょうしました。'] },
+  { id:'b4y8', diff:'hard', level:'Básico 4', pt:'Uma vez por mês fazemos um mini-concerto em casa.', accept:['いっかげつに いっかい うちで ミニ・コンサートを ひらきます。','いっかげつに いっかい うちで ミニコンサートを ひらきます。'] },
+  { id:'b4y9', diff:'med', level:'Básico 4', pt:'Na minha família, todo mundo adora música.', accept:['わたしの かぞくは みんな おんがくが だいすきです。'] },
+  { id:'b4y10', diff:'med', level:'Básico 4', pt:'Eu também toco violino, mas a Maria toca melhor.', accept:['わたしも バイオリンを ひきますが、マリアの ほうが じょうずです。'] }
 ];

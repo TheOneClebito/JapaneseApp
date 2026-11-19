@@ -444,5 +444,55 @@ window.READINGS = [
       { jp:'〜足（〜そく）', pt:'contador de pares de calçado' },
       { jp:'そふ', pt:'meu avô' }
     ]
+  },
+  {
+    id:'b4-kazoku', title:'{私|わたし}の かぞく', sub:'よみましょう — a família musical (L1)', level:'Básico 4',
+    lines:[
+      { jp:'{私|わたし}の かぞくは {四人|よにん}です。{父|ちち}と {母|はは}と {妹|いもうと}と {私|わたし}です。', pt:'Minha família tem quatro pessoas: meu pai, minha mãe, minha irmã mais nova e eu.' },
+      { jp:'{私|わたし}たちは リオデジャネイロの こうがいに すんでいます。', pt:'Nós moramos no subúrbio do Rio de Janeiro.' },
+      { jp:'{父|ちち}は {新聞社|しんぶんしゃ}で はたらいています。{毎朝|まいあさ} {車|くるま}で {会社|かいしゃ}へ {行|い}きます。', pt:'Meu pai trabalha numa empresa jornalística. Toda manhã vai de carro para a empresa.' },
+      { jp:'がいこくごを いろいろ {話|はな}します。フランスごが いちばん {上手|じょうず}です。', pt:'Ele fala vários idiomas estrangeiros. O francês é o que ele fala melhor.' },
+      { jp:'うたを うたいますが、ピアノも ひきます。', pt:'Ele canta, e também toca piano.' },
+      { jp:'でも、ピアノは {母|はは}のほうが ずっと {上手|じょうず}です。', pt:'Mas, no piano, minha mãe é muito melhor.' },
+      { jp:'{母|はは}は りょうりを つくることが {好|す}きです。', pt:'Minha mãe gosta de cozinhar.' },
+      { jp:'とくに ケーキを やくことが とても {上手|じょうず}です。', pt:'Ela é especialmente boa em assar bolos.' },
+      { jp:'かぞくの {誕生日|たんじょうび}には いつも おいしい ケーキを つくってくれます。', pt:'Nos aniversários da família, ela sempre faz um bolo gostoso pra gente.' },
+      { jp:'{妹|いもうと}の マリアは {本|ほん}を {読|よ}むことが {好|す}きで、よく としょかんへ {行|い}きます。', pt:'Minha irmã Maria gosta de ler e vai com frequência à biblioteca.' },
+      { jp:'マリアは バイオリンが {上手|じょうず}です。', pt:'A Maria toca violino bem.' },
+      { jp:'{私|わたし}は {去年|きょねん} {大学|だいがく}を そつぎょうしました。', pt:'Eu me formei na faculdade no ano passado.' },
+      { jp:'そして、{今|いま} こうぎょうデザインの {会社|かいしゃ}で はたらいています。', pt:'E agora trabalho numa empresa de desenho industrial.' },
+      { jp:'{私|わたし}も バイオリンを ひきますが、マリアのほうが {上手|じょうず}です。', pt:'Eu também toco violino, mas a Maria toca melhor.' },
+      { jp:'{私|わたし}は バイオリンを ひくことより えを かくことの ほうが {好|す}きです。', pt:'Eu gosto mais de desenhar do que de tocar violino.' },
+      { jp:'{一|いっ}か{月|げつ}に {一|いっ}かい、{土曜日|どようび}の {夜|よる} うちで ミニ・コンサートを ひらきます。', pt:'Uma vez por mês, no sábado à noite, fazemos um mini-concerto em casa.' },
+      { jp:'{私|わたし}の かぞくは みんな おんがくが {大好|だいす}きです。', pt:'Na minha família, todo mundo adora música.' }
+    ],
+    vocab:[
+      { jp:'こうがい', pt:'subúrbio' },
+      { jp:'新聞社（しんぶんしゃ）', pt:'empresa jornalística' },
+      { jp:'がいこくご', pt:'idioma estrangeiro' },
+      { jp:'いろいろ', pt:'vários' },
+      { jp:'ピアノを ひく', pt:'tocar piano' },
+      { jp:'ずっと', pt:'muito mais (com のほうが)' },
+      { jp:'ケーキを やく', pt:'assar bolo' },
+      { jp:'とくに', pt:'especialmente' },
+      { jp:'よく', pt:'frequentemente' },
+      { jp:'としょかん', pt:'biblioteca' },
+      { jp:'そつぎょうする', pt:'formar-se, graduar-se' },
+      { jp:'こうぎょうデザイン', pt:'desenho industrial' },
+      { jp:'ミニ・コンサート', pt:'mini-concerto' },
+      { jp:'コンサートを ひらく', pt:'realizar um concerto' },
+      { jp:'バイオリン', pt:'violino' },
+      { jp:'〜が すきで、', pt:'gosta de… e…' }
+    ],
+    questions:[
+      { q:'Quantas pessoas há na família e quem são?', a:'Quatro: pai, mãe, irmã mais nova (Maria) e o narrador.' },
+      { q:'Onde eles moram?', a:'No subúrbio (こうがい) do Rio de Janeiro.' },
+      { q:'Onde o pai trabalha e qual idioma ele fala melhor?', a:'Numa empresa jornalística (新聞社). Fala melhor o francês (フランスご).' },
+      { q:'Quem toca piano melhor, o pai ou a mãe?', a:'A mãe — muito melhor (母のほうが ずっと 上手).' },
+      { q:'Em que a mãe é especialmente boa?', a:'Em assar bolos (ケーキを やくこと). Faz bolo nos aniversários.' },
+      { q:'Do que a Maria gosta e que instrumento ela toca bem?', a:'Gosta de ler e vai muito à biblioteca. Toca violino bem.' },
+      { q:'O que o narrador faz hoje e do que gosta mais?', a:'Trabalha numa empresa de desenho industrial. Gosta mais de desenhar do que de tocar violino.' },
+      { q:'Com que frequência fazem o mini-concerto?', a:'Uma vez por mês, no sábado à noite (一か月に一かい、土曜日の夜).' }
+    ]
   }
 ];

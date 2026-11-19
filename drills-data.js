@@ -145,5 +145,8 @@ window.GAP_DATA = [
   { lv:4, s:['にほんと ブラジルと どちらが じんこうが ', 'ですか。'], ans:'おおい', also:[], opts:['おおい', 'おおきい', 'たかい', 'ながい'], pt:'Qual tem mais população, Japão ou Brasil?', note:'População é おおい/すくない (não おおきい).' },
   { lv:4, s:['うちで たべる こと', ' そとで たべる ことと どちらが やすいですか。'], ans:'と', also:[], opts:['と', 'の', 'が', 'より'], pt:'O que é mais barato, comer em casa ou fora?', note:'A ことと B ことと どちらが…' },
   { lv:4, s:['ふたりは たいじゅうが ', 'です。'], ans:'おなじ', also:[], opts:['おなじ', 'いちばん', 'どちら', 'より'], pt:'Os dois têm o mesmo peso.', note:'おなじ = igual.' },
+  { lv:4, s:['ピアノは ははの ほうが ', ' じょうずです。'], ans:'ずっと', also:[], opts:['ずっと', 'いちばん', 'より', 'とくに'], pt:'No piano, minha mãe é muito melhor.', note:'〜のほうが ずっと〜 = muito mais…' },
+  { lv:4, s:['バイオリンを ひく こと', ' えを かく ことの ほうが すきです。'], ans:'より', also:[], opts:['より', 'と', 'の ほうが', 'が'], pt:'Gosto mais de desenhar do que de tocar violino.', note:'A ことより B ことの ほうが = B mais do que A.' },
+  { lv:4, s:['ははは ', ' ケーキを やく ことが じょうずです。'], ans:'とくに', also:[], opts:['とくに', 'いろいろ', 'ずっと', 'よく'], pt:'Minha mãe é especialmente boa em assar bolos.', note:'とくに = especialmente.' },
   { lv:4, s:['どちらも すきですから、', '。'], ans:'きめられません', also:[], opts:['きめられません', 'おなじです', 'いちばんです', 'よりです'], pt:'Gosto dos dois, então não consigo escolher.', note:'きめられません = não consigo escolher.' }
 ];

@@ -191,6 +191,8 @@ window.GRAMMAR_NOTES = [
     { ex:['ちかてつの ほうが はやいです。', 'chikatetsu no hou ga hayai desu.', 'O metrô é mais rápido.'] },
     { ex:['ちかてつの ほうが バスより はやいです。', 'chikatetsu no hou ga basu yori hayai desu.', 'O metrô é mais rápido que o ônibus.'] },
     { ex:['バスより ちかてつの ほうが はやいです。', 'basu yori chikatetsu no hou ga hayai desu.', '(o mesmo — a ordem pode trocar)'] },
+    { p:'Pra dizer "<b>MUITO</b> mais", coloque <b>ずっと (zutto)</b> antes do adjetivo:' },
+    { ex:['ピアノは ははの ほうが ずっと じょうずです。', 'piano wa haha no hou ga zutto jouzu desu.', 'No piano, minha mãe é muito melhor.'] },
     { p:'Pra só AFIRMAR uma comparação, sem ter sido perguntado: <b>A wa B yori 〜 desu</b>.' },
     { ex:['ブラジルは にほんより おおきいです。', 'burajiru wa nihon yori ookii desu.', 'O Brasil é maior que o Japão.'] },
     { p:'Juntando dois adjetivos (い → 〜くて): <b>takai + osoi → takakute osoi</b>.' },
@@ -207,6 +209,8 @@ window.GRAMMAR_NOTES = [
     { ex:['うちで たべる ことの ほうが やすいです。', 'uchi de taberu koto no hou ga yasui desu.', 'Comer em casa é mais barato.'] },
     { ex:['ほんを よむ ことの ほうが おもしろいです。', 'hon wo yomu koto no hou ga omoshiroi desu.', 'Ler livros é mais interessante.'] },
     { ex:['グループで りょこうする ことの ほうが すきです。', 'guruupu de ryokou suru koto no hou ga suki desu.', 'Gosto mais de viajar em grupo.'] },
+    { p:'Também dá pra usar <b>より</b> com ações: <b>A ことより B ことの ほうが</b> = "B mais do que A".' },
+    { ex:['バイオリンを ひく ことより えを かく ことの ほうが すきです。', 'baiorin wo hiku koto yori e wo kaku koto no hou ga suki desu.', 'Gosto mais de desenhar do que de tocar violino.'] },
     { tip:'O verbo antes de <b>koto</b> fica na forma de <b>dicionário</b> (taberu, yomu, suru), nunca na forma ます.' },
   ]},
   { id:'b4-ichiban', level:4, title:'ichiban — "o mais" (3 ou mais coisas / um grupo)', sub:'〜が いちばん · 〜の なかで', blocks:[

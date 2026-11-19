@@ -411,5 +411,26 @@ window.VOCAB_DECKS = [
     { jp:'じびか', mean:'otorrino (耳鼻科)', ex:'じびかへ いきます。', exTr:'Vou ao otorrino.' },
     { jp:'ふそく', mean:'falta, insuficiência (不足)', ex:'すいみん ふそくです。', exTr:'Estou com falta de sono.' },
     { jp:'みぎて', mean:'mão direita (右手)', ex:'みぎてで かきます。', exTr:'Escrevo com a mão direita.' }
+  ]},
+  { id:'b4-l1-yomu', name:'Básico 4 — Leitura: a família (L1)', cards:[
+    { jp:'こうがい', mean:'subúrbio', ex:'リオの こうがいに すんでいます。', exTr:'Moro no subúrbio do Rio.' },
+    { jp:'しんぶんしゃ', mean:'empresa jornalística (新聞社)', ex:'ちちは しんぶんしゃで はたらいています。', exTr:'Meu pai trabalha numa empresa jornalística.' },
+    { jp:'がいこくご', mean:'idioma estrangeiro', ex:'がいこくごを いろいろ はなします。', exTr:'Fala vários idiomas estrangeiros.' },
+    { jp:'いろいろ', mean:'vários, diversos', ex:'いろいろな くにへ いきました。', exTr:'Fui a vários países.' },
+    { jp:'ひきます', mean:'tocar (instrumento de corda/tecla)', ex:'ピアノを ひきます。', exTr:'Toco piano.' },
+    { jp:'ずっと', mean:'muito mais (com 〜のほうが)', ex:'ははの ほうが ずっと じょうずです。', exTr:'Minha mãe é muito melhor.' },
+    { jp:'やきます', mean:'assar', ex:'ケーキを やきます。', exTr:'Asso um bolo.' },
+    { jp:'とくに', mean:'especialmente', ex:'とくに ケーキが すきです。', exTr:'Gosto especialmente de bolo.' },
+    { jp:'よく', mean:'frequentemente, sempre', ex:'よく としょかんへ いきます。', exTr:'Vou com frequência à biblioteca.' },
+    { jp:'としょかん', mean:'biblioteca', ex:'としょかんで ほんを よみます。', exTr:'Leio livros na biblioteca.' },
+    { jp:'そつぎょうします', mean:'formar-se, graduar-se', ex:'きょねん だいがくを そつぎょうしました。', exTr:'Me formei na faculdade ano passado.' },
+    { jp:'こうぎょうデザイン', mean:'desenho industrial', ex:'こうぎょうデザインの かいしゃで はたらいています。', exTr:'Trabalho numa empresa de desenho industrial.' },
+    { jp:'ミニ・コンサート', mean:'mini-concerto', ex:'うちで ミニ・コンサートを ひらきます。', exTr:'Fazemos um mini-concerto em casa.' },
+    { jp:'ひらきます', mean:'realizar, abrir (evento)', ex:'コンサートを ひらきます。', exTr:'Realizamos um concerto.' },
+    { jp:'バイオリン', mean:'violino', ex:'マリアは バイオリンが じょうずです。', exTr:'A Maria toca violino bem.' },
+    { jp:'ピアノ', mean:'piano', ex:'ははは ピアノが じょうずです。', exTr:'Minha mãe toca piano bem.' },
+    { jp:'うたいます', mean:'cantar', ex:'うたを うたいます。', exTr:'Canto uma música.' },
+    { jp:'フランスご', mean:'francês (idioma)', ex:'フランスごが いちばん じょうずです。', exTr:'O francês é o que falo melhor.' },
+    { jp:'きょねん', mean:'ano passado (去年)', ex:'きょねん だいがくを そつぎょうしました。', exTr:'Me formei ano passado.' }
   ]}
 ];
