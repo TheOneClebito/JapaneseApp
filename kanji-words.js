@@ -41,7 +41,7 @@ window.KANJI_WORDS = [
   { w:'門', read:'もん', mean:'portão' },
   // 火
   { w:'火{曜|よう}日', read:'かようび', mean:'terça-feira' },
-  { w:'{花|はな}火', read:'はなび', mean:'fogos de artifício' },
+  { w:'花火', read:'はなび', mean:'fogos de artifício' },
   // 水
   { w:'水{曜|よう}日', read:'すいようび', mean:'quarta-feira' },
   { w:'水', read:'みず', mean:'água' },
@@ -144,7 +144,7 @@ window.KANJI_WORDS = [
   { w:'一{週|しゅう}間', read:'いっしゅうかん', mean:'uma semana' },
   { w:'間に{合|あ}う', read:'まにあう', mean:'chegar a tempo' },
   { w:'畑', read:'はたけ', mean:'horta / campo cultivado' },
-  { w:'{花|はな}畑', read:'はなばたけ', mean:'campo de flores' },
+  { w:'花畑', read:'はなばたけ', mean:'campo de flores' },
   { w:'岩', read:'いわ', mean:'rocha / rochedo' },
   { w:'岩山', read:'いわやま', mean:'montanha rochosa' },
   { w:'十二{時|じ}半', read:'じゅうにじはん', mean:'12h30 (meio-dia e meia)' },
@@ -199,5 +199,35 @@ window.KANJI_WORDS = [
   { w:'雨{天|てん}', read:'うてん', mean:'tempo chuvoso' },
   { w:'雨の日', read:'あめのひ', mean:'dia de chuva' },
   { w:'石川{県|けん}', read:'いしかわけん', mean:'província de Ishikawa' },
-  { w:'竹下さん', read:'たけしたさん', mean:'Sr. Takeshita' }
+  { w:'竹下さん', read:'たけしたさん', mean:'Sr. Takeshita' },
+  // 花 (Básico 4)
+  { w:'花', read:'はな', mean:'flor' },
+  { w:'生け花', read:'いけばな', mean:'arranjo floral (ikebana)' },
+  { w:'生花', read:'せいか', mean:'flores naturais' },
+  { w:'花{見|み}', read:'はなみ', mean:'ver as cerejeiras (hanami)' },
+  { w:'花{屋|や}', read:'はなや', mean:'floricultura' },
+  // 茶 (Básico 4)
+  { w:'お茶', read:'おちゃ', mean:'chá' },
+  { w:'{紅|こう}茶', read:'こうちゃ', mean:'chá preto' },
+  { w:'茶{色|いろ}', read:'ちゃいろ', mean:'marrom' },
+  { w:'{喫|きっ}茶{店|てん}', read:'きっさてん', mean:'cafeteria' },
+  { w:'{緑|りょく}茶', read:'りょくちゃ', mean:'chá verde' },
+  // 肉 (Básico 4)
+  { w:'肉', read:'にく', mean:'carne' },
+  { w:'{牛|ぎゅう}肉', read:'ぎゅうにく', mean:'carne bovina' },
+  { w:'{鳥|とり}肉', read:'とりにく', mean:'carne de ave, frango' },
+  { w:'肉体', read:'にくたい', mean:'corpo (físico)' },
+  { w:'{豚|ぶた}肉', read:'ぶたにく', mean:'carne de porco' },
+  // 文 (Básico 4)
+  { w:'文', read:'ぶん', mean:'frase' },
+  { w:'文学', read:'ぶんがく', mean:'literatura' },
+  { w:'文{部|ぶ}{科|か}学{省|しょう}', read:'もんぶかがくしょう', mean:'Ministério da Educação e Ciência' },
+  { w:'{作|さく}文', read:'さくぶん', mean:'redação' },
+  { w:'文{化|か}', read:'ぶんか', mean:'cultura' },
+  // 字 (Básico 4)
+  { w:'字', read:'じ', mean:'letra' },
+  { w:'{漢|かん}字', read:'かんじ', mean:'kanji (ideograma chinês)' },
+  { w:'ローマ字', read:'ローマじ', mean:'letra romana (romaji)' },
+  { w:'文字', read:'もじ', mean:'letra, caractere' },
+  { w:'{数|すう}字', read:'すうじ', mean:'número, algarismo' }
 ];

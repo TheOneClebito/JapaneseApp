@@ -62,5 +62,20 @@ window.KANJI_SENTENCES = [
   { s:'私は まだ 日本{語|ご}が あまり [上手|じょうず]では ありません。', pt:'Ainda não sou muito bom em japonês.' },
   { s:'[竹田|たけだ]さんは くつを 一足と {靴下|くつした}を 四足 かいました。', pt:'O Sr. Takeda comprou um par de sapatos e quatro pares de meias.' },
   { s:'竹田さんは くつを [一足|いっそく]と {靴下|くつした}を 四足 かいました。', pt:'O Sr. Takeda comprou um par de sapatos e quatro pares de meias.' },
-  { s:'竹田さんは くつを 一足と {靴下|くつした}を [四足|よんそく] かいました。', pt:'O Sr. Takeda comprou um par de sapatos e quatro pares de meias.' }
+  { s:'竹田さんは くつを 一足と {靴下|くつした}を [四足|よんそく] かいました。', pt:'O Sr. Takeda comprou um par de sapatos e quatro pares de meias.' },
+  // ---- Básico 4: 花茶肉文字 ----
+  { s:'あさは いつも [お茶|おちゃ]を のみます。', pt:'De manhã sempre tomo chá.' },
+  { s:'この かばんは [茶|ちゃ]{色|いろ}です。', pt:'Esta bolsa é marrom.' },
+  { s:'{喫|きっ}[茶|さ]{店|てん}で {紅|こう}茶を のみました。', pt:'Tomei chá preto na cafeteria.' },
+  { s:'私は [肉|にく]が 好きです。', pt:'Eu gosto de carne.' },
+  { s:'{牛|ぎゅう}肉と {鳥|とり}[肉|にく]と どちらが 好きですか。', pt:'Do que você gosta mais, carne bovina ou frango?' },
+  { s:'この [文|ぶん]を {読|よ}んで ください。', pt:'Leia esta frase, por favor.' },
+  { s:'日本の [文学|ぶんがく]が 好きです。', pt:'Gosto de literatura japonesa.' },
+  { s:'しゅくだいは {作|さく}[文|ぶん]です。', pt:'A lição de casa é uma redação.' },
+  { s:'[字|じ]が 上手ですね。', pt:'Sua letra é bonita, hein.' },
+  { s:'まいにち {漢|かん}[字|じ]を {書|か}きます。', pt:'Escrevo kanji todos os dias.' },
+  { s:'この [文字|もじ]は {読|よ}めません。', pt:'Não consigo ler estas letras.' },
+  { s:'にわに [花|はな]が たくさん あります。', pt:'Há muitas flores no jardim.' },
+  { s:'日本の [生け花|いけばな]は きれいです。', pt:'O ikebana japonês é bonito.' },
+  { s:'なつに [花火|はなび]を {見|み}ました。', pt:'No verão, vi fogos de artifício.' }
 ];

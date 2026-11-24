@@ -432,5 +432,22 @@ window.VOCAB_DECKS = [
     { jp:'うたいます', mean:'cantar', ex:'うたを うたいます。', exTr:'Canto uma música.' },
     { jp:'フランスご', mean:'francês (idioma)', ex:'フランスごが いちばん じょうずです。', exTr:'O francês é o que falo melhor.' },
     { jp:'きょねん', mean:'ano passado (去年)', ex:'きょねん だいがくを そつぎょうしました。', exTr:'Me formei ano passado.' }
+  ]},
+  { id:'b4-l2-kanji', name:'Básico 4 — Kanji 花茶肉文字', cards:[
+    { jp:'はな', mean:'flor (花)', ex:'にわに はなが あります。', exTr:'Há flores no jardim.' },
+    { jp:'いけばな', mean:'ikebana, arranjo floral (生け花)', ex:'いけばなを ならって います。', exTr:'Estou aprendendo ikebana.' },
+    { jp:'せいか', mean:'flores naturais (生花)', ex:'せいかは たかいです。', exTr:'Flores naturais são caras.' },
+    { jp:'はなみ', mean:'hanami, ver as cerejeiras (花見)', ex:'はるに はなみを します。', exTr:'Na primavera fazemos hanami.' },
+    { jp:'こうちゃ', mean:'chá preto (紅茶)', ex:'こうちゃを ください。', exTr:'Um chá preto, por favor.' },
+    { jp:'にく', mean:'carne (肉)', ex:'にくが すきです。', exTr:'Gosto de carne.' },
+    { jp:'にくたい', mean:'corpo físico (肉体)', ex:'にくたいろうどうは たいへんです。', exTr:'Trabalho braçal é pesado.' },
+    { jp:'ぶん', mean:'frase (文)', ex:'この ぶんを よんで ください。', exTr:'Leia esta frase.' },
+    { jp:'ぶんがく', mean:'literatura (文学)', ex:'にほんの ぶんがくが すきです。', exTr:'Gosto de literatura japonesa.' },
+    { jp:'もんぶかがくしょう', mean:'Ministério da Educação e Ciência (文部科学省)', ex:'もんぶかがくしょうは とうきょうに あります。', exTr:'O Ministério da Educação fica em Tóquio.' },
+    { jp:'さくぶん', mean:'redação (作文)', ex:'しゅくだいは さくぶんです。', exTr:'A lição de casa é uma redação.' },
+    { jp:'じ', mean:'letra, caligrafia (字)', ex:'じが じょうずですね。', exTr:'Sua letra é bonita.' },
+    { jp:'かんじ', mean:'kanji (漢字)', ex:'まいにち かんじを かきます。', exTr:'Escrevo kanji todo dia.' },
+    { jp:'ローマじ', mean:'romaji, letra romana (ローマ字)', ex:'ローマじで かいて ください。', exTr:'Escreva em romaji, por favor.' },
+    { jp:'もじ', mean:'letra, caractere (文字)', ex:'この もじは よめません。', exTr:'Não consigo ler esta letra.' }
   ]}
 ];

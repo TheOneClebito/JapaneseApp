@@ -269,5 +269,17 @@ window.WRITING = [
   { id:'b4y7', diff:'med', level:'Básico 4', pt:'Eu me formei na faculdade no ano passado.', accept:['きょねん だいがくを そつぎょうしました。','わたしは きょねん だいがくを そつぎょうしました。'] },
   { id:'b4y8', diff:'hard', level:'Básico 4', pt:'Uma vez por mês fazemos um mini-concerto em casa.', accept:['いっかげつに いっかい うちで ミニ・コンサートを ひらきます。','いっかげつに いっかい うちで ミニコンサートを ひらきます。'] },
   { id:'b4y9', diff:'med', level:'Básico 4', pt:'Na minha família, todo mundo adora música.', accept:['わたしの かぞくは みんな おんがくが だいすきです。'] },
-  { id:'b4y10', diff:'med', level:'Básico 4', pt:'Eu também toco violino, mas a Maria toca melhor.', accept:['わたしも バイオリンを ひきますが、マリアの ほうが じょうずです。'] }
+  { id:'b4y10', diff:'med', level:'Básico 4', pt:'Eu também toco violino, mas a Maria toca melhor.', accept:['わたしも バイオリンを ひきますが、マリアの ほうが じょうずです。'] },
+  // ---- Básico 4 — kanji 花茶肉文字 ----
+  { id:'b4k1', diff:'easy', level:'Básico 4', pt:'De manhã sempre tomo chá.', accept:['あさは いつも おちゃを のみます。'] },
+  { id:'b4k2', diff:'easy', level:'Básico 4', pt:'Esta bolsa é marrom.', accept:['この かばんは ちゃいろです。'] },
+  { id:'b4k3', diff:'med', level:'Básico 4', pt:'Vamos tomar um chá na cafeteria.', accept:['きっさてんで おちゃを のみましょう。'] },
+  { id:'b4k4', diff:'easy', level:'Básico 4', pt:'Eu gosto de carne.', accept:['わたしは にくが すきです。','にくが すきです。'] },
+  { id:'b4k5', diff:'med', level:'Básico 4', pt:'Do que você gosta mais, carne bovina ou frango?', accept:['ぎゅうにくと とりにくと どちらが すきですか。'] },
+  { id:'b4k6', diff:'easy', level:'Básico 4', pt:'Gosto mais de frango.', accept:['とりにくの ほうが すきです。'] },
+  { id:'b4k7', diff:'med', level:'Básico 4', pt:'Gosto de literatura japonesa.', accept:['にほんの ぶんがくが すきです。'] },
+  { id:'b4k8', diff:'easy', level:'Básico 4', pt:'A lição de casa é uma redação.', accept:['しゅくだいは さくぶんです。'] },
+  { id:'b4k9', diff:'easy', level:'Básico 4', pt:'Sua letra é bonita, hein.', accept:['じが じょうずですね。'] },
+  { id:'b4k10', diff:'med', level:'Básico 4', pt:'Escrevo kanji todos os dias.', accept:['まいにち かんじを かきます。'] },
+  { id:'b4k11', diff:'med', level:'Básico 4', pt:'Há muitas flores no jardim.', accept:['にわに はなが たくさん あります。'] }
 ];

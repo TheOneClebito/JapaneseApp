@@ -72,5 +72,11 @@ window.KANJI_DEX = [
   { c:'米', on:['ベイ','マイ'], kun:['こめ'], mean:'arroz', week:8, level:4 },
   { c:'貝', on:['バイ'], kun:['かい'], mean:'concha, marisco', week:8, level:4 },
   { c:'石', on:['セキ'], kun:['いし'], mean:'pedra', week:8, level:4 },
-  { c:'糸', on:['シ'], kun:['いと'], mean:'fio, linha', week:8, level:4 }
+  { c:'糸', on:['シ'], kun:['いと'], mean:'fio, linha', week:8, level:4 },
+  // ---- Básico 4 (漢字 66–70) ----
+  { c:'花', on:['カ'], kun:['はな'], mean:'flor', week:9, level:4 },
+  { c:'茶', on:['チャ','サ'], kun:[], mean:'chá', week:9, level:4 },
+  { c:'肉', on:['ニク'], kun:[], mean:'carne', week:9, level:4 },
+  { c:'文', on:['ブン','モン'], kun:['ふみ'], mean:'frase, texto', week:9, level:4 },
+  { c:'字', on:['ジ'], kun:[], mean:'letra, caractere', week:9, level:4 }
 ];
