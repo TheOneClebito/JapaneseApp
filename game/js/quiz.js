@@ -215,7 +215,8 @@ const Q = {
   },
   verbForm(v, form) {
     const k = v.kana, stem = k.slice(0, -1), iRow = I_ROW[k.slice(-1)] || '';
-    const F = { te: ['て', teForm], nai: ['ない', naiForm], ta: ['た (passado)', taForm], masu: ['ます', masuForm] }[form];
+    const TAI = { tai: 'たい (quero)', takunai: 'たくない (não quero)', takatta: 'たかった (queria)', takunakatta: 'たくなかった (não queria)' };
+    const F = TAI[form] ? [TAI[form], x => taiForm(x, form)] : { te: ['て', teForm], nai: ['ない', naiForm], ta: ['た (passado)', taForm], masu: ['ます', masuForm] }[form];
     const ok = F[1](v);
     let wrong = [];
     if (form === 'te' || form === 'ta') {
@@ -228,6 +229,12 @@ const Q = {
       wrong = [stem + 'ない', stem + 'らない', stem + 'わない', stem + iRow + 'ない', k + 'ない'];
       if (k.endsWith('くる')) wrong.push(k.slice(0, -2) + 'きない', k.slice(0, -2) + 'くない');
       if (k.endsWith('する')) wrong.push(k.slice(0, -2) + 'さない', k.slice(0, -2) + 'すない');
+    } else if (TAI[form]) {
+      const ends = ['たい', 'たくない', 'たかった', 'たくなかった'], mine = ok.slice(masuForm(v).length - 2);
+      const st = masuForm(v).slice(0, -2);
+      wrong = [k + mine, stem + mine, stem + 'い' + mine, teForm(v) + mine].concat(ends.filter(e => e !== mine).map(e => st + e));
+      if (form === 'takatta') wrong.push(st + 'たいでした');
+      if (form === 'takunai') wrong.push(st + 'たいない');
     } else {
       wrong = [stem + 'ます', stem + 'ります', stem + iRow + 'ます', k + 'ます'];
       if (k.endsWith('くる')) wrong.push(k.slice(0, -2) + 'くります', k.slice(0, -2) + 'こます');
@@ -438,7 +445,7 @@ function catBuilders(cat) {
       add(V.length > 1, .4, () => Q.vocabRev(adaptivePick(V, v => 'vr:' + v.jp)), 1); break; }
     case 'verb': { // ます = Básico 2 · て/ない/た = Básico 3
       const vs = allVerbs(); if (vs.length < 3) break;
-      [['masu', 1.5, 2], ['te', 3, 3], ['nai', 2.5, 3], ['ta', 2, 3]].forEach(([f, w, lv]) =>
+      [['masu', 1.5, 2], ['te', 3, 3], ['nai', 2.5, 3], ['ta', 2, 3], ['tai', 1.5, 4], ['takunai', 1, 4], ['takatta', 1, 4], ['takunakatta', 1, 4]].forEach(([f, w, lv]) =>
         add(lvOk(lv), w, () => Q.verbForm(adaptivePick(vs, v => 'v' + f + ':' + v.kana), f), 1)); break; }
     case 'adj': add(lvOk(2) && allAdj().length > 2, 1, () => { const f = pick(['neg', 'past', 'pastneg', 'te']); return Q.adjForm(adaptivePick(allAdj(), a => 'a' + f + ':' + a.kana), f); }, 1); break;
     case 'part': add(lvOk(2) && allParts().length > 2, 1, () => Q.particle(adaptivePick(allParts(), p => 'pa:' + p.s.join('_')))); break;

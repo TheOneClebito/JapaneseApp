@@ -148,5 +148,21 @@ window.GAP_DATA = [
   { lv:4, s:['ピアノは ははの ほうが ', ' じょうずです。'], ans:'ずっと', also:[], opts:['ずっと', 'いちばん', 'より', 'とくに'], pt:'No piano, minha mãe é muito melhor.', note:'〜のほうが ずっと〜 = muito mais…' },
   { lv:4, s:['バイオリンを ひく こと', ' えを かく ことの ほうが すきです。'], ans:'より', also:[], opts:['より', 'と', 'の ほうが', 'が'], pt:'Gosto mais de desenhar do que de tocar violino.', note:'A ことより B ことの ほうが = B mais do que A.' },
   { lv:4, s:['ははは ', ' ケーキを やく ことが じょうずです。'], ans:'とくに', also:[], opts:['とくに', 'いろいろ', 'ずっと', 'よく'], pt:'Minha mãe é especialmente boa em assar bolos.', note:'とくに = especialmente.' },
-  { lv:4, s:['どちらも すきですから、', '。'], ans:'きめられません', also:[], opts:['きめられません', 'おなじです', 'いちばんです', 'よりです'], pt:'Gosto dos dois, então não consigo escolher.', note:'きめられません = não consigo escolher.' }
+  { lv:4, s:['どちらも すきですから、', '。'], ans:'きめられません', also:[], opts:['きめられません', 'おなじです', 'いちばんです', 'よりです'], pt:'Gosto dos dois, então não consigo escolher.', note:'きめられません = não consigo escolher.' },
+  // ---- Básico 4: ほしい / たい / は〜が ----
+  { lv:4, s:['私は 新しい 車', ' ほしいです。'], ans:'が', also:[], opts:['が', 'を', 'に', 'で'], pt:'Quero um carro novo.', note:'ほしい: a coisa desejada leva が.' },
+  { lv:4, s:['この くつは ', 'です。'], ans:'ほしくない', also:['ほしくありません'], opts:['ほしくない', 'ほしいない', 'ほしじゃない', 'ほしかった'], pt:'Não quero este sapato.', note:'ほしい → ほしくない (igual adjetivo い).' },
+  { lv:4, s:['わかい とき、外車が ', 'です。'], ans:'ほしかった', also:[], opts:['ほしかった', 'ほしいでした', 'ほしくない', 'ほしい'], pt:'Quando jovem, eu queria um carro importado.', note:'Passado: ほしかった です (nunca ほしいでした).' },
+  { lv:4, s:['子どもの とき、おもちゃが ', 'です。'], ans:'ほしくなかった', also:['ほしくありませんでした'], opts:['ほしくなかった', 'ほしくないでした', 'ほしかった', 'ほしくない'], pt:'Quando criança, eu não queria brinquedos.', note:'Passado negativo: ほしくなかったです.' },
+  { lv:4, s:['本が ', 'です。'], ans:'かきたい', also:[], opts:['かきたい', 'かくたい', 'かいたい', 'はなしたい'], pt:'Quero escrever um livro.', note:'かきます → かき + たい. (はなしたい = quero FALAR)' },
+  { lv:4, s:['ひとりで りょこう', 'です。'], ans:'したくない', also:['したくありません'], opts:['したくない', 'したいない', 'するたくない', 'したかった'], pt:'Não quero viajar sozinho.', note:'します → し + たくない.' },
+  { lv:4, s:['わかい とき、あの 会社で ', 'です。'], ans:'はたらきたかった', also:[], opts:['はたらきたかった', 'はたらしかった', 'はたらくたかった', 'はたらきたいでした'], pt:'Quando jovem, eu queria trabalhar naquela empresa.', note:'はたらきます → はたらき + たかった.' },
+  { lv:4, s:['あの 会社', ' はたらきたかったです。'], ans:'で', also:[], opts:['で', 'が', 'に', 'を'], pt:'Eu queria trabalhar naquela empresa.', note:'Lugar onde a ação acontece → で.' },
+  { lv:4, s:['子どもの とき、やさいが ', 'です。'], ans:'たべたくなかった', also:['たべたくありませんでした'], opts:['たべたくなかった', 'たべたいなかった', 'たべなかった', 'たべたかった'], pt:'Quando criança, eu não queria comer vegetais.', note:'たべます → たべ + たくなかった.' },
+  { lv:4, s:['だれ', ' けっこんしたいですか。'], ans:'と', also:[], opts:['と', 'に', 'が', 'を'], pt:'Com quem você quer se casar?', note:'けっこんする: com alguém → と.' },
+  { lv:4, s:['来年の 夏休み どこ', ' 行きたいですか。'], ans:'へ', also:['に'], opts:['へ', 'で', 'を', 'が'], pt:'Aonde quer ir nas férias do ano que vem?', note:'Destino → へ (ou に).' },
+  { lv:4, s:['あなたは 漢字が ', 'ですか。'], ans:'ならいたい', also:[], opts:['ならいたい', 'ならうたい', 'ならたい', 'ならいほしい'], pt:'Você quer aprender kanji?', note:'ならいます → ならい + たい.' },
+  { lv:4, s:['エルザさんは 目', ' あおいです。'], ans:'が', also:[], opts:['が', 'は', 'を', 'の'], pt:'A Elsa tem olhos azuis.', note:'Pessoa は, parte do corpo が, adjetivo.' },
+  { lv:4, s:['私は あたまが ', 'です。'], ans:'いたい', also:[], opts:['いたい', 'ほしい', 'ながい', 'たかい'], pt:'Estou com dor de cabeça.', note:'いたい = dolorido.' },
+  { lv:4, s:['休みが ', 'です。'], ans:'ほしい', also:[], opts:['ほしい', 'したい', 'たべたい', 'いきたい'], pt:'Quero férias.', note:'Querer uma COISA → ほしい; querer FAZER → 〜たい.' }
 ];

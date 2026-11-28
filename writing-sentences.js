@@ -281,5 +281,26 @@ window.WRITING = [
   { id:'b4k8', diff:'easy', level:'Básico 4', pt:'A lição de casa é uma redação.', accept:['しゅくだいは さくぶんです。'] },
   { id:'b4k9', diff:'easy', level:'Básico 4', pt:'Sua letra é bonita, hein.', accept:['じが じょうずですね。'] },
   { id:'b4k10', diff:'med', level:'Básico 4', pt:'Escrevo kanji todos os dias.', accept:['まいにち かんじを かきます。'] },
-  { id:'b4k11', diff:'med', level:'Básico 4', pt:'Há muitas flores no jardim.', accept:['にわに はなが たくさん あります。'] }
+  { id:'b4k11', diff:'med', level:'Básico 4', pt:'Há muitas flores no jardim.', accept:['にわに はなが たくさん あります。'] },
+  // ---- Básico 4 — ほしい / 〜たい / は〜が (características) ----
+  { id:'b4t1', diff:'easy', level:'Básico 4', pt:'Quero um carro novo.', accept:['わたしは あたらしい くるまが ほしいです。','あたらしい くるまが ほしいです。'] },
+  { id:'b4t2', diff:'easy', level:'Básico 4', pt:'Quero férias.', accept:['わたしは やすみが ほしいです。','やすみが ほしいです。'] },
+  { id:'b4t3', diff:'easy', level:'Básico 4', pt:'Não quero este sapato.', accept:['わたしは この くつが ほしくないです。','この くつが ほしくないです。','この くつが ほしくありません。','わたしは この くつが ほしくありません。'] },
+  { id:'b4t4', diff:'med', level:'Básico 4', pt:'Você quer um animal de estimação?', accept:['あなたは ペットが ほしいですか。','ペットが ほしいですか。'] },
+  { id:'b4t5', diff:'hard', level:'Básico 4', pt:'Quando jovem, todo ano eu queria um video game novo.', accept:['わかい とき、まいとし あたらしい ビデオゲームが ほしかったです。','わかい とき、まいとし あたらしい ゲームが ほしかったです。'] },
+  { id:'b4t6', diff:'hard', level:'Básico 4', pt:'Quando criança, eu não queria brinquedos. Queria livros.', accept:['こどもの とき、おもちゃが ほしくなかったです。ほんが ほしかったです。','こどもの とき、おもちゃが ほしくありませんでした。ほんが ほしかったです。'] },
+  { id:'b4t7', diff:'med', level:'Básico 4', pt:'Quando jovem, você queria um carro importado?', accept:['あなたは わかい とき、がいしゃが ほしかったですか。','わかい とき、がいしゃが ほしかったですか。'] },
+  { id:'b4t8', diff:'easy', level:'Básico 4', pt:'Eu quero escrever um livro.', accept:['わたしは ほんが かきたいです。','わたしは ほんを かきたいです。','ほんが かきたいです。','ほんを かきたいです。'] },
+  { id:'b4t9', diff:'easy', level:'Básico 4', pt:'Não quero viajar sozinho.', accept:['ひとりで りょこうしたくないです。','ひとりで りょこうしたくありません。','わたしは ひとりで りょこうしたくないです。'] },
+  { id:'b4t10', diff:'hard', level:'Básico 4', pt:'Quando jovem, eu queria trabalhar naquela empresa.', accept:['わかい とき、あの かいしゃで はたらきたかったです。','わたしは わかい とき、あの かいしゃで はたらきたかったです。'] },
+  { id:'b4t11', diff:'med', level:'Básico 4', pt:'Quando criança, eu não queria comer vegetais.', accept:['こどもの とき、やさいが たべたくなかったです。','こどもの とき、やさいを たべたくなかったです。','こどもの とき、やさいが たべたくありませんでした。','こどもの とき、やさいを たべたくありませんでした。'] },
+  { id:'b4t12', diff:'easy', level:'Básico 4', pt:'Quero comer churrasco.', accept:['わたしは シュラスコが たべたいです。','シュラスコが たべたいです。','シュラスコを たべたいです。'] },
+  { id:'b4t13', diff:'med', level:'Básico 4', pt:'Aonde você quer ir nas férias de verão do ano que vem?', accept:['らいねんの なつやすみ どこへ いきたいですか。','らいねんの なつやすみ どこに いきたいですか。','らいねんの なつやすみは どこへ いきたいですか。'] },
+  { id:'b4t14', diff:'easy', level:'Básico 4', pt:'Quero ir para Kyoto.', accept:['きょうとへ いきたいです。','きょうとに いきたいです。'] },
+  { id:'b4t15', diff:'med', level:'Básico 4', pt:'Com quem você quer se casar?', accept:['だれと けっこんしたいですか。'] },
+  { id:'b4t16', diff:'med', level:'Básico 4', pt:'Você quer aprender kanji? — Não, não quero.', accept:['あなたは かんじが ならいたいですか。いいえ、ならいたくないです。','かんじが ならいたいですか。いいえ、ならいたくないです。','かんじを ならいたいですか。いいえ、ならいたくないです。'] },
+  { id:'b4t17', diff:'easy', level:'Básico 4', pt:'A Elsa tem olhos azuis.', accept:['エルザさんは めが あおいです。'] },
+  { id:'b4t18', diff:'easy', level:'Básico 4', pt:'Estou com dor de cabeça.', accept:['わたしは あたまが いたいです。','あたまが いたいです。'] },
+  { id:'b4t19', diff:'easy', level:'Básico 4', pt:'O coelho tem orelhas compridas.', accept:['うさぎは みみが ながいです。'] },
+  { id:'b4t20', diff:'easy', level:'Básico 4', pt:'O gato tem pelo curto.', accept:['ねこは けが みじかいです。'] }
 ];

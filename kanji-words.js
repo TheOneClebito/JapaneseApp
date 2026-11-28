@@ -129,10 +129,10 @@ window.KANJI_WORDS = [
   { w:'体力', read:'たいりょく', mean:'força física' },
   { w:'体{育|いく}', read:'たいいく', mean:'educação física' },
   { w:'好き', read:'すき', mean:'gostar (de)' },
-  { w:'好{物|ぶつ}', read:'こうぶつ', mean:'comida/coisa favorita' },
+  { w:'好物', read:'こうぶつ', mean:'comida/coisa favorita' },
   { w:'男', read:'おとこ', mean:'homem' },
   { w:'男の子', read:'おとこのこ', mean:'menino' },
-  { w:'{長|ちょう}男', read:'ちょうなん', mean:'filho mais velho' },
+  { w:'長男', read:'ちょうなん', mean:'filho mais velho' },
   { w:'男子学生', read:'だんしがくせい', mean:'estudante (do sexo masculino)' },
   // 林 森 間 畑 岩 (semana 7)
   { w:'林', read:'はやし', mean:'bosque / mata' },
@@ -214,8 +214,8 @@ window.KANJI_WORDS = [
   { w:'{緑|りょく}茶', read:'りょくちゃ', mean:'chá verde' },
   // 肉 (Básico 4)
   { w:'肉', read:'にく', mean:'carne' },
-  { w:'{牛|ぎゅう}肉', read:'ぎゅうにく', mean:'carne bovina' },
-  { w:'{鳥|とり}肉', read:'とりにく', mean:'carne de ave, frango' },
+  { w:'牛肉', read:'ぎゅうにく', mean:'carne bovina' },
+  { w:'鳥肉', read:'とりにく', mean:'carne de ave, frango' },
   { w:'肉体', read:'にくたい', mean:'corpo (físico)' },
   { w:'{豚|ぶた}肉', read:'ぶたにく', mean:'carne de porco' },
   // 文 (Básico 4)
@@ -229,5 +229,51 @@ window.KANJI_WORDS = [
   { w:'{漢|かん}字', read:'かんじ', mean:'kanji (ideograma chinês)' },
   { w:'ローマ字', read:'ローマじ', mean:'letra romana (romaji)' },
   { w:'文字', read:'もじ', mean:'letra, caractere' },
-  { w:'{数|すう}字', read:'すうじ', mean:'número, algarismo' }
+  { w:'{数|すう}字', read:'すうじ', mean:'número, algarismo' },
+  // 物 (Básico 4)
+  { w:'物', read:'もの', mean:'coisa' },
+  { w:'{食|た}べ物', read:'たべもの', mean:'comida' },
+  { w:'{動|どう}物', read:'どうぶつ', mean:'animal' },
+  { w:'{荷|に}物', read:'にもつ', mean:'bagagem' },
+  { w:'{買|か}い物', read:'かいもの', mean:'compras' },
+  { w:'{飲|の}み物', read:'のみもの', mean:'bebida' },
+  // 牛 (Básico 4)
+  { w:'牛', read:'うし', mean:'boi, vaca' },
+  { w:'子牛', read:'こうし', mean:'bezerro' },
+  { w:'牛{乳|にゅう}', read:'ぎゅうにゅう', mean:'leite' },
+  // 馬 (Básico 4)
+  { w:'馬', read:'うま', mean:'cavalo' },
+  { w:'馬車', read:'ばしゃ', mean:'carruagem' },
+  { w:'馬力', read:'ばりき', mean:'cavalo-vapor, potência' },
+  // 鳥 (Básico 4)
+  { w:'鳥', read:'とり', mean:'pássaro, ave' },
+  { w:'{白|はく}鳥', read:'はくちょう', mean:'cisne' },
+  { w:'小鳥', read:'ことり', mean:'passarinho' },
+  // 魚 (Básico 4)
+  { w:'魚', read:'さかな', mean:'peixe' },
+  { w:'魚{屋|や}', read:'さかなや', mean:'peixaria' },
+  { w:'生魚', read:'なまざかな', mean:'peixe cru' },
+  { w:'金魚', read:'きんぎょ', mean:'peixinho dourado' },
+  // 新 (Básico 4)
+  { w:'新しい', read:'あたらしい', mean:'novo' },
+  { w:'新車', read:'しんしゃ', mean:'carro novo' },
+  { w:'新年', read:'しんねん', mean:'ano novo' },
+  { w:'新{聞|ぶん}', read:'しんぶん', mean:'jornal' },
+  // 古 (Básico 4)
+  { w:'古い', read:'ふるい', mean:'velho, antigo' },
+  { w:'古本{屋|や}', read:'ふるほんや', mean:'sebo' },
+  { w:'古文', read:'こぶん', mean:'literatura clássica' },
+  { w:'中古車', read:'ちゅうこしゃ', mean:'carro usado' },
+  // 長 (Básico 4)
+  { w:'長い', read:'ながい', mean:'longo, comprido' },
+  { w:'長さ', read:'ながさ', mean:'comprimento' },
+  { w:'{社|しゃ}長', read:'しゃちょう', mean:'presidente (de empresa)' },
+  // 短 (Básico 4)
+  { w:'短い', read:'みじかい', mean:'curto' },
+  { w:'短{時|じ}間', read:'たんじかん', mean:'tempo curto' },
+  { w:'短{期|き}', read:'たんき', mean:'período curto' },
+  // 高 (Básico 4)
+  { w:'高い', read:'たかい', mean:'alto, caro' },
+  { w:'高{校|こう}生', read:'こうこうせい', mean:'estudante do ensino médio' },
+  { w:'高{速|そく}', read:'こうそく', mean:'alta velocidade' }
 ];

@@ -134,6 +134,10 @@ function masuForm(v) {
   if (v.type === 'ichidan') return k.slice(0, -1) + 'ます';
   return k.slice(0, -1) + (I_ROW[k.slice(-1)] || 'り') + 'ます';
 }
+function taiForm(v, sub) { // masu sem ます + たい/たくない/たかった/たくなかった
+  const st = masuForm(v).slice(0, -2);
+  return st + ({ tai: 'たい', takunai: 'たくない', takatta: 'たかった', takunakatta: 'たくなかった' }[sub || 'tai']);
+}
 function taForm(v) { const t = teForm(v); return t.slice(0, -1) + (t.endsWith('で') ? 'だ' : 'た'); }
 
 // ---------- Voz (TTS) ----------

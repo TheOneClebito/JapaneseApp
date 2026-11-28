@@ -988,6 +988,17 @@ function teForm(v){
   const baseRom = v.romaji.slice(0,-2); // remove last vowel+consonant roughly
   return { kana: stem+suf, romaji: (v.romaji.replace(/(u|tsu|ru|nu|bu|mu|ku|gu|su)$/, '') ) + (romMap[suf]||'te') };
 }
+// forma たい (quero fazer): masu sem ます + たい/たくない/たかった/たくなかった
+const TAI_SUBS = [['tai','たい','quero'],['takunai','たくない','não quero'],['takatta','たかった','queria'],['takunakatta','たくなかった','não queria']];
+function taiForm(v, sub){
+  const k = v.kana; let st;
+  if(v.type==='irregular' && k.endsWith('くる')) st = k.slice(0,-2)+'き';
+  else if(v.type==='irregular' && k.endsWith('する')) st = k.slice(0,-2)+'し';
+  else if(v.type==='ichidan') st = k.slice(0,-1);
+  else st = k.slice(0,-1) + ({'う':'い','く':'き','ぐ':'ぎ','す':'し','つ':'ち','ぬ':'に','ぶ':'び','む':'み','る':'り'}[k.slice(-1)]||'り');
+  const e = (TAI_SUBS.find(x=>x[0]===sub)||TAI_SUBS[0])[1];
+  return { kana: st+e, romaji: kanaToRomaji(st+e) };
+}
 // forma ない (negativa simples). Romaji derivado do kana.
 function naiForm(v){
   const k = v.kana;
@@ -1118,17 +1129,24 @@ const NAI_RULE = `<div class="rule-box">
   <div><b>Grupo 2 (ru):</b> tira -ru + nai <span class="rm">taberu → tabenai</span></div>
   <div><b>Grupo 3:</b> suru→shinai · kuru→<b>konai</b> · iku→ikanai</div>
 </div>`;
+const TAI_RULE = `<div class="rule">
+  <div class="rule-t">Forma たい = querer FAZER</div>
+  <div>Forma ます, tira <b>ます</b>, põe <b>たい</b> <span class="rm">ならいます → ならいたい · たべます → たべたい · します → したい</span></div>
+  <div>Conjuga como adjetivo い: <b>たい · たくない · たかった · たくなかった</b></div>
+  <div>⚠️ passado é <b>たかった</b>です (nunca たいでした)</div>
+</div>`;
 function renderTeDrill(keep){
-  const nai = state.settings.verbForm==='nai';
+  const nai = state.settings.verbForm==='nai', tai = state.settings.verbForm==='tai';
   $('#drill-body').innerHTML = `
-    <h2 class="sec-title">Verbos — forma ${nai?'ない':'て'}</h2>
+    <h2 class="sec-title">Verbos — forma ${tai?'たい':nai?'ない':'て'}</h2>
     <div class="row" style="gap:8px;margin-bottom:8px">
-      <button class="chip ${!nai?'on':''}" data-vf="te">て-form</button>
+      <button class="chip ${!nai&&!tai?'on':''}" data-vf="te">て-form</button>
       <button class="chip ${nai?'on':''}" data-vf="nai">ない-form</button>
+      <button class="chip ${tai?'on':''}" data-vf="tai">たい-form</button>
     </div>
     ${drillToggles('teHint')}
-    ${state.settings.teHint? (nai? NAI_RULE : TE_RULE) : ''}
-    <div class="hint" style="text-align:left;margin-bottom:12px">Veja o verbo no dicionário e diga a forma ${nai?'ない (negativa simples)':'て'}.</div>
+    ${state.settings.teHint? (tai? TAI_RULE : nai? NAI_RULE : TE_RULE) : ''}
+    <div class="hint" style="text-align:left;margin-bottom:12px">Veja o verbo no dicionário e diga a forma ${tai?'pedida (quero / não quero / queria / não queria)':nai?'ない (negativa simples)':'て'}.</div>
     <div class="flash" id="drill-card" style="min-height:240px"></div>
     <div style="height:14px"></div>
     <div id="drill-actions"></div>
@@ -1141,12 +1159,14 @@ function renderTeDrill(keep){
 }
 function nextDrill(){
   drill.v = nextFromBag('te', VERBS);
+  drill.sub = TAI_SUBS[Math.floor(Math.random()*TAI_SUBS.length)][0];
   drill.revealed = false; drill.result = null; drill.typed = '';
   drawDrill();
 }
 function drawDrill(){
   const v = drill.v;
-  const te = (state.settings.verbForm==='nai') ? naiForm(v) : teForm(v);
+  const vf = state.settings.verbForm, tsub = TAI_SUBS.find(x=>x[0]===drill.sub)||TAI_SUBS[0];
+  const te = vf==='tai' ? taiForm(v, tsub[0]) : vf==='nai' ? naiForm(v) : teForm(v);
   const s = state.settings;
   const c = $('#drill-card');
   c.innerHTML = `
@@ -1154,6 +1174,7 @@ function drawDrill(){
     ${s.showKana? `<div class="jp-kana">${esc(v.kana)}</div>`:''}
     ${s.showRomaji? `<div class="jp-romaji">${esc(v.romaji)} — ${esc(v.meaning)}</div>`:''}
     <div class="hint" style="margin-top:8px">tipo: ${v.type==='godan'?'godan (う)':v.type==='ichidan'?'ichidan (る)':'irregular'}</div>
+    ${vf==='tai'?`<div class="meaning" style="font-size:18px;margin-top:6px">→ 〜${tsub[1]} <span class="hint">(${tsub[2]})</span></div>`:''}
     ${drill.revealed? `<div class="divider"></div>
       <div class="meaning" style="color:var(--accent2)">${esc(te.kana)}</div>
       ${s.showRomaji?`<div class="jp-romaji">${esc(te.romaji)}</div>`:''}

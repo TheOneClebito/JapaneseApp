@@ -78,5 +78,17 @@ window.KANJI_DEX = [
   { c:'茶', on:['チャ','サ'], kun:[], mean:'chá', week:9, level:4 },
   { c:'肉', on:['ニク'], kun:[], mean:'carne', week:9, level:4 },
   { c:'文', on:['ブン','モン'], kun:['ふみ'], mean:'frase, texto', week:9, level:4 },
-  { c:'字', on:['ジ'], kun:[], mean:'letra, caractere', week:9, level:4 }
+  { c:'字', on:['ジ'], kun:[], mean:'letra, caractere', week:9, level:4 },
+  // ---- Básico 4 (漢字 71–75) ----
+  { c:'物', on:['ブツ','モツ'], kun:['もの'], mean:'coisa', week:10, level:4 },
+  { c:'牛', on:['ギュウ'], kun:['うし'], mean:'boi, vaca', week:10, level:4 },
+  { c:'馬', on:['バ'], kun:['うま'], mean:'cavalo', week:10, level:4 },
+  { c:'鳥', on:['チョウ'], kun:['とり'], mean:'pássaro, ave', week:10, level:4 },
+  { c:'魚', on:['ギョ'], kun:['さかな'], mean:'peixe', week:10, level:4 },
+  // ---- Básico 4 (漢字 76–80) ----
+  { c:'新', on:['シン'], kun:['あたら(しい)'], mean:'novo', week:11, level:4 },
+  { c:'古', on:['コ'], kun:['ふる(い)'], mean:'velho, antigo', week:11, level:4 },
+  { c:'長', on:['チョウ'], kun:['なが(い)'], mean:'longo, comprido; chefe', week:11, level:4 },
+  { c:'短', on:['タン'], kun:['みじか(い)'], mean:'curto', week:11, level:4 },
+  { c:'高', on:['コウ'], kun:['たか(い)'], mean:'alto, caro', week:11, level:4 }
 ];

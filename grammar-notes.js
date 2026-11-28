@@ -230,6 +230,36 @@ window.GRAMMAR_NOTES = [
            ['3 ou mais', 'A と B と C と <b>なに／どこ／だれ</b>が <b>いちばん</b>…?', 'A <b>が いちばん</b>…'],
            ['um grupo', '[grupo]<b>の なかで</b> なにが <b>いちばん</b>…?', 'A <b>が いちばん</b>…']] },
   ]},
+  { id:'b4-wa-ga', level:4, title:'〜は 〜が [adjetivo] — características (corpo, aparência)', sub:'エルザさんは 目が あおいです', blocks:[
+    { f:'[pessoa/animal] は [parte] が [adjetivo] です。' },
+    { p:'O <b>は</b> marca de quem você está falando (o tema). O <b>が</b> marca a parte que tem a característica. O foco é a pessoa, não a parte.' },
+    { ex:['エルザさんは 目が あおいです。', 'eruza-san wa me ga aoi desu.', 'A Elsa tem olhos azuis.'] },
+    { ex:['私は あたまが いたいです。', 'watashi wa atama ga itai desu.', 'Estou com dor de cabeça (minha cabeça dói).'] },
+    { ex:['うさぎは 耳が 長いです。', 'usagi wa mimi ga nagai desu.', 'O coelho tem orelhas compridas.'] },
+    { ex:['ねこは 毛が みじかいです。', 'neko wa ke ga mijikai desu.', 'O gato tem pelo curto.'] },
+    { tip:'É o mesmo molde de <b>あには せが たかいです</b> (meu irmão é alto) e <b>ちちは あしが はやいです</b> (meu pai corre rápido).' },
+  ]},
+  { id:'b4-hoshii', level:4, title:'〜が ほしい — querer uma COISA', sub:'ほしい · ほしくない · ほしかった · ほしくなかった', blocks:[
+    { f:'(私は) [substantivo] が ほしいです。' },
+    { p:'<b>ほしい</b> = "é desejável" → querer <b>uma coisa</b>. A coisa leva <b>が</b>. Só se usa para <b>eu</b> (afirmando) e <b>você</b> (perguntando).' },
+    { tbl:[['forma', 'japonês', 'sentido'], ['afirmativa', '〜が ほし<b>い</b>です', 'quero'], ['negativa', '〜が ほし<b>くない</b>です ／ ほし<b>くありません</b>', 'não quero'], ['passado', '〜が ほし<b>かった</b>です', 'queria'], ['passado negativo', '〜が ほし<b>くなかった</b>です ／ ほし<b>くありませんでした</b>', 'não queria']] },
+    { ex:['私は 新しい 車が ほしいです。', 'watashi wa atarashii kuruma ga hoshii desu.', 'Quero um carro novo.'] },
+    { ex:['あなたは ペットが ほしいですか。— いいえ、ほしくないです。', 'anata wa petto ga hoshii desu ka. — iie, hoshikunai desu.', 'Você quer um pet? — Não, não quero.'] },
+    { ex:['わかい とき、外車が ほしかったです。', 'wakai toki, gaisha ga hoshikatta desu.', 'Quando jovem, eu queria um carro importado.'] },
+    { tip:'ほしい conjuga igual a um adjetivo い (たかい → たかくない → たかかった → たかくなかった).' },
+  ]},
+  { id:'b4-tai', level:4, title:'〜たい — querer FAZER algo', sub:'verbo (ます) + たい · たくない · たかった · たくなかった', blocks:[
+    { f:'verbo na forma ます, tira ます, põe たい' },
+    { tbl:[['dicionário', 'ます', 'たい'], ['ならう', 'ならいます', 'ならい<b>たい</b>'], ['食べる', '食べます', '食べ<b>たい</b>'], ['する', 'します', 'し<b>たい</b>'], ['行く', '行きます', '行き<b>たい</b>'], ['はたらく', 'はたらきます', 'はたらき<b>たい</b>']] },
+    { tbl:[['forma', 'final', 'sentido'], ['afirmativa', '〜た<b>い</b>です', 'quero fazer'], ['negativa', '〜た<b>くない</b>です ／ た<b>くありません</b>', 'não quero fazer'], ['passado', '〜た<b>かった</b>です', 'queria fazer'], ['passado negativo', '〜た<b>くなかった</b>です ／ た<b>くありませんでした</b>', 'não queria fazer']] },
+    { p:'O objeto pode levar <b>が</b> (como no livro) ou <b>を</b>: 本が かきたい ／ 本を かきたい. As outras partículas não mudam: <b>へ</b> (destino), <b>と</b> (com quem), <b>で</b> (onde a ação acontece).' },
+    { ex:['私は シュラスコが 食べたいです。', 'watashi wa shurasuko ga tabetai desu.', 'Quero comer churrasco.'] },
+    { ex:['来年の 夏休み どこへ 行きたいですか。— きょうとへ 行きたいです。', 'rainen no natsuyasumi doko e ikitai desu ka. — kyouto e ikitai desu.', 'Aonde quer ir nas férias de verão do ano que vem? — Quero ir a Kyoto.'] },
+    { ex:['だれと けっこんしたいですか。', 'dare to kekkon shitai desu ka.', 'Com quem você quer se casar?'] },
+    { ex:['わかい とき、あの 会社で はたらきたかったです。', 'wakai toki, ano kaisha de hatarakitakatta desu.', 'Quando jovem, eu queria trabalhar naquela empresa.'] },
+    { ex:['子どもの とき、やさいが 食べたくなかったです。', 'kodomo no toki, yasai ga tabetakunakatta desu.', 'Quando criança, eu não queria comer vegetais.'] },
+    { tbl:[['quero…', 'use', 'exemplo'], ['uma COISA', '〜が <b>ほしい</b>', '本が ほしいです (quero um livro)'], ['FAZER algo', 'verbo + <b>たい</b>', '本が かきたいです (quero escrever um livro)']] },
+  ]},
 ];
 
 // ---------- renderização (usada pelos dois apps) ----------
